@@ -121,7 +121,7 @@
                 <div class="booking-widget__times">
                     <div class="times-date">Monday, August 3</div>
                     <div class="times-list">
-                        <button type="button" class="time-slot time-slot--active">12:30 PM</button>
+                        <button type="button" class="time-slot">12:30 PM</button>
                         <button type="button" class="time-slot">1:00 PM</button>
                         <button type="button" class="time-slot">1:30 PM</button>
                         <button type="button" class="time-slot">2:00 PM</button>
@@ -148,58 +148,95 @@
             </div>
         </section>
 
-        <section class="booking-form-section">
-            <div class="section-heading">
-                <div class="eyebrow">Confirm your call</div>
-                <h2>Reservation details</h2>
-            </div>
-
-            <form class="booking-form" action="#" method="POST">
-                <label class="field">
-                    <span>Your Name</span>
-                    <input type="text" name="name" placeholder="Your full name" required>
-                </label>
-
-                <label class="field">
-                    <span>Your Email</span>
-                    <input type="email" name="email" placeholder="you@example.com" required>
-                </label>
-
-                <label class="field">
-                    <span>Company / Brand</span>
-                    <input type="text" name="company" placeholder="Company or brand name">
-                </label>
-
-                <label class="field">
-                    <span>Phone Number</span>
-                    <input type="tel" name="phone" placeholder="+1 (555) 123-4567">
-                </label>
-
-                <label class="field field--full">
-                    <span>Selected service</span>
-                    <select name="service">
-                        <option>AI Commercial Ads</option>
-                        <option>AI Product Ads</option>
-                        <option>AI Storytelling / Drama</option>
-                        <option>AI Movie Trailers</option>
-                        <option>UGC-style AI Videos</option>
-                        <option>Explainer Videos</option>
-                    </select>
-                </label>
-
-                <label class="field field--full">
-                    <span>Tell us about your project</span>
-                    <textarea name="message" rows="5" placeholder="Share a brief overview of your goals..."></textarea>
-                </label>
-
-                <button type="submit" class="booking-submit">Book Call</button>
-            </form>
-
-            <p class="booking-note">Once submitted, you will receive an email confirmation and a calendar invite for your selected time slot.</p>
-        </section>
-
     </main>
 
+    <!-- ==================== BOOKING MODAL ==================== -->
+    <div class="booking-modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="booking-modal">
+
+            <div class="booking-modal__header">
+                <div class="booking-modal__meta">
+                    <span class="booking-modal__eyebrow">Confirm your call</span>
+                    <h2 class="booking-modal__title" id="modalTitle">Reservation details</h2>
+                    <div class="booking-modal__slot-badge">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 7v5l3 3"></path>
+                        </svg>
+                        <span id="modalSlotText">Monday, August 3 · 12:30 PM</span>
+                    </div>
+                </div>
+                <button class="booking-modal__close" id="bookingModalClose" aria-label="Close">✕</button>
+            </div>
+
+            <div class="booking-modal__body">
+                <form class="booking-form" action="{{ route('book-a-call.store') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="selected_slot" id="hiddenSlot">
+                    <input type="hidden" name="timezone" id="timezoneField">
+
+                    @if (session('status'))
+                        <div class="booking-alert booking-alert--success">{{ session('status') }}</div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="booking-alert booking-alert--error">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <label class="field">
+                        <span>Your Name</span>
+                        <input type="text" name="name" placeholder="Your full name" required>
+                    </label>
+
+                    <label class="field">
+                        <span>Your Email</span>
+                        <input type="email" name="email" placeholder="you@example.com" required>
+                    </label>
+
+                    <label class="field">
+                        <span>Company / Brand</span>
+                        <input type="text" name="company" placeholder="Company or brand name">
+                    </label>
+
+                    <label class="field">
+                        <span>Phone Number</span>
+                        <input type="tel" name="phone" placeholder="+1 (555) 123-4567">
+                    </label>
+
+                    <label class="field field--full">
+                        <span>Selected service</span>
+                        <select name="service" id="serviceSelect" required>
+                            <option value="AI Commercial Ads">AI Commercial Ads</option>
+                            <option value="AI Product Ads">AI Product Ads</option>
+                            <option value="AI Storytelling / Drama">AI Storytelling / Drama</option>
+                            <option value="AI Movie Trailers">AI Movie Trailers</option>
+                            <option value="UGC-style AI Videos">UGC-style AI Videos</option>
+                            <option value="Explainer Videos">Explainer Videos</option>
+                        </select>
+                    </label>
+
+                    <label class="field field--full">
+                        <span>Tell us about your project</span>
+                        <textarea name="message" rows="3" placeholder="Share a brief overview of your goals..."></textarea>
+                    </label>
+
+                    <div class="booking-form-footer">
+                        <button type="submit" class="booking-submit">Book Call</button>
+                        <p class="booking-note">You'll receive a confirmation email & calendar invite after booking.</p>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+    <!-- ==================== END MODAL ==================== -->
     @include('footer.footer')
+    <script src="{{ asset('js/booking-calendar/booking-calendar.js') }}"></script>
 </body>
 </html>

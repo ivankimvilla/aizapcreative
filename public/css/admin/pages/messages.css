@@ -44,36 +44,6 @@
     border-radius: 20px;
 }
 
-.thread-search {
-    position: relative;
-    margin: 0 18px 14px;
-    display: flex;
-    align-items: center;
-}
-
-.thread-search svg {
-    position: absolute;
-    left: 12px;
-    width: 15px;
-    height: 15px;
-    color: var(--text-muted);
-    pointer-events: none;
-}
-
-.thread-search input {
-    width: 100%;
-    font-family: 'Manrope', sans-serif;
-    font-size: 13px;
-    color: var(--ink);
-    background: var(--paper);
-    border: 1.5px solid var(--line-on-light);
-    border-radius: 8px;
-    padding: 9px 12px 9px 34px;
-}
-
-.thread-search input::placeholder {
-    color: var(--text-muted);
-}
 
 .thread-items {
     flex: 1;
@@ -222,30 +192,91 @@
 .thread-view-title p {
     font-size: 12px;
     color: var(--text-on-light);
-    margin-top: 1px;
+    margin-top: 12px;
 }
 
-.thread-view-more {
-    width: 32px;
-    height: 32px;
+.thread-subject {
+    display: none;
+}
+
+.thread-info-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.thread-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.thread-info-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.thread-info-value {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.thread-meta {
+    display: grid;
+    gap: 14px;
+    padding: 18px 20px 24px;
+    border-top: 1.5px solid var(--line-on-light);
+}
+
+.thread-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.thread-meta-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.thread-meta-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+    word-break: break-word;
+}
+
+.thread-empty {
+    padding: 50px 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
-    border: none;
-    border-radius: 8px;
+}
+
+.thread-empty__text {
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
     color: var(--text-muted);
-    cursor: pointer;
-    transition: background 0.12s ease;
+    text-transform: none;
+    letter-spacing: 0.02em;
 }
 
-.thread-view-more:hover {
-    background: var(--paper);
+.message--empty .message-bubble {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-muted);
 }
 
-.thread-view-more svg {
-    width: 18px;
-    height: 18px;
+.message--empty .message-bubble p {
+    text-align: center;
+    margin: 0;
 }
 
 .thread-messages {

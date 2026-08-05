@@ -5,6 +5,11 @@
     --muted: #949aa5;
 }
 
+html,
+body {
+    overflow-x: hidden;
+}
+
 .site-header {
     position: fixed;
     top: 0;

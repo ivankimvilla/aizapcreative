@@ -47,37 +47,58 @@
                     <div class="eyebrow">Send Us a Message</div>
                 </div>
 
-                <div class="form-grid">
+                <form class="form-grid" action="{{ route('contact.store') }}" method="POST">
+                    @csrf
+
                     <label class="field">
                         <span>Your Name</span>
-                        <input type="text" placeholder="Your Name">
+                        <input type="text" name="name" placeholder="Your Name" value="{{ old('name') }}" required>
                     </label>
                     <label class="field">
                         <span>Your Email</span>
-                        <input type="email" placeholder="Your Email">
+                        <input type="email" name="email" placeholder="Your Email" value="{{ old('email') }}">
                     </label>
                     <label class="field">
                         <span>Company / Brand</span>
-                        <input type="text" placeholder="Company / Brand">
+                        <input type="text" name="role" placeholder="Company / Brand" value="{{ old('role') }}">
                     </label>
                     <label class="field">
                         <span>Subject</span>
-                        <input type="text" placeholder="Subject">
+                        <input type="text" name="subject" placeholder="Subject" value="{{ old('subject') }}">
                     </label>
                     <label class="field field--full">
                         <span>Tell us about your project...</span>
-                        <textarea rows="5" placeholder="Tell us about your project..."></textarea>
+                        <textarea name="message" rows="5" placeholder="Tell us about your project..." required>{{ old('message') }}</textarea>
                     </label>
-                </div>
 
-                <button class="contact-submit" type="button">
-                    Send Message
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                </button>
-                <p class="contact-note">
-                    <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                    We respect your privacy. Your information will never be shared.
-                </p>
+                    <div class="form-footer">
+                        <div class="form-footer__left">
+                            @if (session('status'))
+                                <div class="form-alert form-alert--success" role="status">
+                                    {{ session('status') }}
+                                </div>
+                            @elseif ($errors->any())
+                                <div class="form-alert form-alert--error" role="alert">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <p class="contact-note">
+                                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                                We respect your privacy. Your information will never be shared.
+                            </p>
+                        </div>
+
+                        <button class="contact-submit" type="submit">
+                            Send Message
+                            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
+                </form>
             </div>
 
             <div class="contact-info-panel">

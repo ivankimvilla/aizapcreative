@@ -27,93 +27,18 @@
         </section>
 
         <section class="portfolio-grid">
-            <article class="portfolio-card">
-                <div class="portfolio-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                    <span class="portfolio-play">▶</span>
-                    <span class="portfolio-duration">0:30</span>
-                </div>
-                <div class="portfolio-card__meta">
-                    <h3>Nike Commercial</h3>
-                    <p>AI Commercial Ad</p>
-                </div>
-            </article>
-
-            <article class="portfolio-card">
-                <div class="portfolio-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                    <span class="portfolio-play">▶</span>
-                    <span class="portfolio-duration">0:15</span>
-                </div>
-                <div class="portfolio-card__meta">
-                    <h3>Lumière Perfume AD</h3>
-                    <p>AI Product Ad</p>
-                </div>
-            </article>
-
-            <article class="portfolio-card">
-                <div class="portfolio-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                    <span class="portfolio-play">▶</span>
-                    <span class="portfolio-duration">1:02</span>
-                </div>
-                <div class="portfolio-card__meta">
-                    <h3>Echoes of Us</h3>
-                    <p>AI Drama / Storytelling</p>
-                </div>
-            </article>
-
-            <article class="portfolio-card">
-                <div class="portfolio-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                    <span class="portfolio-play">▶</span>
-                    <span class="portfolio-duration">0:45</span>
-                </div>
-                <div class="portfolio-card__meta">
-                    <h3>Beyond the Realm</h3>
-                    <p>AI Short Film</p>
-                </div>
-            </article>
-
-            <article class="portfolio-card">
-                <div class="portfolio-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                    <span class="portfolio-play">▶</span>
-                    <span class="portfolio-duration">0:20</span>
-                </div>
-                <div class="portfolio-card__meta">
-                    <h3>Fresh Max Campaign</h3>
-                    <p>AI Brand Campaign</p>
-                </div>
-            </article>
-
-            <article class="portfolio-card">
-                <div class="portfolio-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                    <span class="portfolio-play">▶</span>
-                    <span class="portfolio-duration">0:35</span>
-                </div>
-                <div class="portfolio-card__meta">
-                    <h3>Cyber City</h3>
-                    <p>AI Short Film</p>
-                </div>
-            </article>
-
-            <article class="portfolio-card">
-                <div class="portfolio-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                    <span class="portfolio-play">▶</span>
-                    <span class="portfolio-duration">0:20</span>
-                </div>
-                <div class="portfolio-card__meta">
-                    <h3>Timeless Precision</h3>
-                    <p>AI Product Ad</p>
-                </div>
-            </article>
-
-            <article class="portfolio-card">
-                <div class="portfolio-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                    <span class="portfolio-play">▶</span>
-                    <span class="portfolio-duration">0:30</span>
-                </div>
-                <div class="portfolio-card__meta">
-                    <h3>Finance App Explainer</h3>
-                    <p>Explainer Video</p>
-                </div>
-            </article>
+            <div class="video-grid">
+                @forelse ($videos ?? [] as $video)
+                    <x-frontend.video-card
+                        :title="$video->title"
+                        :subtitle="$video->client ?: $video->getCategoryLabelAttribute()"
+                        :image-url="$video->cover_url ?? asset('home-bg.png')"
+                            :video-url="$video->video_url"
+                    />
+                @empty
+                    <x-frontend.video-card />
+                @endforelse
+            </div>
         </section>
 
         <section class="portfolio-footer-cta">
@@ -130,5 +55,6 @@
         </section>
     </main>
     @include('footer.footer')
+    <script src="{{ asset('js/video-player.js') }}"></script>
 </body>
 </html>

@@ -242,100 +242,16 @@ a.filter-chip {
 
 .portfolio-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 22px;
     margin-top: 28px;
 }
 
-.portfolio-card {
-    display: flex;
-    flex-direction: column;
-}
-
-.portfolio-card__thumb {
-    position: relative;
-    height: 210px;
-    border-radius: 14px;
-    overflow: hidden;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.portfolio-card__thumb::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 45%);
-    pointer-events: none;
-}
-
-.portfolio-card:hover .portfolio-card__thumb {
-    transform: translateY(-4px);
-}
-
-.portfolio-play {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.85);
-    background: rgba(0, 0, 0, 0.35);
-    color: #fff;
-    font-size: 14px;
-}
-
-.portfolio-duration {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    z-index: 2;
-    padding: 3px 8px;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.6);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-}
-
-.portfolio-card__meta {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 8px;
-    margin-top: 14px;
-}
-
-.portfolio-card__meta h3 {
-    margin: 0 0 4px;
-    color: #fff;
-    font-size: 13.5px;
-    font-weight: 800;
-    letter-spacing: 0.01em;
-    text-transform: uppercase;
-}
-
-.portfolio-card__meta p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 12px;
-}
-
-.portfolio-card__meta::after {
-    content: "\2192";
-    flex: 0 0 auto;
-    margin-top: 2px;
-    color: var(--gold);
-    font-size: 14px;
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 22px;
+    justify-content: stretch;
 }
 
 /* ---------- Footer CTA ---------- */

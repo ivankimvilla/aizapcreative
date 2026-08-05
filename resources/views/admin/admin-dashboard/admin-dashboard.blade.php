@@ -47,9 +47,9 @@
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
-          <span class="stat-trend">+8% today</span>
+          <span class="stat-trend">{{ $visitsTrendLabel ?? '+0% this week' }}</span>
         </div>
-        <div class="stat-value">{{ $siteVisits ?? '2,481' }}</div>
+        <div class="stat-value">{{ number_format($siteVisits ?? 0) }}</div>
         <div class="stat-label">Site visits</div>
       </div>
 
@@ -58,9 +58,9 @@
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z"/></svg>
           </div>
-          <span class="stat-trend down">5 unread</span>
+          <span class="stat-trend down">{{ $messagesCount > 0 ? $messagesCount.' new' : '0 new' }}</span>
         </div>
-        <div class="stat-value">{{ $messagesCount ?? '63' }}</div>
+        <div class="stat-value">{{ number_format($messagesCount ?? 0) }}</div>
         <div class="stat-label">Messages</div>
       </div>
 
@@ -69,9 +69,9 @@
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
           </div>
-          <span class="stat-trend">+3 new</span>
+          <span class="stat-trend">{{ $videosCount > 0 ? '+'.max(0, round($videosCount / 5)).' new' : '0 new' }}</span>
         </div>
-        <div class="stat-value">{{ $videosCount ?? '19' }}</div>
+        <div class="stat-value">{{ number_format($videosCount ?? 0) }}</div>
         <div class="stat-label">Videos</div>
       </div>
 
@@ -82,7 +82,7 @@
           </div>
           <span class="stat-trend">4.8 avg</span>
         </div>
-        <div class="stat-value">{{ $feedbackCount ?? '104' }}</div>
+        <div class="stat-value">{{ number_format($feedbackCount ?? 0) }}</div>
         <div class="stat-label">Feedback</div>
       </div>
 
@@ -93,7 +93,7 @@
           </div>
           <span class="stat-trend">+6 this week</span>
         </div>
-        <div class="stat-value">{{ $bookingsCount ?? '27' }}</div>
+        <div class="stat-value">{{ number_format($bookingsCount ?? 0) }}</div>
         <div class="stat-label">Bookings</div>
       </div>
     </div>
@@ -107,8 +107,8 @@
         </div>
         <div class="chart-panel-body">
           <div class="chart-summary">
-            <span class="value">{{ $totalVisits ?? '3,032' }}</span>
-            <span class="stat-trend">+18% vs last week</span>
+            <span class="value">{{ number_format($totalVisits ?? 0) }}</span>
+            <span class="stat-trend">{{ $todayVisits ?? 0 }} today</span>
           </div>
           <p class="chart-sub">Total visitors across all channels, Mon–Sun</p>
 
@@ -215,17 +215,60 @@
         </div>
 
         <div class="breakdown-section">
-          <div class="breakdown-title">Devices</div>
-          <div class="device-stack">
-            <span style="width:57%;background:var(--ink);"></span>
-            <span style="width:35%;background:var(--yellow-deep);"></span>
-            <span style="width:8%;background:rgba(10,10,8,0.18);"></span>
-          </div>
-          <div class="device-legend">
-            <div class="device-legend-item"><span class="dot" style="background:var(--ink);"></span>Desktop 57%</div>
-            <div class="device-legend-item"><span class="dot" style="background:var(--yellow-deep);"></span>Mobile 35%</div>
-            <div class="device-legend-item"><span class="dot" style="background:rgba(10,10,8,0.18);"></span>Tablet 8%</div>
-          </div>
+          <div class="breakdown-title">Daily traffic</div>
+          @if ($dailyTraffic->isNotEmpty())
+            <ul class="activity-list">
+              @foreach ($dailyTraffic as $day)
+                <li class="activity-item">
+                  <div>
+                    <div class="activity-path">{{ \Carbon\Carbon::parse($day->date)->format('M d') }}</div>
+                    <div class="activity-meta">{{ $day->count }} visits</div>
+                  </div>
+                  <span class="activity-pill">{{ $day->count }}x</span>
+                </li>
+              @endforeach
+            </ul>
+          @else
+            <p class="activity-empty">No daily traffic yet.</p>
+          @endif
+        </div>
+
+        <div class="breakdown-section">
+          <div class="breakdown-title">Top pages</div>
+          @if ($topPages->isNotEmpty())
+            <ul class="activity-list">
+              @foreach ($topPages as $page)
+                <li class="activity-item">
+                  <div>
+                    <div class="activity-path">{{ $page->url }}</div>
+                    <div class="activity-meta">Most visited page</div>
+                  </div>
+                  <span class="activity-pill">{{ $page->count }}x</span>
+                </li>
+              @endforeach
+            </ul>
+          @else
+            <p class="activity-empty">No page data yet.</p>
+          @endif
+        </div>
+
+        <div class="breakdown-section">
+          <div class="breakdown-title">Visitor activity</div>
+          @if ($recentVisits->isNotEmpty())
+            <ul class="activity-list">
+              @foreach ($recentVisits as $visit)
+                <li class="activity-item">
+                  <div>
+                    <div class="activity-path">{{ $visit->url }}</div>
+                    <div class="activity-meta">{{ $visit->created_at->diffForHumans() }}</div>
+                  </div>
+                  <span class="activity-pill">{{ $visit->ip_address ?? 'unknown' }}</span>
+                </li>
+              @endforeach
+            </ul>
+          @else
+            <p class="activity-empty">No visitor activity recorded yet.</p>
+          @endif
         </div>
       </div>
     </div>

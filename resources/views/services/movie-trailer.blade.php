@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/services/movie-trailer.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home-page/home-page.css') }}">
 </head>
 <body class="service-page service-page--trailers">
     @include('header.header')
@@ -28,50 +29,22 @@
 
         <section class="video-grid-section">
             <div class="video-grid">
-                <article class="video-card">
-                    <div class="video-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                        <span class="video-card__play">▶</span>
-                    </div>
-                    <h3>Launch Teaser</h3>
-                    <p>AI Movie Trailer</p>
-                </article>
-
-                <article class="video-card">
-                    <div class="video-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                        <span class="video-card__play">▶</span>
-                    </div>
-                    <h3>Series Promo</h3>
-                    <p>AI Movie Trailer</p>
-                </article>
-
-                <article class="video-card">
-                    <div class="video-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                        <span class="video-card__play">▶</span>
-                    </div>
-                    <h3>Cinematic Campaign</h3>
-                    <p>AI Movie Trailer</p>
-                </article>
-
-                <article class="video-card">
-                    <div class="video-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                        <span class="video-card__play">▶</span>
-                    </div>
-                    <h3>Event Countdown</h3>
-                    <p>AI Movie Trailer</p>
-                </article>
-
-                <article class="video-card">
-                    <div class="video-card__thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                        <span class="video-card__play">▶</span>
-                    </div>
-                    <h3>Brand Reveal</h3>
-                    <p>AI Movie Trailer</p>
-                </article>
+                @forelse ($videos ?? [] as $video)
+                    <x-frontend.video-card
+                        :title="$video->title"
+                        :subtitle="$video->client ?: $video->getCategoryLabelAttribute()"
+                        :image-url="$video->cover_url ?? asset('home-bg.png')"
+                        :video-url="$video->video_url"
+                    />
+                @empty
+                    <x-frontend.video-card />
+                @endforelse
             </div>
         </section>
 
     </main>
 
     @include('footer.footer')
+    <script src="{{ asset('js/video-player.js') }}"></script>
 </body>
 </html>

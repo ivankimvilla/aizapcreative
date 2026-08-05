@@ -12,7 +12,7 @@
 </head>
 <body>
   <div class="shell">
-    
+
   @include('admin.sidebar.sidebar')
 
     <div class="seam" aria-hidden="true">
@@ -54,204 +54,220 @@
             </select>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
           </div>
-          <a href="#" class="btn-primary">
+          <button type="button" class="btn-primary" id="newVideoBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
             New video
-          </a>
+          </button>
         </div>
       </div>
 
+      <form id="deleteSelectedForm" method="POST" action="{{ route('admin.projects.destroy') }}">
+        @csrf
+        @method('DELETE')
+        <div id="deleteInputs"></div>
+      </form>
+
       <!-- VIDEO GRID -->
-      <div class="video-grid">
+      <div class="video-grid" id="videoGrid">
+        @if (session('status'))
+          <div class="feedback-form-wrap" style="grid-column: 1 / -1; margin-bottom: 1rem;">
+            <p style="margin: 0; color: #0f766e;">{{ session('status') }}</p>
+          </div>
+        @endif
 
-        <div class="video-card">
-          <div class="video-thumb hue-1">
-            <label class="video-select">
-              <input type="checkbox" class="video-checkbox">
-              <span></span>
-            </label>
-            <button class="play-btn" aria-label="Play video">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
-            </button>
-            <span class="duration">2:14</span>
+        @forelse ($videos ?? [] as $video)
+          <div class="video-card" data-id="{{ $video->id }}">
+            <div class="video-thumb hue-{{ ($loop->iteration % 4) + 1 }} {{ $video->video_url ? 'has-video' : '' }}">
+              <label class="video-select">
+                <input type="checkbox" class="video-checkbox">
+                <span></span>
+              </label>
+              @if ($video->video_url)
+                <video controls playsinline preload="metadata" poster="{{ $video->cover_url ?? 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'338\'%3E%3Cdefs%3E%3CradialGradient id=\'g\'%3E%3Cstop offset=\'0%25\' stop-color=\'%23141414\'/%3E%3Cstop offset=\'100%25\' stop-color=\'%23000000\'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'url(%23g)\'/%3E%3C/svg%3E' }}" src="{{ $video->video_url }}"></video>
+              @else
+                <button class="play-btn" aria-label="Play video">
+                  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
+                </button>
+              @endif
+              <span class="duration">--:--</span>
+            </div>
+            <div class="video-info">
+              <div class="video-title-row"><h3>{{ $video->title }}</h3></div>
+              <p class="video-meta">{{ $video->getCategoryLabelAttribute() }}</p>
+              <span class="status-pill {{ $video->is_featured ? 'approved' : 'review' }}">
+                {{ $video->is_featured ? 'Featured' : 'Not featured' }}
+              </span>
+            </div>
           </div>
-          <div class="video-info">
-            <div class="video-title-row"><h3>Summer Campaign — Teaser</h3></div>
-            <p class="video-meta">Nova Retail · Aug 1, 2026</p>
+        @empty
+          <div class="feedback-form-wrap" style="grid-column: 1 / -1;">
+            <p style="margin: 0; color: #6b7280;">No videos yet. Use the form above to add your first project.</p>
           </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-thumb hue-2">
-            <label class="video-select">
-              <input type="checkbox" class="video-checkbox">
-              <span></span>
-            </label>
-            <button class="play-btn" aria-label="Play video">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
-            </button>
-            <span class="duration">1:02</span>
-          </div>
-          <div class="video-info">
-            <div class="video-title-row"><h3>Product Launch Reel</h3></div>
-            <p class="video-meta">Fen &amp; Co. · Jul 29, 2026</p>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-thumb hue-3">
-            <label class="video-select">
-              <input type="checkbox" class="video-checkbox">
-              <span></span>
-            </label>
-            <button class="play-btn" aria-label="Play video">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
-            </button>
-            <span class="duration">4:47</span>
-          </div>
-          <div class="video-info">
-            <div class="video-title-row"><h3>Brand Story — Long Cut</h3></div>
-            <p class="video-meta">Ardent Studio · Jul 27, 2026</p>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-thumb hue-4">
-            <label class="video-select">
-              <input type="checkbox" class="video-checkbox">
-              <span></span>
-            </label>
-            <button class="play-btn" aria-label="Play video">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
-            </button>
-            <span class="duration">0:31</span>
-          </div>
-          <div class="video-info">
-            <div class="video-title-row"><h3>Instagram Cutdown v2</h3></div>
-            <p class="video-meta">Nova Retail · Jul 24, 2026</p>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-thumb hue-1">
-            <label class="video-select">
-              <input type="checkbox" class="video-checkbox">
-              <span></span>
-            </label>
-            <button class="play-btn" aria-label="Play video">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
-            </button>
-            <span class="duration">3:08</span>
-          </div>
-          <div class="video-info">
-            <div class="video-title-row"><h3>Behind the Scenes</h3></div>
-            <p class="video-meta">Marlowe &amp; Rae · Jul 22, 2026</p>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-thumb hue-2">
-            <label class="video-select">
-              <input type="checkbox" class="video-checkbox">
-              <span></span>
-            </label>
-            <button class="play-btn" aria-label="Play video">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
-            </button>
-            <span class="duration">1:35</span>
-          </div>
-          <div class="video-info">
-            <div class="video-title-row"><h3>Client Testimonial — Priya</h3></div>
-            <p class="video-meta">Fen &amp; Co. · Jul 18, 2026</p>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-thumb hue-3">
-            <label class="video-select">
-              <input type="checkbox" class="video-checkbox">
-              <span></span>
-            </label>
-            <button class="play-btn" aria-label="Play video">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
-            </button>
-            <span class="duration">2:50</span>
-          </div>
-          <div class="video-info">
-            <div class="video-title-row"><h3>Holiday Promo Draft</h3></div>
-            <p class="video-meta">Ardent Studio · Jul 15, 2026</p>
-          </div>
-        </div>
-
-        <div class="video-card">
-          <div class="video-thumb hue-4">
-            <label class="video-select">
-              <input type="checkbox" class="video-checkbox">
-              <span></span>
-            </label>
-            <button class="play-btn" aria-label="Play video">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
-            </button>
-            <span class="duration">5:12</span>
-          </div>
-          <div class="video-info">
-            <div class="video-title-row"><h3>Event Recap</h3></div>
-            <p class="video-meta">Marlowe &amp; Rae · Jul 9, 2026</p>
-          </div>
-        </div>
-
+        @endforelse
       </div>
     </main>
   </div>
 
-  <script>
-    var toggle = document.getElementById('menuToggle');
-    var sidebar = document.getElementById('sidebar');
-    if (toggle && sidebar) {
-      toggle.addEventListener('click', function () {
-        sidebar.classList.toggle('open');
-      });
-    }
+  <!-- NEW VIDEO MODAL -->
+  <div class="modal-overlay" id="newVideoOverlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="newVideoTitle">
+      <div class="modal-header">
+        <h2 id="newVideoTitle">New video</h2>
+        <button type="button" class="modal-close" id="newVideoClose" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
 
-    var checkboxes = document.querySelectorAll('.video-checkbox');
-    var selectAll = document.getElementById('selectAll');
-    var selectedCount = document.getElementById('selectedCount');
-    var deleteBtn = document.getElementById('deleteSelected');
+      <form id="newVideoForm" method="POST" action="{{ route('admin.projects.store') ?? '#' }}" enctype="multipart/form-data">
+        @csrf
 
-    function updateSelectionState() {
-      var checked = document.querySelectorAll('.video-checkbox:checked');
-      selectedCount.textContent = checked.length + ' selected';
-      deleteBtn.disabled = checked.length === 0;
-      selectAll.checked = checked.length === checkboxes.length;
-      selectAll.indeterminate = checked.length > 0 && checked.length < checkboxes.length;
-    }
+        <div class="modal-body">
 
-    checkboxes.forEach(function (box) {
-      box.addEventListener('change', function () {
-        box.closest('.video-card').classList.toggle('selected', box.checked);
-        updateSelectionState();
-      });
-    });
+          <!-- Upload -->
+          <label class="field">
+            <span class="field-label">Video file</span>
+            <label class="upload-drop" id="uploadDrop" for="videoFile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M12 4 7 9M12 4l5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+              <span class="upload-text" id="uploadText">Drop a video here, or <b>browse</b></span>
+              <span class="upload-hint">MP4, MOV, WEBM · up to 2GB</span>
+              <input type="file" id="videoFile" name="video_file" accept="video/*" hidden>
+            </label>
+          </label>
 
-    selectAll.addEventListener('change', function () {
-      checkboxes.forEach(function (box) {
-        box.checked = selectAll.checked;
-        box.closest('.video-card').classList.toggle('selected', box.checked);
-      });
-      updateSelectionState();
-    });
+          <!-- Cover image -->
+          <label class="field">
+            <span class="field-label">Cover image (thumbnail)</span>
+            <label class="upload-drop" id="coverDrop" for="coverImage">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
+              <span class="upload-text">Upload a cover image (JPG/PNG)</span>
+              <span class="upload-hint">Recommended 1280×720 · up to 5MB</span>
+              <input type="file" id="coverImage" name="cover_image" accept="image/*" hidden required>
+            </label>
+          </label>
 
-    deleteBtn.addEventListener('click', function () {
-      var checked = document.querySelectorAll('.video-checkbox:checked');
-      if (checked.length === 0) return;
-      var confirmed = confirm('Delete ' + checked.length + ' selected video' + (checked.length > 1 ? 's' : '') + '? This cannot be undone.');
-      if (!confirmed) return;
-      checked.forEach(function (box) {
-        box.closest('.video-card').remove();
-      });
-      checkboxes = document.querySelectorAll('.video-checkbox');
-      updateSelectionState();
-    });
-  </script>
+          <!-- Title -->
+          <label class="field">
+            <span class="field-label">Title</span>
+            <input type="text" name="title" class="text-input" placeholder="e.g. Summer Campaign — Teaser" required>
+          </label>
+
+          <div class="field-row">
+            <!-- Category select -->
+            <label class="field">
+              <span class="field-label">Category</span>
+              <div class="sort-select select-full">
+                <select name="category" id="categorySelect" required>
+                  <option value="" disabled selected>Choose a category</option>
+                  <option value="ai-commercial-ads">AI Commercial Ads</option>
+                  <option value="ai-product-ads">AI Product Ads</option>
+                  <option value="ai-storytelling-drama">AI Storytelling / Drama</option>
+                  <option value="ai-movie-trailers">AI Movie Trailers</option>
+                  <option value="ugc-style-ai-videos">UGC-style AI Videos</option>
+                  <option value="explainer-videos">Explainer Videos</option>
+                </select>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+              </div>
+            </label>
+            <label class="field">
+              <span class="field-label">Featured</span>
+              <div class="feature-toggle">
+                <label class="checkbox-field">
+                  <input type="checkbox" name="is_featured" value="1">
+                  Featured
+                </label>
+              </div>
+            </label>
+          </div>
+
+          <!-- Featured category picker -->
+          <div class="field">
+            <span class="field-label">Feature category</span>
+            <p class="field-hint">Pick the category card this video should be featured under. Selecting a card also sets the category above.</p>
+
+            <div class="category-picker" id="categoryPicker">
+
+              <label class="category-card" data-category="ai-commercial-ads" data-url="http://127.0.0.1:8000/what-we-do/ai-commercial-ads">
+                <input type="radio" name="feature_category" value="ai-commercial-ads">
+                <div class="category-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m9 9 6 3-6 3z"/></svg>
+                </div>
+                <span class="category-card-title">AI Commercial Ads</span>
+                <a class="category-card-link" href="http://127.0.0.1:8000/what-we-do/ai-commercial-ads" target="_blank" rel="noopener" aria-label="View AI Commercial Ads page">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </a>
+              </label>
+
+              <label class="category-card" data-category="ai-product-ads" data-url="http://127.0.0.1:8000/what-we-do/ai-product-ads">
+                <input type="radio" name="feature_category" value="ai-product-ads">
+                <div class="category-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 7.3 12 3 3.5 7.3 12 11.6z"/><path d="M3.5 7.3V16.7L12 21l8.5-4.3V7.3"/><path d="M12 11.6V21"/></svg>
+                </div>
+                <span class="category-card-title">AI Product Ads</span>
+                <a class="category-card-link" href="http://127.0.0.1:8000/what-we-do/ai-product-ads" target="_blank" rel="noopener" aria-label="View AI Product Ads page">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </a>
+              </label>
+
+              <label class="category-card" data-category="ai-storytelling-drama" data-url="http://127.0.0.1:8000/what-we-do/ai-storytelling-drama">
+                <input type="radio" name="feature_category" value="ai-storytelling-drama">
+                <div class="category-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>
+                </div>
+                <span class="category-card-title">AI Storytelling / Drama</span>
+                <a class="category-card-link" href="http://127.0.0.1:8000/what-we-do/ai-storytelling-drama" target="_blank" rel="noopener" aria-label="View AI Storytelling / Drama page">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </a>
+              </label>
+
+              <label class="category-card" data-category="ai-movie-trailers" data-url="http://127.0.0.1:8000/what-we-do/ai-movie-trailers">
+                <input type="radio" name="feature_category" value="ai-movie-trailers">
+                <div class="category-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 6v12M18 6v12M2 10h4M2 14h4M18 10h4M18 14h4"/></svg>
+                </div>
+                <span class="category-card-title">AI Movie Trailers</span>
+                <a class="category-card-link" href="http://127.0.0.1:8000/what-we-do/ai-movie-trailers" target="_blank" rel="noopener" aria-label="View AI Movie Trailers page">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </a>
+              </label>
+
+              <label class="category-card" data-category="ugc-style-ai-videos" data-url="http://127.0.0.1:8000/what-we-do/ugc-style-ai-videos">
+                <input type="radio" name="feature_category" value="ugc-style-ai-videos">
+                <div class="category-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>
+                </div>
+                <span class="category-card-title">UGC-style AI Videos</span>
+                <a class="category-card-link" href="http://127.0.0.1:8000/what-we-do/ugc-style-ai-videos" target="_blank" rel="noopener" aria-label="View UGC-style AI Videos page">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </a>
+              </label>
+
+              <label class="category-card" data-category="explainer-videos" data-url="http://127.0.0.1:8000/what-we-do/explainer-videos">
+                <input type="radio" name="feature_category" value="explainer-videos">
+                <div class="category-card-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+                </div>
+                <span class="category-card-title">Explainer Videos</span>
+                <a class="category-card-link" href="http://127.0.0.1:8000/what-we-do/explainer-videos" target="_blank" rel="noopener" aria-label="View Explainer Videos page">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
+                </a>
+              </label>
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-ghost" id="newVideoCancel">Cancel</button>
+          <button type="submit" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            Add video
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+ <script src="{{ asset('js/admin/pages/projects.js') }}"></script>
+  <script src="{{ asset('js/video-player.js') }}"></script>
 </body>
 </html>

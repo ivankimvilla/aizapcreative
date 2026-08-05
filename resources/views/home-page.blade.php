@@ -39,55 +39,88 @@
                 </div>
 
                 <div class="projects-grid">
-                    <article class="project-card">
-                        <div class="project-thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                            <span class="play-badge">▶</span>
+                    @forelse ($featuredProjects as $project)
+                        <article class="project-card">
+                            @if ($project->video_url)
+                                <div class="project-thumb">
+                                    <video playsinline preload="metadata" poster="{{ $project->cover_url ?? 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'338\'%3E%3Cdefs%3E%3CradialGradient id=\'g\'%3E%3Cstop offset=\'0%25\' stop-color=\'%23141414\'/%3E%3Cstop offset=\'100%25\' stop-color=\'%23000000\'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'url(%23g)\'/%3E%3C/svg%3E' }}" src="{{ $project->video_url }}"></video>
+                                </div>
+                            @else
+                                <div class="project-thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
+                                    <span class="project-play-icon" aria-hidden="true"></span>
+                                </div>
+                            @endif
+                            <div class="project-card__content">
+                                <h3>
+                                    {{ $project->title }}
+                                    <span class="project-category">
+                                        {{ $project->client && strcasecmp($project->client, $project->title) !== 0 ? $project->client . ' • ' : '' }}{{ $project->getCategoryLabelAttribute() }}
+                                    </span>
+                                </h3>
+                            </div>
+                        </article>
+                    @empty
+                        <div class="feedback-form-wrap" style="grid-column: 1 / -1;">
+                            <p style="margin: 0; color: #6b7280;">No featured videos yet. Add one from the admin projects page to see it here.</p>
                         </div>
-                        <h3>Nike Commercial</h3>
-                        <p>AI Commercial Ad</p>
-                    </article>
-
-                    <article class="project-card">
-                        <div class="project-thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                            <span class="play-badge">▶</span>
-                        </div>
-                        <h3>Luxury Perfume AD</h3>
-                        <p>AI Product Ad</p>
-                    </article>
-
-                    <article class="project-card">
-                        <div class="project-thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                            <span class="play-badge">▶</span>
-                        </div>
-                        <h3>Echoes of Us</h3>
-                        <p>AI Drama / Storytelling</p>
-                    </article>
-
-                    <article class="project-card">
-                        <div class="project-thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                            <span class="play-badge">▶</span>
-                        </div>
-                        <h3>Beyond the Realm</h3>
-                        <p>AI Short Film</p>
-                    </article>
-
-                    <article class="project-card">
-                        <div class="project-thumb" style="background-image: url('{{ asset('home-bg.png') }}');">
-                            <span class="play-badge">▶</span>
-                        </div>
-                        <h3>Fresh Max Campaign</h3>
-                        <p>AI Brand Campaign</p>
-                    </article>
+                    @endforelse
                 </div>
             </section>
 
             <section class="feedback-section" id="feedback">
-                <div class="feedback-header">
-                    <div class="eyebrow">Client Feedback</div>
-                    <h2>What Our Clients Say</h2>
-                </div>
-
                 <div class="feedback-layout">
+                    <aside class="feedback-summary">
+                        <div class="feedback-header">
+                            <div class="eyebrow">Client Feedback</div>
+                            <h2>What Our Clients Say</h2>
+                            <p class="feedback-header__sub">Real feedback from the brands and creators we've worked with — see what it's like to bring your project to Aizap Creatives.</p>
+                        </div>
+
+                        @php
+                            $totalReviews = $feedbackItems->count();
+                            $avgRating = $totalReviews ? round($feedbackItems->avg('rating'), 1) : 0;
+                            $ratingCounts = [];
+                            for ($r = 5; $r >= 1; $r--) {
+                                $ratingCounts[$r] = $feedbackItems->where('rating', $r)->count();
+                            }
+                            $maxCount = max(array_merge($ratingCounts, [1]));
+                        @endphp
+
+                        <div class="rating-summary rating-summary--panel">
+                            <div class="rating-summary__score">
+                                <div class="rating-summary__number">{{ number_format($avgRating, 1) }}</div>
+                                <div class="rating-summary__stars" aria-hidden="true">
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: {{ $i <= round($avgRating) ? '1' : '0.2' }};">
+                                            <path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/>
+                                        </svg>
+                                    @endfor
+                                </div>
+                                <div class="rating-summary__count">{{ $totalReviews }} {{ Str::plural('review', $totalReviews) }}</div>
+                            </div>
+
+                            <div class="rating-summary__bars">
+                                @foreach ($ratingCounts as $star => $count)
+                                    <div class="rating-bar-row">
+                                        <span class="rating-bar-row__label">
+                                            @for ($i = 1; $i <= $star; $i++)
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD400" class="rating-bar-row__label-star" aria-hidden="true">
+                                                    <path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/>
+                                                </svg>
+                                            @endfor
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
+
+                            <button type="button" class="btn btn-primary rating-summary__cta" id="openReviewModalBtn">Write a review</button>
+                        </div>
+
+                        <div class="feedback-summary__note">
+                            <strong>New reviews appear instantly</strong> once submitted, and each entry includes the post date so visitors can see recent praise.
+                        </div>
+                    </aside>
+
                     <div class="feedback-panel">
                         <div class="feedback-panel__top">
                             <div class="feedback-panel__title">
@@ -97,183 +130,107 @@
                                     </svg>
                                 </span>
                                 Feedback List
-                                <span class="feedback-panel__count">6</span>
+                                <span class="feedback-panel__count">{{ $feedbackItems->count() }}</span>
                             </div>
                         </div>
 
-                        <div class="feedback-table__head" aria-hidden="true">
-                            <span>Client</span>
-                            <span>Feedback Details</span>
-                            <span>Rating</span>
-                        </div>
-
-                        <div class="feedback-table__body" id="feedbackRows">
-                            <div class="feedback-row" data-search="lia pascual founder from concept to delivery">
-                                <div class="feedback-row__user" data-label="Client">
-                                    <span class="feedback-row__avatar">LP</span>
-                                    <div class="feedback-row__user-meta">
-                                        <strong>Lia Pascual</strong>
-                                        <small>Founder</small>
+                        <div class="feedback-table__wrap">
+                            <div class="feedback-table__body">
+                                @forelse ($feedbackItems as $feedback)
+                                    <div class="review-card" data-search="{{ strtolower($feedback->name . ' ' . ($feedback->role ?? '') . ' ' . $feedback->message) }}">
+                                        <div class="review-card__top">
+                                            <span class="review-card__avatar">
+                                                @if (!empty($feedback->avatar_url))
+                                                    <img src="{{ $feedback->avatar_url }}" alt="{{ $feedback->name }}">
+                                                @else
+                                                    {{ strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $feedback->name), 0, 2)) }}
+                                                @endif
+                                            </span>
+                                            <strong class="review-card__name">{{ $feedback->name }}</strong>
+                                        </div>
+                                        <div class="review-card__stars-date">
+                                            <span class="review-card__stars">
+                                                @for ($i = 1; $i <= 5; $i++)
+                                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="opacity: {{ $i <= $feedback->rating ? '1' : '0.25' }};">
+                                                        <path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/>
+                                                    </svg>
+                                                @endfor
+                                            </span>
+                                            <span class="review-card__date">{{ optional($feedback->created_at)->format('M j, Y') ?? now()->format('M j, Y') }}</span>
+                                        </div>
+                                        <p class="review-card__message">{{ $feedback->message }}</p>
                                     </div>
-                                </div>
-                                <div class="feedback-row__details" data-label="Feedback">
-                                    <p>“From concept to delivery, the team made the process smooth and strategic. Our audience response doubled after launch.”</p>
-                                    <span class="feedback-row__id">REV-001</span>
-                                </div>
-                                <div class="feedback-row__rating" data-label="Rating">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                </div>
-                            </div>
-
-                            <div class="feedback-row" data-search="anna martinez brand director aizap turned our product launch">
-                                <div class="feedback-row__user" data-label="Client">
-                                    <span class="feedback-row__avatar">AM</span>
-                                    <div class="feedback-row__user-meta">
-                                        <strong>Anna Martinez</strong>
-                                        <small>Brand Director</small>
+                                @empty
+                                    <div class="review-card review-card--empty">
+                                        <p class="review-card__message">No client feedback is available yet.</p>
                                     </div>
-                                </div>
-                                <div class="feedback-row__details" data-label="Feedback">
-                                    <p>“Aizap turned our product launch into a bold visual story. The campaign felt premium, fast, and incredibly on-brand.”</p>
-                                    <span class="feedback-row__id">REV-002</span>
-                                </div>
-                                <div class="feedback-row__rating" data-label="Rating">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                </div>
-                            </div>
-
-                            <div class="feedback-row" data-search="jordan reyes marketing lead ai creative workflow">
-                                <div class="feedback-row__user" data-label="Client">
-                                    <span class="feedback-row__avatar">JR</span>
-                                    <div class="feedback-row__user-meta">
-                                        <strong>Jordan Reyes</strong>
-                                        <small>Marketing Lead</small>
-                                    </div>
-                                </div>
-                                <div class="feedback-row__details" data-label="Feedback">
-                                    <p>“Their AI creative workflow gave us polished commercial visuals in days, not weeks. Every frame felt intentional and high-end.”</p>
-                                    <span class="feedback-row__id">REV-003</span>
-                                </div>
-                                <div class="feedback-row__rating" data-label="Rating">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                </div>
-                            </div>
-
-                            <div class="feedback-row" data-search="daniel kim creative director turnaround time was unreal">
-                                <div class="feedback-row__user" data-label="Client">
-                                    <span class="feedback-row__avatar">DK</span>
-                                    <div class="feedback-row__user-meta">
-                                        <strong>Daniel Kim</strong>
-                                        <small>Creative Director</small>
-                                    </div>
-                                </div>
-                                <div class="feedback-row__details" data-label="Feedback">
-                                    <p>“The turnaround time was unreal without sacrificing quality. Aizap gets the brief right on the first pass, every time.”</p>
-                                    <span class="feedback-row__id">REV-004</span>
-                                </div>
-                                <div class="feedback-row__rating" data-label="Rating">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                </div>
-                            </div>
-
-                            <div class="feedback-row" data-search="sofia cruz growth manager tested three agencies">
-                                <div class="feedback-row__user" data-label="Client">
-                                    <span class="feedback-row__avatar">SC</span>
-                                    <div class="feedback-row__user-meta">
-                                        <strong>Sofia Cruz</strong>
-                                        <small>Growth Manager</small>
-                                    </div>
-                                </div>
-                                <div class="feedback-row__details" data-label="Feedback">
-                                    <p>“We tested three agencies before Aizap. Nobody else understood our brand voice this fast or executed it this cleanly.”</p>
-                                    <span class="feedback-row__id">REV-005</span>
-                                </div>
-                                <div class="feedback-row__rating" data-label="Rating">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                </div>
-                            </div>
-
-                            <div class="feedback-row" data-search="rico tan founder fresh max storytelling ads emotional edge">
-                                <div class="feedback-row__user" data-label="Client">
-                                    <span class="feedback-row__avatar">RT</span>
-                                    <div class="feedback-row__user-meta">
-                                        <strong>Rico Tan</strong>
-                                        <small>Founder, Fresh Max</small>
-                                    </div>
-                                </div>
-                                <div class="feedback-row__details" data-label="Feedback">
-                                    <p>“Their storytelling ads gave our campaign an emotional edge competitors just don't have. Worth every peso.”</p>
-                                    <span class="feedback-row__id">REV-006</span>
-                                </div>
-                                <div class="feedback-row__rating" data-label="Rating">
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>
-                                </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="feedback-form-wrap">
+                @php
+                    $reviewModalShouldOpen = session('status') || $errors->any();
+                @endphp
+
+                <div class="review-modal__backdrop{{ $reviewModalShouldOpen ? ' is-open' : '' }}" id="reviewModalBackdrop">
+                    <div class="review-modal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+                        <button type="button" class="review-modal__close" id="closeReviewModalBtn" aria-label="Close">&times;</button>
+
                         <div class="feedback-form-header">
                             <div class="eyebrow">Share Your Experience</div>
-                            <h3>Write a Feedback</h3>
+                            <h3 id="reviewModalTitle">Write a Feedback</h3>
                             <p class="feedback-form-sub">Tell us what you think about working with Aizap Creatives.</p>
                         </div>
 
-                        <form class="feedback-form" action="#" method="POST">
+                        <form class="feedback-form" action="{{ route('feedback.store') }}" method="POST">
+                            @csrf
+                            @if (session('status'))
+                                <div class="form-alert form-alert--success" role="status">
+                                    {{ session('status') }}
+                                </div>
+                            @endif
+                            @if ($errors->any())
+                                <div class="form-alert form-alert--error" role="alert">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
                             <div class="form-row">
                                 <div class="form-group">
                                     <label for="fb-name">Full Name</label>
-                                    <input type="text" id="fb-name" name="name" autocomplete="name" placeholder="Enter your full name" required>
+                                    <input type="text" id="fb-name" name="name" autocomplete="name" placeholder="Enter your full name" value="{{ old('name') }}" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="fb-role">Role / Company</label>
-                                    <input type="text" id="fb-role" name="role" autocomplete="organization" placeholder="Role, Company Name">
+                                    <input type="text" id="fb-role" name="role" autocomplete="organization" placeholder="Role, Company Name" value="{{ old('role') }}">
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <span class="form-group-label">Your Rating</span>
                                 <div class="rating-input">
-                                    <input type="radio" id="star5" name="rating" value="5" checked>
+                                    <input type="radio" id="star5" name="rating" value="5" {{ old('rating', '5') === '5' ? 'checked' : '' }}>
                                     <label for="star5" title="5 stars">★</label>
-                                    <input type="radio" id="star4" name="rating" value="4">
+                                    <input type="radio" id="star4" name="rating" value="4" {{ old('rating') === '4' ? 'checked' : '' }}>
                                     <label for="star4" title="4 stars">★</label>
-                                    <input type="radio" id="star3" name="rating" value="3">
+                                    <input type="radio" id="star3" name="rating" value="3" {{ old('rating') === '3' ? 'checked' : '' }}>
                                     <label for="star3" title="3 stars">★</label>
-                                    <input type="radio" id="star2" name="rating" value="2">
+                                    <input type="radio" id="star2" name="rating" value="2" {{ old('rating') === '2' ? 'checked' : '' }}>
                                     <label for="star2" title="2 stars">★</label>
-                                    <input type="radio" id="star1" name="rating" value="1">
+                                    <input type="radio" id="star1" name="rating" value="1" {{ old('rating') === '1' ? 'checked' : '' }}>
                                     <label for="star1" title="1 star">★</label>
                                 </div>
                             </div>
 
                             <div class="form-group form-group--grow">
                                 <label for="fb-message">Your Feedback</label>
-                                <textarea id="fb-message" name="message" rows="4" autocomplete="off" placeholder="Share details about your experience working with us..." required></textarea>
+                                <textarea id="fb-message" name="message" rows="4" autocomplete="off" placeholder="Share details about your experience working with us..." required>{{ old('message') }}</textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary feedback-submit">Submit Feedback</button>
@@ -285,5 +242,7 @@
         </div>
     </div>
     @include('footer.footer')
+    <script src="{{ asset('js/video-player.js') }}"></script>
+    <script src="{{ asset('js/home-page.js') }}"></script>
 </body>
 </html>
