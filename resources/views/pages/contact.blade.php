@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/pages/contact.css') }}">
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 <body class="contact-page">
     @include('header.header')
@@ -51,33 +52,31 @@
                     @csrf
 
                     <label class="field">
-                        <span>Your Name</span>
-                        <input type="text" name="name" placeholder="Your Name" value="{{ old('name') }}" required>
+                        <span>First name*</span>
+                        <input type="text" name="first_name" value="{{ old('first_name') }}" required>
                     </label>
                     <label class="field">
-                        <span>Your Email</span>
-                        <input type="email" name="email" placeholder="Your Email" value="{{ old('email') }}">
+                        <span>Last name*</span>
+                        <input type="text" name="last_name" value="{{ old('last_name') }}" required>
                     </label>
                     <label class="field">
-                        <span>Company / Brand</span>
-                        <input type="text" name="role" placeholder="Company / Brand" value="{{ old('role') }}">
-                    </label>
-                    <label class="field">
-                        <span>Subject</span>
-                        <input type="text" name="subject" placeholder="Subject" value="{{ old('subject') }}">
+                        <span>Email*</span>
+                        <input type="email" name="email" value="{{ old('email') }}" required>
                     </label>
                     <label class="field field--full">
-                        <span>Tell us about your project...</span>
-                        <textarea name="message" rows="5" placeholder="Tell us about your project..." required>{{ old('message') }}</textarea>
+                        <span>Tell us about your inquiry*</span>
+                        <textarea name="message" rows="5" required>{{ old('message') }}</textarea>
                     </label>
+
+                    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+
+                    <div class="field field--full">
+                        <div class="g-recaptcha" data-sitekey="6LeoNnctAAAAAKR5jGB0E8YWYZe7eJWvC9iIQpxc" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                    </div>
 
                     <div class="form-footer">
                         <div class="form-footer__left">
-                            @if (session('status'))
-                                <div class="form-alert form-alert--success" role="status">
-                                    {{ session('status') }}
-                                </div>
-                            @elseif ($errors->any())
+                            @if ($errors->any())
                                 <div class="form-alert form-alert--error" role="alert">
                                     <ul>
                                         @foreach ($errors->all() as $error)
@@ -168,7 +167,7 @@
                         <span>Let's Create Something Extraordinary Together.</span>
                     </div>
                     <span class="contact-callout__icon">
-                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg>
+                        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l2 2 4-4"/></svg>
                     </span>
                 </div>
             </div>

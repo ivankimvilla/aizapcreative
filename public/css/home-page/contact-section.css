@@ -1,0 +1,349 @@
+.aizap-contact {
+    padding: 20px 0 100px;
+    position: relative;
+}
+
+.aizap-contact__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: stretch;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    margin-top: 60px;
+}
+
+.aizap-contact__left,
+.aizap-contact__right {
+    display: flex;
+    flex-direction: column;
+}
+
+.aizap-contact__left {
+    padding-top: 16px;
+}
+
+.aizap-contact__title {
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin: 0 0 1.25rem;
+    text-transform: uppercase;
+}
+
+.aizap-contact__desc {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #a0a0a0;
+    max-width: 480px;
+    margin: 0;
+}
+
+.aizap-contact__desc strong {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* ---- Slideshow (3 images, auto-rotating every 5s) ---- */
+
+.aizap-contact__slideshow {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-top: 2rem;
+    border: 1px solid #2a2820;
+    background: #141210;
+}
+
+.aizap-contact__slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    animation: aizapSlideFade 15s infinite;
+    /* 3 images x 5s each = 15s */
+}
+
+.aizap-contact__slide:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.aizap-contact__slide:nth-child(2) {
+    animation-delay: 5s;
+}
+
+.aizap-contact__slide:nth-child(3) {
+    animation-delay: 10s;
+}
+
+@keyframes aizapSlideFade {
+    0% {
+        opacity: 0;
+    }
+
+    3% {
+        opacity: 1;
+    }
+
+    30% {
+        opacity: 1;
+    }
+
+    33% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* ---- Contact card / form ---- */
+
+.aizap-contact__card {
+    position: relative;
+    background: rgba(30, 28, 24, 0.85);
+    border: 1px solid #2a2820;
+    border-radius: 20px;
+    padding: 2.25rem 2rem;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.aizap-form {
+    position: relative;
+}
+
+.aizap-alert--success.aizap-alert--floating,
+.form-alert--success.aizap-alert--floating {
+    position: absolute;
+    top: 2.25rem;
+    left: 2rem;
+    right: 2rem;
+    z-index: 2;
+    margin: 0;
+    width: auto;
+    max-width: calc(100% - 4rem);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.16);
+    background: #0f8a44;
+    border-color: rgba(16, 138, 68, 0.4);
+    color: #ffffff;
+}
+
+.aizap-alert--success.aizap-alert--floating .form-alert__title,
+.form-alert--success.aizap-alert--floating .form-alert__title {
+    color: #ffffff;
+}
+
+.aizap-alert--success.aizap-alert--floating p,
+.form-alert--success.aizap-alert--floating p {
+    margin: 0;
+}
+
+.aizap-contact__heading {
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    text-align: center;
+}
+
+.aizap-alert {
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+}
+
+.aizap-alert--success {
+    background: rgba(201, 151, 42, 0.12);
+    border: 1px solid rgba(201, 151, 42, 0.35);
+    color: #c9972a;
+}
+
+.aizap-alert--error {
+    background: rgba(220, 60, 60, 0.1);
+    border: 1px solid rgba(220, 60, 60, 0.3);
+    color: #f07070;
+}
+
+.aizap-alert ul {
+    margin: 0;
+    padding-left: 1.1rem;
+}
+
+.aizap-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.aizap-form__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.aizap-form__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #ffffff;
+}
+
+.aizap-form__input {
+    width: 100%;
+    box-sizing: border-box;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 28px;
+    padding: 0.65rem 1rem;
+    min-height: 44px;
+    font-size: 0.95rem;
+    font-family: 'Instrument Sans', sans-serif;
+    color: #000000;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.aizap-form__input:hover {
+    border-color: #d1d5db;
+    background: #ffffff;
+}
+
+
+.aizap-form__select-wrap {
+    position: relative;
+}
+
+.aizap-form__select {
+    cursor: pointer;
+    padding-right: 2.5rem;
+    color: #a0a0a0;
+}
+
+.aizap-form__select:focus,
+.aizap-form__select.has-value {
+    color: #f0ede8;
+}
+
+.aizap-form__chevron {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #888;
+    pointer-events: none;
+}
+
+.aizap-form__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    margin-top: 0;
+    background: #c9972a;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Instrument Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    color: #000;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.aizap-form__submit:hover {
+    background: #e0a93a;
+}
+
+.aizap-form__submit:active {
+    transform: scale(0.98);
+}
+
+.aizap-form__recaptcha {
+    margin: 0;
+    padding: 0;
+}
+
+.aizap-form__submit svg {
+    width: 16px;
+    height: 16px;
+}
+
+.aizap-form__privacy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: #555;
+    margin: 0.5rem 0 0;
+    text-align: center;
+}
+
+.aizap-form__privacy svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 860px) {
+    .aizap-contact__inner {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .aizap-contact__left {
+        text-align: center;
+    }
+
+    .aizap-contact__desc {
+        max-width: 100%;
+    }
+
+    .aizap-contact__slideshow {
+        max-width: 100%;
+        margin: 2rem auto 0;
+    }
+
+    .aizap-contact__card {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .aizap-contact__card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .aizap-form__input {
+        padding: 0.6rem 0.9rem;
+        min-height: 40px;
+    }
+}
+
+/* Feedback list scrolling helper */
+.feedback-table__body {
+    /* JS sets max-height; ensure overflow allows scrolling when set */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}

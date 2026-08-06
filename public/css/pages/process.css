@@ -36,20 +36,26 @@ body {
     padding: 0 40px 56px;
 }
 
-/* HERO — flush to top, no margin/padding above it */
+/* HERO — two columns: visual panel on the left, copy on the right */
 .process-hero {
     display: grid;
-    grid-template-columns: 0.88fr 1.12fr;
-    gap: 34px;
-    align-items: stretch;
-    min-height: 500px;
-    margin-top: 0;
-    padding-top: 0;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+    min-height: auto;
+    margin-top: 32px;
+    padding-top: 12px;
+    padding-bottom: 8px;
+    text-align: left;
 }
 
 .process-hero__copy {
-    max-width: 600px;
+    max-width: 560px;
     align-self: center;
+}
+
+.process-hero__copy--wide {
+    padding: 0 16px 0 0;
 }
 
 .eyebrow {
@@ -62,13 +68,13 @@ body {
 }
 
 .process-hero__title {
-    margin: 0 0 18px;
+    margin: 0 0 20px;
     color: #fff;
     font-size: clamp(34px, 5.5vw, 72px);
-    line-height: 0.92;
+    line-height: 1.02;
     font-weight: 900;
     text-transform: uppercase;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.04em;
 }
 
 .process-hero__title span {
@@ -76,7 +82,7 @@ body {
 }
 
 .process-hero__text {
-    max-width: 530px;
+    max-width: 480px;
     margin: 0 0 24px;
     color: var(--muted);
     font-size: 15px;
@@ -140,34 +146,96 @@ body {
     color: #000;
 }
 
-
-/* MEDIA — flush to top of the hero row, bled out to the true right edge
-   of the viewport (breaks out of the .process-shell's right padding and
-   the max-width container itself, whichever is the binding constraint). */
+/* MEDIA — contained panel on the left with a slow scanning-light sweep,
+   a quiet nod to AI generation happening "inside" the frame. */
 .process-hero__media-wrap {
     display: grid;
     grid-template-columns: 1fr;
     align-self: stretch;
-    margin-top: 0;
-    margin-right: calc(-1 * max(40px, (100vw - 1480px) / 2 + 40px));
 }
 
 .process-hero__media {
     position: relative;
     height: 100%;
-    min-height: 470px;
-    border-radius: 18px 0 0 18px;
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    overflow: hidden;
+    min-height: 440px;
+    background: transparent;
 }
 
-.process-hero__media::after {
-    content: "";
+/* SLIDESHOW — 6 stacked category panels crossfade in sequence, 5s each,
+   looping every 30s. animation-delay (set inline per slide, in
+   -5s steps) staggers each panel into its turn in the same cycle. */
+.process-hero__slide {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.52));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    opacity: 0;
+    background: transparent;
+    animation: hero-slide-fade 30s ease-in-out infinite;
+    will-change: opacity;
+}
+
+.process-hero__slide-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(247, 197, 32, 0.85);
+    background: rgba(247, 197, 32, 0.06);
+    color: var(--gold);
+}
+
+.process-hero__slide-icon svg {
+    width: 92px;
+    height: 92px;
+}
+
+.process-hero__slide-label {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    text-align: center;
+    padding: 0 24px;
+}
+
+@keyframes hero-slide-fade {
+    0% {
+        opacity: 0;
+    }
+
+    4% {
+        opacity: 1;
+    }
+
+    13% {
+        opacity: 1;
+    }
+
+    17% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .process-hero__slide {
+        animation: none;
+        opacity: 0;
+    }
+
+    .process-hero__slide:first-child {
+        opacity: 1;
+    }
 }
 
 .process-section {
@@ -254,7 +322,7 @@ body {
     height: 24px;
 }
 
-/* STEP CARDS — no border/box, matches the clean column layout */
+/* STEP CARDS */
 .process-steps {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -291,14 +359,28 @@ body {
 }
 
 .process-step-image {
+    position: relative;
     width: 100%;
     aspect-ratio: 4 / 3;
     border-radius: 14px;
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-color: #000;
+    overflow: hidden;
     margin-bottom: 16px;
+    background: #0a0a0a;
+}
+
+.process-step-image::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.45));
+    pointer-events: none;
+}
+
+.process-step-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .process-step-desc {
@@ -408,7 +490,26 @@ body {
         padding: 0 18px 52px;
     }
 
-    .process-hero,
+    .process-hero {
+        grid-template-columns: 1fr;
+        margin-top: 24px;
+        padding-top: 8px;
+        text-align: center;
+    }
+
+    .process-hero__copy {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .process-hero__copy--wide {
+        padding: 0 16px;
+    }
+
+    .process-hero__text {
+        margin: 0 auto 24px;
+    }
+
     .process-steps {
         grid-template-columns: 1fr;
     }
@@ -418,13 +519,25 @@ body {
     }
 
     .process-hero__media-wrap {
-        grid-template-columns: 1fr;
-        margin-right: 0;
+        order: -1;
     }
 
     .process-hero__media {
         min-height: 240px;
-        border-radius: 18px;
+    }
+
+    .process-hero__slide-icon {
+        width: 140px;
+        height: 140px;
+    }
+
+    .process-hero__slide-icon svg {
+        width: 58px;
+        height: 58px;
+    }
+
+    .process-hero__slide-label {
+        font-size: 17px;
     }
 
     .process-cta {

@@ -7,11 +7,15 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/home-page/home-page.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pages/process.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/home-page/contact-section.css') }}">
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 <body class="home-page-page">
     @include('header.header')
     <div class="background-glow">
         <div class="container">
+
             <section class="hero-section" id="services">
                 <div class="hero-copy">
                     <h1 class="hero-title">
@@ -23,7 +27,6 @@
                         We create high-quality AI-generated videos, ads, and creative content that helps brands stand out, connect, and grow in the digital world.
                     </p>
                 </div>
-
                 <div class="hero-panels hero-panel">
                     <div class="hero-panel-media" style="background-image: url('{{ asset('home-bg.png') }}');"></div>
                 </div>
@@ -37,7 +40,6 @@
                     </div>
                     <a href="/portfolio" class="btn btn-secondary">View All Projects</a>
                 </div>
-
                 <div class="projects-grid">
                     @forelse ($featuredProjects as $project)
                         <article class="project-card">
@@ -67,6 +69,204 @@
                 </div>
             </section>
 
+            <main class="process-shell">
+                <section class="process-hero">
+                    <div class="process-hero__media-wrap">
+                        <div class="process-hero__media">
+                            <div class="process-hero__slide" style="animation-delay: 0s;">
+                                <div class="process-hero__slide-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+                                </div>
+                                <div class="process-hero__slide-label">AI Commercial Ads</div>
+                            </div>
+                            <div class="process-hero__slide" style="animation-delay: -5s;">
+                                <div class="process-hero__slide-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".7" fill="currentColor" stroke="none"/></svg>
+                                </div>
+                                <div class="process-hero__slide-label">AI Product Ads</div>
+                            </div>
+                            <div class="process-hero__slide" style="animation-delay: -10s;">
+                                <div class="process-hero__slide-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
+                                </div>
+                                <div class="process-hero__slide-label">AI Storytelling / Drama</div>
+                            </div>
+                            <div class="process-hero__slide" style="animation-delay: -15s;">
+                                <div class="process-hero__slide-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 3.9"/><path d="m12.4 3.4 3.1 4"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+                                </div>
+                                <div class="process-hero__slide-label">AI Movie Trailers</div>
+                            </div>
+                            <div class="process-hero__slide" style="animation-delay: -20s;">
+                                <div class="process-hero__slide-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+                                </div>
+                                <div class="process-hero__slide-label">UGC-style AI Videos</div>
+                            </div>
+                            <div class="process-hero__slide" style="animation-delay: -25s;">
+                                <div class="process-hero__slide-icon">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                                </div>
+                                <div class="process-hero__slide-label">Explainer Videos</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="process-hero__copy process-hero__copy--wide">
+                        <h1 class="process-hero__title">Our process.<br><span>Simple. clear.</span><br>Powerful.</h1>
+                        <p class="process-hero__text">
+                            Our proven process ensures every project is strategic, creative, and delivered with precision from concept to final cut.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="process-section">
+                    <div class="section-heading">
+                        <div class="eyebrow">How We Work</div>
+                        <h2>A clear process. Exceptional results.</h2>
+                        <p>From your idea to a powerful final video — we handle everything.</p>
+                    </div>
+
+                    <div class="process-icons-row">
+                        <div class="process-icons-line"></div>
+
+                        <div class="process-icon-node">
+                            <div class="process-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="process-icon-node">
+                            <div class="process-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.44 1 1.15 1 1.9V17a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-.4c0-.75.4-1.46 1-1.9A7 7 0 0 0 12 2z"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="process-icon-node">
+                            <div class="process-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="process-icon-node">
+                            <div class="process-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 2.5 2.5 0 0 0 1.32 4.26 2.5 2.5 0 0 0 1.98 3 2.5 2.5 0 0 0 4.96-.44"/><path d="M12 4.5a2.5 2.5 0 0 1 4.96-.46 2.5 2.5 0 0 1 1.98 3 2.5 2.5 0 0 1 1.32 4.24 2.5 2.5 0 0 1-1.32 4.26 2.5 2.5 0 0 1-1.98 3 2.5 2.5 0 0 1-4.96-.44"/><path d="M12 4.5v15"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="process-icon-node">
+                            <div class="process-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg>
+                            </div>
+                        </div>
+
+                        <div class="process-icon-node">
+                            <div class="process-circle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="process-steps">
+                        <article class="process-step-card">
+                            <span class="process-number">01</span>
+                            <h3>Discovery Call</h3>
+                            <div class="process-step-image">
+                                <img src="{{ asset('images/process/discovery-call.png') }}" alt="Discovery Call" loading="lazy">
+                            </div>
+                            <p class="process-step-desc">We get to know your goals, audience, and vision.</p>
+                            <ul>
+                                <li>Project brief</li>
+                                <li>Goal alignment</li>
+                                <li>Scope &amp; timeline</li>
+                            </ul>
+                        </article>
+
+                        <article class="process-step-card">
+                            <span class="process-number">02</span>
+                            <h3>Strategy &amp; Concept</h3>
+                            <div class="process-step-image">
+                                <img src="{{ asset('images/process/strategy-concept.png') }}" alt="Strategy &amp; Concept" loading="lazy">
+                            </div>
+                            <p class="process-step-desc">We craft the right strategy and creative concept.</p>
+                            <ul>
+                                <li>Market &amp; audience insight</li>
+                                <li>Creative direction</li>
+                                <li>Concept approval</li>
+                            </ul>
+                        </article>
+
+                        <article class="process-step-card">
+                            <span class="process-number">03</span>
+                            <h3>Script &amp; Storyboard</h3>
+                            <div class="process-step-image">
+                                <img src="{{ asset('images/process/script.png') }}" alt="Script &amp; Storyboard" loading="lazy">
+                            </div>
+                            <p class="process-step-desc">We write the script and visualize the entire story.</p>
+                            <ul>
+                                <li>Scriptwriting</li>
+                                <li>Storyboard &amp; shot list</li>
+                                <li>Client approval</li>
+                            </ul>
+                        </article>
+
+                        <article class="process-step-card">
+                            <span class="process-number">04</span>
+                            <h3>AI Production</h3>
+                            <div class="process-step-image">
+                                <img src="{{ asset('images/process/production.png') }}" alt="AI Production" loading="lazy">
+                            </div>
+                            <p class="process-step-desc">Our AI tools bring your story to life.</p>
+                            <ul>
+                                <li>AI image &amp; video generation</li>
+                                <li>Voiceover &amp; SFX</li>
+                                <li>Scene composition</li>
+                            </ul>
+                        </article>
+
+                        <article class="process-step-card">
+                            <span class="process-number">05</span>
+                            <h3>Editing &amp; Revisions</h3>
+                            <div class="process-step-image">
+                                <img src="{{ asset('images/process/editing-revisions.png') }}" alt="Editing &amp; Revisions" loading="lazy">
+                            </div>
+                            <p class="process-step-desc">We polish every frame until it's perfect.</p>
+                            <ul>
+                                <li>Editing &amp; color grading</li>
+                                <li>Sound design &amp; music</li>
+                                <li>Revisions included</li>
+                            </ul>
+                        </article>
+
+                        <article class="process-step-card">
+                            <span class="process-number">06</span>
+                            <h3>Final Delivery</h3>
+                            <div class="process-step-image">
+                                <img src="{{ asset('images/process/final-delivery.png') }}" alt="Final Delivery" loading="lazy">
+                            </div>
+                            <p class="process-step-desc">We deliver a high-impact final video, ready to perform.</p>
+                            <ul>
+                                <li>Final quality check</li>
+                                <li>Formats for all platforms</li>
+                                <li>On-time delivery</li>
+                            </ul>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="process-cta">
+                    <div class="process-cta__left">
+                        <div class="process-cta__icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l2 2 4-4"/></svg>
+                        </div>
+                        <div>
+                            <h3>Ready to bring your story to life?</h3>
+                            <p>Let's create something extraordinary together.</p>
+                        </div>
+                    </div>
+                    <a href="/contact" class="process-cta__button">Let's Work Together</a>
+                </section>
+            </main>
+
             <section class="feedback-section" id="feedback">
                 <div class="feedback-layout">
                     <aside class="feedback-summary">
@@ -77,13 +277,9 @@
                         </div>
 
                         @php
-                            $totalReviews = $feedbackItems->count();
-                            $avgRating = $totalReviews ? round($feedbackItems->avg('rating'), 1) : 0;
-                            $ratingCounts = [];
-                            for ($r = 5; $r >= 1; $r--) {
-                                $ratingCounts[$r] = $feedbackItems->where('rating', $r)->count();
-                            }
-                            $maxCount = max(array_merge($ratingCounts, [1]));
+                            $totalReviews = $feedbackCount ?? $feedbackItems->count();
+                            $avgRating = $totalReviews ? round($feedbackAverage ?? $feedbackItems->avg('rating'), 1) : 0;
+                            $ratingBarWidths = [5 => 100, 4 => 60, 3 => 35, 2 => 15, 1 => 8];
                         @endphp
 
                         <div class="rating-summary rating-summary--panel">
@@ -96,18 +292,15 @@
                                         </svg>
                                     @endfor
                                 </div>
-                                <div class="rating-summary__count">{{ $totalReviews }} {{ Str::plural('review', $totalReviews) }}</div>
+                                <div class="rating-summary__count" id="feedbackSummaryCount">{{ $totalReviews }} {{ Str::plural('review', $totalReviews) }}</div>
                             </div>
 
                             <div class="rating-summary__bars">
-                                @foreach ($ratingCounts as $star => $count)
+                                @foreach ($ratingBarWidths as $star => $pct)
                                     <div class="rating-bar-row">
-                                        <span class="rating-bar-row__label">
-                                            @for ($i = 1; $i <= $star; $i++)
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#FFD400" class="rating-bar-row__label-star" aria-hidden="true">
-                                                    <path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/>
-                                                </svg>
-                                            @endfor
+                                        <span class="rating-bar-row__label">{{ $star }}</span>
+                                        <span class="rating-bar-row__track">
+                                            <span class="rating-bar-row__fill" style="width: {{ $pct }}%;"></span>
                                         </span>
                                     </div>
                                 @endforeach
@@ -130,12 +323,12 @@
                                     </svg>
                                 </span>
                                 Feedback List
-                                <span class="feedback-panel__count">{{ $feedbackItems->count() }}</span>
+                                <span class="feedback-panel__count" id="feedbackCount">{{ $totalReviews }}</span>
                             </div>
                         </div>
 
                         <div class="feedback-table__wrap">
-                            <div class="feedback-table__body">
+                            <div class="feedback-table__body" id="feedbackBody">
                                 @forelse ($feedbackItems as $feedback)
                                     <div class="review-card" data-search="{{ strtolower($feedback->name . ' ' . ($feedback->role ?? '') . ' ' . $feedback->message) }}">
                                         <div class="review-card__top">
@@ -171,7 +364,7 @@
                 </div>
 
                 @php
-                    $reviewModalShouldOpen = session('status') || $errors->any();
+                    $reviewModalShouldOpen = $errors->any();
                 @endphp
 
                 <div class="review-modal__backdrop{{ $reviewModalShouldOpen ? ' is-open' : '' }}" id="reviewModalBackdrop">
@@ -184,53 +377,47 @@
                             <p class="feedback-form-sub">Tell us what you think about working with Aizap Creatives.</p>
                         </div>
 
-                        <form class="feedback-form" action="{{ route('feedback.store') }}" method="POST">
+                        <form id="feedbackForm" class="feedback-form" action="{{ route('feedback.store') }}" method="POST">
                             @csrf
-                            @if (session('status'))
-                                <div class="form-alert form-alert--success" role="status">
-                                    {{ session('status') }}
-                                </div>
-                            @endif
                             @if ($errors->any())
                                 <div class="form-alert form-alert--error" role="alert">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                                    <div class="form-alert__icon" aria-hidden="true">!</div>
+                                    <div>
+                                        <div class="form-alert__title">Couldn't submit feedback</div>
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                             @endif
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="fb-name">Full Name</label>
-                                    <input type="text" id="fb-name" name="name" autocomplete="name" placeholder="Enter your full name" value="{{ old('name') }}" required>
+                                    <label for="fb-first-name">First name<span class="required-asterisk">*</span></label>
+                                    <input type="text" id="fb-first-name" name="first_name" autocomplete="given-name" value="{{ old('first_name') }}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="fb-role">Role / Company</label>
-                                    <input type="text" id="fb-role" name="role" autocomplete="organization" placeholder="Role, Company Name" value="{{ old('role') }}">
+                                    <label for="fb-last-name">Last name<span class="required-asterisk">*</span></label>
+                                    <input type="text" id="fb-last-name" name="last_name" autocomplete="family-name" value="{{ old('last_name') }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <span class="form-group-label">Your Rating</span>
-                                <div class="rating-input">
-                                    <input type="radio" id="star5" name="rating" value="5" {{ old('rating', '5') === '5' ? 'checked' : '' }}>
-                                    <label for="star5" title="5 stars">★</label>
-                                    <input type="radio" id="star4" name="rating" value="4" {{ old('rating') === '4' ? 'checked' : '' }}>
-                                    <label for="star4" title="4 stars">★</label>
-                                    <input type="radio" id="star3" name="rating" value="3" {{ old('rating') === '3' ? 'checked' : '' }}>
-                                    <label for="star3" title="3 stars">★</label>
-                                    <input type="radio" id="star2" name="rating" value="2" {{ old('rating') === '2' ? 'checked' : '' }}>
-                                    <label for="star2" title="2 stars">★</label>
-                                    <input type="radio" id="star1" name="rating" value="1" {{ old('rating') === '1' ? 'checked' : '' }}>
-                                    <label for="star1" title="1 star">★</label>
-                                </div>
+                                <label for="fb-rating">Your Rating<span class="required-asterisk">*</span></label>
+                                <select id="fb-rating" name="rating" required>
+                                    <option value="5" {{ old('rating', '5') === '5' ? 'selected' : '' }}>⭐⭐⭐⭐⭐ — 5 (Excellent)</option>
+                                    <option value="4" {{ old('rating') === '4' ? 'selected' : '' }}>⭐⭐⭐⭐☆ — 4 (Good)</option>
+                                    <option value="3" {{ old('rating') === '3' ? 'selected' : '' }}>⭐⭐⭐☆☆ — 3 (Average)</option>
+                                    <option value="2" {{ old('rating') === '2' ? 'selected' : '' }}>⭐⭐☆☆☆ — 2 (Poor)</option>
+                                    <option value="1" {{ old('rating') === '1' ? 'selected' : '' }}>⭐☆☆☆☆ — 1 (Terrible)</option>
+                                </select>
                             </div>
 
                             <div class="form-group form-group--grow">
-                                <label for="fb-message">Your Feedback</label>
-                                <textarea id="fb-message" name="message" rows="4" autocomplete="off" placeholder="Share details about your experience working with us..." required>{{ old('message') }}</textarea>
+                                <label for="fb-message">Your Feedback<span class="required-asterisk">*</span></label>
+                                <textarea id="fb-message" name="message" rows="4" autocomplete="off" required>{{ old('message') }}</textarea>
                             </div>
 
                             <button type="submit" class="btn btn-primary feedback-submit">Submit Feedback</button>
@@ -239,10 +426,106 @@
                 </div>
             </section>
 
+            <section class="aizap-contact" id="contact">
+                <div class="aizap-contact__inner">
+
+                    <div class="aizap-contact__left">
+                        <h2 class="aizap-contact__title">CONTACT US!</h2>
+                        <p class="aizap-contact__desc">
+                            Reaching out to <strong>Aizap Creatives</strong> couldn't be simpler.
+                            Share the details of your next project through our form and one of our
+                            experts will get back to you right away. We'd love to work with you.
+                        </p>
+
+                        <div class="aizap-contact__slideshow">
+                            <img src="{{ asset('images/contact-section/call-1.png') }}" alt="Aizap Creatives work 1" class="aizap-contact__slide" loading="lazy">
+                            <img src="{{ asset('images/contact-section/call-2.png') }}" alt="Aizap Creatives work 2" class="aizap-contact__slide" loading="lazy">
+                            <img src="{{ asset('images/contact-section/call-3.png') }}" alt="Aizap Creatives work 3" class="aizap-contact__slide" loading="lazy">
+                           </div>
+                    </div>
+
+                    <div class="aizap-contact__right">
+                        <div class="aizap-contact__card">
+                            <div class="aizap-contact__heading">Get in touch</div>
+
+                            @if ($errors->any())
+                                <div class="aizap-alert aizap-alert--error" role="alert">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+
+                            <form id="contactForm" class="aizap-form" action="{{ route('contact.store') }}" method="POST">
+                                @csrf
+
+                                <div class="aizap-form__group">
+                                    <label class="aizap-form__label" for="cf-first-name">First name*</label>
+                                    <input class="aizap-form__input" id="cf-first-name" type="text" name="first_name" value="{{ old('first_name') }}" required autocomplete="given-name">
+                                </div>
+
+                                <div class="aizap-form__group">
+                                    <label class="aizap-form__label" for="cf-last-name">Last name*</label>
+                                    <input class="aizap-form__input" id="cf-last-name" type="text" name="last_name" value="{{ old('last_name') }}" required autocomplete="family-name">
+                                </div>
+
+                                <div class="aizap-form__group">
+                                    <label class="aizap-form__label" for="cf-email">Email*</label>
+                                    <input class="aizap-form__input" id="cf-email" type="email" name="email" value="{{ old('email') }}" required autocomplete="email">
+                                </div>
+
+                                <div class="aizap-form__group aizap-form__group--grow">
+                                    <label class="aizap-form__label" for="cf-message">Message*</label>
+                                    <textarea class="aizap-form__textarea" id="cf-message" name="message" rows="4" required>{{ old('message') }}</textarea>
+                                </div>
+
+                                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+
+                                <div class="aizap-form__recaptcha">
+                                    <div class="g-recaptcha" data-sitekey="6LeoNnctAAAAAKR5jGB0E8YWYZe7eJWvC9iIQpxc" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                                </div>
+
+                                <button class="aizap-form__submit" type="submit">
+                                    Send Message
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
         </div>
     </div>
     @include('footer.footer')
     <script src="{{ asset('js/video-player.js') }}"></script>
     <script src="{{ asset('js/home-page.js') }}"></script>
+    <script>
+        window.onRecaptchaSuccess = function (token) {
+            var input = document.getElementById('g-recaptcha-response');
+            if (input) {
+                input.value = token;
+            }
+        };
+
+        window.onRecaptchaExpired = function () {
+            var input = document.getElementById('g-recaptcha-response');
+            if (input) {
+                input.value = '';
+            }
+        };
+
+        (function () {
+            var svc = document.getElementById('cf-service');
+            if (!svc) return;
+            svc.addEventListener('change', function () {
+                this.classList.toggle('has-value', this.value !== '');
+            });
+        })();
+    </script>
 </body>
 </html>

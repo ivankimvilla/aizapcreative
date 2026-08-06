@@ -24,9 +24,11 @@ $servicePage = function (string $category, string $view) {
 
 Route::get('/', function () {
     $featuredProjects = ProjectVideo::where('is_featured', true)->latest()->take(5)->get();
-    $feedbackItems = Feedback::latest()->take(6)->get();
+    $feedbackItems = Feedback::latest()->get();
+    $feedbackCount = Feedback::count();
+    $feedbackAverage = Feedback::avg('rating');
 
-    return view('home-page', compact('featuredProjects', 'feedbackItems'));
+    return view('home-page', compact('featuredProjects', 'feedbackItems', 'feedbackCount', 'feedbackAverage'));
 })->name('home');
 
 Route::get('/about-us', function () {
@@ -85,7 +87,10 @@ Route::get('/admin/projects', [ProjectVideoController::class, 'index'])->name('a
 Route::post('/admin/projects', [ProjectVideoController::class, 'store'])->name('admin.projects.store');
 Route::delete('/admin/projects', [ProjectVideoController::class, 'destroy'])->name('admin.projects.destroy');
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.store');
-Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
+
+// Contact routes
+
+Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store')->middleware('throttle:10,1');
 Route::get('/admin/messages', [ContactMessageController::class, 'index'])->name('admin.messages');
 Route::redirect('/admin/clients', '/admin/messages');
 // Bookings view removed — keep briefs route unavailable

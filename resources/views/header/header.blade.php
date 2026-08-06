@@ -38,7 +38,6 @@
         </div>
 
         <a href="{{ url('/portfolio') }}" class="site-header__nav-link {{ request()->is('portfolio') ? 'site-header__nav-link--active' : '' }}">Portfolio</a>
-        <a href="{{ url('/process') }}" class="site-header__nav-link {{ request()->is('process') ? 'site-header__nav-link--active' : '' }}">Process</a>
         <a href="{{ url('/pricing') }}" class="site-header__nav-link {{ request()->is('pricing') ? 'site-header__nav-link--active' : '' }}">Pricing</a>
         <a href="{{ url('/contact') }}" class="site-header__nav-link {{ request()->is('contact') ? 'site-header__nav-link--active' : '' }}">Contact</a>
     </nav>
@@ -57,6 +56,22 @@
         <span></span>
         <span></span>
     </button>
+
+    @if (session('feedback_status') || session('contact_status'))
+        <div class="site-header__status" role="status">
+            <span class="site-header__status-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <div>
+                <div class="site-header__status-title">
+                    {{ session('feedback_status') ? 'Feedback submitted' : 'Message sent' }}
+                </div>
+                <p>{{ session('feedback_status') ?? session('contact_status') }}</p>
+            </div>
+        </div>
+    @endif
 </header>
 
 <script src="{{ asset('js/header/header.js') }}"></script>

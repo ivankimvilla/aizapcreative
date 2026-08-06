@@ -58,3 +58,18 @@
         }
     });
 })();
+
+(function () {
+    var status = document.querySelector('.site-header__status');
+    if (!status) return;
+
+    window.setTimeout(function () {
+        status.style.opacity = '0';
+        status.style.transform = 'translateX(-50%) translateY(-4px)';
+        window.setTimeout(function () {
+            if (status && status.parentNode) {
+                status.parentNode.removeChild(status);
+            }
+        }, 250);
+    }, 4200);
+})();

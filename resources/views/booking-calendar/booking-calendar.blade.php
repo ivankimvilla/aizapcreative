@@ -189,29 +189,29 @@
                         </div>
                     @endif
 
-                    <label class="field">
+                    <label class="field" for="bookingName">
                         <span>Your Name</span>
-                        <input type="text" name="name" placeholder="Your full name" required>
+                        <input type="text" id="bookingName" name="name" autocomplete="name" placeholder="Your full name" required>
                     </label>
 
-                    <label class="field">
+                    <label class="field" for="bookingEmail">
                         <span>Your Email</span>
-                        <input type="email" name="email" placeholder="you@example.com" required>
+                        <input type="email" id="bookingEmail" name="email" autocomplete="email" placeholder="you@example.com" required>
                     </label>
 
-                    <label class="field">
+                    <label class="field" for="bookingCompany">
                         <span>Company / Brand</span>
-                        <input type="text" name="company" placeholder="Company or brand name">
+                        <input type="text" id="bookingCompany" name="company" autocomplete="organization" placeholder="Company or brand name">
                     </label>
 
-                    <label class="field">
+                    <label class="field" for="bookingPhone">
                         <span>Phone Number</span>
-                        <input type="tel" name="phone" placeholder="+1 (555) 123-4567">
+                        <input type="tel" id="bookingPhone" name="phone" autocomplete="tel" placeholder="+1 (555) 123-4567">
                     </label>
 
-                    <label class="field field--full">
+                    <label class="field field--full" for="serviceSelect">
                         <span>Selected service</span>
-                        <select name="service" id="serviceSelect" required>
+                        <select name="service" id="serviceSelect" autocomplete="off" required>
                             <option value="AI Commercial Ads">AI Commercial Ads</option>
                             <option value="AI Product Ads">AI Product Ads</option>
                             <option value="AI Storytelling / Drama">AI Storytelling / Drama</option>
@@ -223,7 +223,7 @@
 
                     <label class="field field--full">
                         <span>Tell us about your project</span>
-                        <textarea name="message" rows="3" placeholder="Share a brief overview of your goals..."></textarea>
+                        <textarea name="message" rows="3" autocomplete="off" placeholder="Share a brief overview of your goals..."></textarea>
                     </label>
 
                     <div class="booking-form-footer">
