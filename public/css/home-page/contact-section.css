@@ -279,11 +279,6 @@
     transform: scale(0.98);
 }
 
-.aizap-form__recaptcha {
-    margin: 0;
-    padding: 0;
-}
-
 .aizap-form__submit svg {
     width: 16px;
     height: 16px;

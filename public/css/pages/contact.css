@@ -257,6 +257,47 @@ body {
     padding-left: 18px;
 }
 
+.field--recaptcha {
+    position: relative;
+}
+
+.recaptcha-error {
+    position: absolute;
+    top: 0;
+    right: -240px;
+    width: 220px;
+    padding: 10px 12px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 10px;
+    color: #ffb4b4;
+    font-size: 12px;
+    line-height: 1.4;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    z-index: 1;
+}
+
+.recaptcha-error strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 12px;
+}
+
+.recaptcha-error span {
+    display: block;
+    font-size: 11px;
+    color: #ffd5d5;
+}
+
+@media (max-width: 900px) {
+    .recaptcha-error {
+        position: static;
+        width: 100%;
+        right: auto;
+        margin-top: 12px;
+    }
+}
+
 .contact-submit {
     flex-shrink: 0;
     display: flex;

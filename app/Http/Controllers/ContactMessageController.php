@@ -28,6 +28,9 @@ class ContactMessageController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255'],
             'message' => ['required', 'string', 'max:2000'],
+            'g-recaptcha-response' => ['required'],
+        ], [
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before sending your message.',
         ]);
 
         // reCAPTCHA server-side verification (optional if keys set)

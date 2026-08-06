@@ -52,7 +52,7 @@
             <p><a href="tel:+639123456789">+63 912 345 6789</a></p>
 
             <div class="site-footer__socials">
-                <a href="#" class="site-footer__social site-footer__social--facebook" aria-label="Facebook">
+                <a href="https://www.facebook.com/profile.php?id=61555466491031&mibextid=wwXIfr&rdid=d4amKcQ6qw8cRg7x&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1D3GqsevBs%2F%3Fmibextid%3DwwXIfr#" class="site-footer__social site-footer__social--facebook" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.23 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22C18.34 21.23 22 17.08 22 12.06z"/></svg>
                 </a>
                 <a href="#" class="site-footer__social site-footer__social--instagram" aria-label="Instagram">

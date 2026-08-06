@@ -481,10 +481,19 @@
                                     <textarea class="aizap-form__textarea" id="cf-message" name="message" rows="4" required>{{ old('message') }}</textarea>
                                 </div>
 
-                                <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+                                <input
+                                    type="hidden"
+                                    name="g-recaptcha-response"
+                                    id="g-recaptcha-response">
 
                                 <div class="aizap-form__recaptcha">
-                                    <div class="g-recaptcha" data-sitekey="6LeoNnctAAAAAKR5jGB0E8YWYZe7eJWvC9iIQpxc" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                                    @error('g-recaptcha-response')
+                                        <div class="recaptcha-error" role="alert">
+                                            <strong>reCAPTCHA required</strong>
+                                            <span>Please complete the reCAPTCHA before sending your message.</span>
+                                        </div>
+                                    @enderror
                                 </div>
 
                                 <button class="aizap-form__submit" type="submit">

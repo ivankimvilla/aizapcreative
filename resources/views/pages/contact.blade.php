@@ -68,10 +68,19 @@
                         <textarea name="message" rows="5" required>{{ old('message') }}</textarea>
                     </label>
 
-                    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response">
+                    <input
+                        type="hidden"
+                        name="g-recaptcha-response"
+                        id="g-recaptcha-response">
 
-                    <div class="field field--full">
-                        <div class="g-recaptcha" data-sitekey="6LeoNnctAAAAAKR5jGB0E8YWYZe7eJWvC9iIQpxc" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                    <div class="field field--full field--recaptcha">
+                        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                        @error('g-recaptcha-response')
+                            <div class="recaptcha-error" role="alert">
+                                <strong>reCAPTCHA required</strong>
+                                <span>Please complete the reCAPTCHA before sending your message.</span>
+                            </div>
+                        @enderror
                     </div>
 
                     <div class="form-footer">
@@ -186,5 +195,21 @@
         </section>
     </main>
     @include('footer.footer')
+
+    <script>
+        window.onRecaptchaSuccess = function (token) {
+            var input = document.getElementById('g-recaptcha-response');
+            if (input) {
+                input.value = token || '';
+            }
+        };
+
+        window.onRecaptchaExpired = function () {
+            var input = document.getElementById('g-recaptcha-response');
+            if (input) {
+                input.value = '';
+            }
+        };
+    </script>
 </body>
 </html>
