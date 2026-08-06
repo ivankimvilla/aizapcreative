@@ -665,11 +665,14 @@ body {
     background: transparent;
 }
 
-.review-card--empty {
+..review-card--empty {
+    display: flex;
     align-items: center;
+    justify-content: center;
     text-align: center;
     flex: 1 1 100%;
     max-width: 100%;
+    padding: 40px 16px;
 }
 
 .review-card__top {
@@ -742,7 +745,7 @@ body {
     white-space: nowrap;
 }
 
-.review-card__message {
+..review-card__message {
     margin: 0;
     color: #cbd5e1;
     font-size: 13.5px;
@@ -751,15 +754,25 @@ body {
     width: 100%;
 }
 
+.review-card--empty .review-card__message {
+    width: auto;
+    text-align: center;
+}
+
 .feedback-form-wrap {
     width: 100%;
     height: 560px;
     padding: 30px;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+    border: none;
+    background: transparent;
     display: flex;
     flex-direction: column;
+}
+
+.review-card--empty .review-card__message {
+    text-align: center;
+    margin: 0 auto;
 }
 
 /* Write a review modal */
