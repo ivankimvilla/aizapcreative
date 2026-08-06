@@ -229,9 +229,24 @@ body {
 .site-footer__bottom {
     border-top: 1px solid var(--border);
     padding: 22px 0;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     font-size: 13.5px;
     color: var(--muted);
+}
+
+.site-footer__bottom-left,
+.site-footer__bottom-right {
+    display: block;
+}
+
+@media (max-width: 780px) {
+    .site-footer__bottom {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
 }
 
 @media (max-width: 1100px) {

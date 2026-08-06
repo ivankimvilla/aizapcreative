@@ -71,24 +71,10 @@
         </div>
 
         </div>
-
-        <div class="site-footer__map-column">
-            <h3>Find Us</h3>
-            <div class="site-footer__map-card">
-                <iframe
-                    src="https://www.google.com/maps?q=7.0486008,125.5038646&z=16&output=embed"
-                    loading="lazy"
-                    allowfullscreen
-                    referrerpolicy="no-referrer-when-downgrade"
-                    title="aiZAP Creatives location map">
-                </iframe>
-            </div>
-            <a href="https://www.google.com/maps/place/Villa+Kareena+Subdivision/@7.0486008,125.5012897,17z/data=!3m1!4b1!4m6!3m5!1s0x32f90dbe4229628d:0xf0e7bd34d9a8f097!8m2!3d7.0486008!4d125.5038646!16s%2Fg%2F1tgh52dg?entry=ttu&g_ep=EgoyMDI2MDcyOS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" class="site-footer__map-button">Open in Google Maps</a>
-        </div>
-
     </div>
 
     <div class="site-footer__bottom">
-        &copy; 2026 aiZAP CREATIVES. All Rights Reserved.
+        <span class="site-footer__bottom-left">&copy; 2026 aiZAP CREATIVES.</span>
+        <span class="site-footer__bottom-right">All Rights Reserved.</span>
     </div>
 </footer>
