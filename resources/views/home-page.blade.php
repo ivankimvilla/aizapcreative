@@ -63,7 +63,7 @@
                         </article>
                     @empty
                         <div class="feedback-form-wrap" style="grid-column: 1 / -1;">
-                            <p style="margin: 0; color: #6b7280;">No featured videos yet. Add one from the admin projects page to see it here.</p>
+                            <p style="margin: 0; color: #6b7280;">No featured videos yet.</p>
                         </div>
                     @endforelse
                 </div>
@@ -449,12 +449,18 @@
                             <div class="aizap-contact__heading">Get in touch</div>
 
                             @if ($errors->any())
-                                <div class="aizap-alert aizap-alert--error" role="alert">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                                <div class="form-alert form-alert--error" role="alert">
+                                    <div class="form-alert__icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5L23 21H1L12 2.5Z" fill="#ef4444"/><rect x="11" y="9" width="2" height="6" rx="1" fill="#fff"/><rect x="11" y="16.5" width="2" height="2" rx="1" fill="#fff"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="form-alert__title">Couldn't send message</div>
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                             @endif
 
@@ -481,13 +487,8 @@
                                     <textarea class="aizap-form__textarea" id="cf-message" name="message" rows="4" required>{{ old('message') }}</textarea>
                                 </div>
 
-                                <input
-                                    type="hidden"
-                                    name="g-recaptcha-response"
-                                    id="g-recaptcha-response">
-
                                 <div class="aizap-form__recaptcha">
-                                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-action="LOGIN" data-theme="dark" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
                                     @error('g-recaptcha-response')
                                         <div class="recaptcha-error" role="alert">
                                             <strong>reCAPTCHA required</strong>
@@ -514,20 +515,6 @@
     <script src="{{ asset('js/video-player.js') }}"></script>
     <script src="{{ asset('js/home-page.js') }}"></script>
     <script>
-        window.onRecaptchaSuccess = function (token) {
-            var input = document.getElementById('g-recaptcha-response');
-            if (input) {
-                input.value = token;
-            }
-        };
-
-        window.onRecaptchaExpired = function () {
-            var input = document.getElementById('g-recaptcha-response');
-            if (input) {
-                input.value = '';
-            }
-        };
-
         (function () {
             var svc = document.getElementById('cf-service');
             if (!svc) return;

@@ -279,9 +279,6 @@ body {
     padding-right: 18px;
 }
 
-/* Align the "CLIENT FEEDBACK" eyebrow with the "Feedback List" panel header
-   on the right — the panel row has 22px of top padding before its text,
-   so match that offset here instead of sitting flush at the top. */
 .feedback-header .eyebrow {
     margin-top: 30px;
 }
@@ -410,7 +407,6 @@ body {
     font-weight: 800;
 }
 
-/* Rating summary (Play-Store style score + distribution bars) */
 .rating-summary {
     display: flex;
     align-items: center;
@@ -563,11 +559,6 @@ body {
     cursor: pointer;
 }
 
-/* Feedback list — grid-based; rows are sized to their content (min-content)
-   and packed to the top of the panel (align-content: start) instead of
-   stretching to fill the panel's fixed height. This is what keeps the
-   gap between rows small and consistent no matter how few cards there
-   are or how long each card's message text is. */
 .feedback-table__wrap {
     position: relative;
     display: flex;
@@ -613,7 +604,6 @@ body {
     }
 }
 
-
 .feedback-table__scroll-icon {
     position: absolute;
     right: 16px;
@@ -648,9 +638,6 @@ body {
     background: rgba(255, 255, 255, 0.2);
 }
 
-/* Review card — avatar+name row, then a full-width stars+date row,
-   then the message, each flush to the card's left edge (matches the
-   reference screenshot layout). */
 .review-card {
     position: relative;
     display: flex;
@@ -665,7 +652,7 @@ body {
     background: transparent;
 }
 
-..review-card--empty {
+.review-card--empty {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -745,7 +732,7 @@ body {
     white-space: nowrap;
 }
 
-..review-card__message {
+.review-card__message {
     margin: 0;
     color: #cbd5e1;
     font-size: 13.5px;
@@ -775,7 +762,6 @@ body {
     margin: 0 auto;
 }
 
-/* Write a review modal */
 .review-modal__backdrop {
     position: fixed;
     inset: 0;
@@ -815,9 +801,6 @@ body {
     max-width: 960px;
 }
 
-/* If the wide modal reuses .feedback-layout, drop the sidebar column
-   entirely so the review grid spans the full modal width instead of
-   leaving empty space where the header/sidebar would normally sit. */
 .review-modal--wide .feedback-layout {
     grid-template-columns: 1fr;
 }
@@ -936,7 +919,6 @@ body {
     margin-left: 2px;
 }
 
-/* ===== Status alert (success / error) ===== */
 .form-alert {
     display: flex;
     align-items: flex-start;
@@ -988,10 +970,6 @@ body {
     color: #e5e7eb;
 }
 
-/* Success-only state: JS hides all form fields (via .feedback-form--success
-   on the <form>) and leaves just the .form-alert--success message behind.
-   Center it in the space the fields used to occupy instead of leaving it
-   pinned to the top-left like a normal inline alert. */
 .feedback-form--success {
     justify-content: center;
     align-items: center;
@@ -1021,11 +999,6 @@ body {
     font-size: 15.5px;
 }
 
-/* Success-only state, card itself: strips the dark card's own
-   background/border/shadow (set via JS: .review-modal--success) so
-   the modal doesn't render as a solid box behind the message — just
-   the green pill floating on the dimmed backdrop, plus the close
-   button. */
 .review-modal--success {
     background: transparent;
     border-color: transparent;

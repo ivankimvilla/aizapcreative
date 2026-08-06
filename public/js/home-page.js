@@ -1,51 +1,98 @@
 (function () {
     'use strict';
 
-    // Small DOM helper to create the consistent alert nodes used across forms
     function createAlert(type, title, message, items) {
         var alert = document.createElement('div');
         alert.className = 'form-alert form-alert--' + type;
         alert.setAttribute('role', 'alert');
 
         var icon = document.createElement('div');
-        icon.className = 'form-alert__icon';
+        icon.className = type === 'success' ? 'form-alert--success__icon' : 'form-alert__icon';
         icon.setAttribute('aria-hidden', 'true');
         icon.innerHTML = type === 'success'
-            ? '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="12" fill="#16a34a"/><path d="M7 12.5l3 3 7-7.5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+            ? '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
             : '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5L23 21H1L12 2.5Z" fill="#ef4444"/><rect x="11" y="9" width="2" height="6" rx="1" fill="#fff"/><rect x="11" y="16.5" width="2" height="2" rx="1" fill="#fff"/></svg>';
         alert.appendChild(icon);
 
-        var content = document.createElement('div');
+        var body = document.createElement('div');
+        if (type === 'success') {
+            body.className = 'form-alert--success__body';
+        }
+
         var titleEl = document.createElement('div');
-        titleEl.className = 'form-alert__title';
+        titleEl.className = type === 'success' ? 'form-alert--success__title' : 'form-alert__title';
         titleEl.textContent = title;
-        content.appendChild(titleEl);
+        body.appendChild(titleEl);
 
         if (message) {
-            var msgEl = document.createElement('p');
-            msgEl.textContent = message;
-            content.appendChild(msgEl);
+            var text = document.createElement('p');
+            text.textContent = message;
+            if (type === 'success') {
+                text.className = 'form-alert--success__text';
+            }
+            body.appendChild(text);
         }
 
         if (items && items.length) {
             var list = document.createElement('ul');
             items.forEach(function (item) { var li = document.createElement('li'); li.textContent = item; list.appendChild(li); });
-            content.appendChild(list);
+            body.appendChild(list);
         }
 
-        alert.appendChild(content);
+        alert.appendChild(body);
         return alert;
     }
 
-    // ------------------ Review modal & feedback submission (graceful noop if not present) ------------------
+    function createHeaderStatus(title, message) {
+        var status = document.createElement('div');
+        status.className = 'site-header__status';
+        status.setAttribute('role', 'status');
+
+        var icon = document.createElement('span');
+        icon.className = 'site-header__status-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        status.appendChild(icon);
+
+        var body = document.createElement('div');
+        var titleEl = document.createElement('div');
+        titleEl.className = 'site-header__status-title';
+        titleEl.textContent = title;
+        body.appendChild(titleEl);
+
+        if (message) {
+            var messageEl = document.createElement('p');
+            messageEl.textContent = message;
+            body.appendChild(messageEl);
+        }
+
+        status.appendChild(body);
+        return status;
+    }
+
+    function getCsrfToken(form) {
+        if (!form) return '';
+
+        var tokenInput = form.querySelector('input[name="_token"]');
+        if (tokenInput && tokenInput.value) {
+            return tokenInput.value;
+        }
+
+        var metaTag = document.querySelector('meta[name="csrf-token"]');
+        if (metaTag && metaTag.getAttribute('content')) {
+            return metaTag.getAttribute('content');
+        }
+
+        return '';
+    }
+
     (function () {
         var backdrop = document.getElementById('reviewModalBackdrop');
         var openBtn = document.getElementById('openReviewModalBtn');
         var closeBtn = document.getElementById('closeReviewModalBtn');
-        var modalCard = document.querySelector('.review-modal__card');
         var feedbackBody = document.querySelector('.feedback-table__body');
-        var feedbackCount = document.querySelector('.feedback-count');
-        var feedbackSummaryCount = document.querySelector('.feedback-summary-count');
+        var feedbackCount = document.getElementById('feedbackCount');
+        var feedbackSummaryCount = document.getElementById('feedbackSummaryCount');
 
         function closeModal() {
             if (!backdrop) return;
@@ -102,12 +149,10 @@
             }
         }
 
-        // wire open/close safely
         if (openBtn) openBtn.addEventListener('click', function () { if (backdrop) backdrop.classList.add('is-open'); });
         if (closeBtn) closeBtn.addEventListener('click', closeModal);
 
-        // If there is a feedback form inside the modal, wire basic AJAX submit
-        var fbForm = document.querySelector('.review-form');
+        var fbForm = document.getElementById('feedbackForm');
         if (!fbForm) return;
 
         var isSubmitting = false;
@@ -118,14 +163,55 @@
             var submitButton = fbForm.querySelector('button[type="submit"]');
             if (submitButton) submitButton.disabled = true;
 
-            // basic submit via fetch
             var fd = new FormData(fbForm);
             var action = fbForm.getAttribute('action') || window.location.href;
-            fetch(action, { method: 'POST', body: fd, credentials: 'same-origin' })
-                .then(function (res) { return res.json(); })
+            var headers = { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
+            var csrfToken = getCsrfToken(fbForm);
+            if (csrfToken) {
+                headers['X-CSRF-TOKEN'] = csrfToken;
+            }
+            fetch(action, {
+                method: 'POST',
+                body: fd,
+                headers: headers,
+                credentials: 'same-origin'
+            })
+                .then(function (res) {
+                    return res.json().then(function (data) {
+                        if (!res.ok) {
+                            var err = new Error('Submission failed');
+                            err.data = data;
+                            throw err;
+                        }
+                        return data;
+                    });
+                })
                 .then(function (data) {
-                    var successAlert = createAlert('success', 'Feedback submitted', 'Thanks for sharing your experience.');
-                    fbForm.insertBefore(successAlert, fbForm.firstChild);
+                    var header = document.querySelector('.site-header');
+                    var headerMessage = data.message || 'Thanks for sharing your experience.';
+
+                    if (header) {
+                        var existingStatus = header.querySelector('.site-header__status');
+                        if (existingStatus) {
+                            existingStatus.remove();
+                        }
+
+                        var headerStatus = createHeaderStatus('Feedback submitted', headerMessage);
+                        header.appendChild(headerStatus);
+
+                        window.setTimeout(function () {
+                            headerStatus.style.opacity = '0';
+                            headerStatus.style.transform = 'translateX(-50%) translateY(-4px)';
+                        }, 4200);
+
+                        window.setTimeout(function () {
+                            if (headerStatus && headerStatus.parentNode) {
+                                headerStatus.parentNode.removeChild(headerStatus);
+                            }
+                        }, 4450);
+                    }
+
+                    closeModal();
                     fbForm.reset();
                     if (!data.duplicate && data.feedback) {
                         appendFeedbackCard(data.feedback);
@@ -133,7 +219,6 @@
                     }
                     if (submitButton) submitButton.disabled = false;
                     isSubmitting = false;
-                    setTimeout(closeModal, 1400);
                 })
                 .catch(function (err) {
                     var errAlert = createAlert('error', "Couldn't submit feedback", err && err.message ? [err.message] : null);
@@ -144,7 +229,6 @@
         });
     })();
 
-    // ------------------ Contact form: reCAPTCHA Enterprise v3 + AJAX submit ------------------
     (function () {
         var form = document.getElementById('contactForm');
         if (!form) return;
@@ -155,20 +239,26 @@
         }
 
         var emailInput = document.getElementById('cf-email');
-        var recaptchaTokenField = document.getElementById('g-recaptcha-response');
         var isSubmitting = false;
 
+        var recaptchaCompleted = false;
+
         window.onRecaptchaSuccess = function (token) {
-            if (recaptchaTokenField) {
-                recaptchaTokenField.value = token || '';
-            }
+            recaptchaCompleted = !!token;
         };
 
         window.onRecaptchaExpired = function () {
-            if (recaptchaTokenField) {
-                recaptchaTokenField.value = '';
-            }
+            recaptchaCompleted = false;
         };
+
+        function getWidgetToken() {
+            try {
+                if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && grecaptcha.enterprise.getResponse) {
+                    return (grecaptcha.enterprise.getResponse() || '').trim();
+                }
+            } catch (e) { }
+            return '';
+        }
 
         function submitFormData() {
             clearFormAlerts();
@@ -178,20 +268,63 @@
 
             var fd = new FormData(form);
             var action = form.getAttribute('action') || window.location.href;
-            fetch(action, { method: 'POST', body: fd, headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'same-origin' })
+            var headers = { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
+            var csrfToken = getCsrfToken(form);
+            if (csrfToken) {
+                headers['X-CSRF-TOKEN'] = csrfToken;
+            }
+            fetch(action, { method: 'POST', body: fd, headers: headers, credentials: 'same-origin' })
                 .then(function (res) { return res.json().then(function (data) { if (!res.ok) { var err = new Error('Submission failed'); err.data = data; throw err; } return data; }); })
                 .then(function (data) {
-                    var successAlert = createAlert('success', 'Message sent', data.message || 'Thank you for your message. We will be in touch soon.');
-                    successAlert.classList.add('aizap-alert--floating');
-                    var card = form.closest('.aizap-contact__card'); if (card) card.insertBefore(successAlert, card.firstChild); else form.insertBefore(successAlert, form.firstChild);
+                    var header = document.querySelector('.site-header');
+                    var message = data.message || 'Thank you for your message. We will be in touch soon.';
+
+                    if (header) {
+                        var existingStatus = header.querySelector('.site-header__status');
+                        if (existingStatus) {
+                            existingStatus.remove();
+                        }
+
+                        var headerStatus = createHeaderStatus('Message sent', message);
+                        header.appendChild(headerStatus);
+
+                        window.setTimeout(function () {
+                            headerStatus.style.opacity = '0';
+                            headerStatus.style.transform = 'translateX(-50%) translateY(-4px)';
+                        }, 4200);
+
+                        window.setTimeout(function () {
+                            if (headerStatus && headerStatus.parentNode) {
+                                headerStatus.parentNode.removeChild(headerStatus);
+                            }
+                        }, 4450);
+                    } else {
+                        var successAlert = createAlert('success', 'Message sent', message);
+                        successAlert.classList.add('aizap-alert--floating');
+                        var card = form.closest('.aizap-contact__card');
+                        if (card) {
+                            card.insertBefore(successAlert, card.firstChild);
+                        } else {
+                            form.insertBefore(successAlert, form.firstChild);
+                        }
+                        window.setTimeout(function () {
+                            if (successAlert.parentNode) {
+                                successAlert.parentNode.removeChild(successAlert);
+                            }
+                        }, 6000);
+                    }
+
                     var contactSection = document.getElementById('contact');
                     if (contactSection && contactSection.scrollIntoView) {
                         contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
-                    form.reset(); if (submitButton) submitButton.disabled = false;
-                    if (recaptchaTokenField) recaptchaTokenField.value = '';
+                    form.reset();
+                    if (submitButton) submitButton.disabled = false;
+                    recaptchaCompleted = false;
+                    if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && grecaptcha.enterprise.reset) {
+                        grecaptcha.enterprise.reset();
+                    }
                     isSubmitting = false;
-                    window.setTimeout(function () { if (successAlert.parentNode) successAlert.parentNode.removeChild(successAlert); }, 6000);
                 })
                 .catch(function (error) {
                     var messages = [];
@@ -211,8 +344,9 @@
             var email = emailInput && emailInput.value ? emailInput.value.trim() : '';
             if (!email) { form.insertBefore(createAlert('error', 'Missing email', 'Please enter your email address.'), form.firstChild); if (submitButton) submitButton.disabled = false; isSubmitting = false; return; }
 
-            var currentToken = recaptchaTokenField ? (recaptchaTokenField.value || '').trim() : '';
-            if (!currentToken) {
+            var hasToken = recaptchaCompleted || !!getWidgetToken();
+
+            if (!hasToken) {
                 form.insertBefore(createAlert('error', 'reCAPTCHA required', 'Please complete the reCAPTCHA before sending your message.'), form.firstChild);
                 if (submitButton) submitButton.disabled = false;
                 isSubmitting = false;
@@ -224,7 +358,6 @@
 
     })();
 
-    // ------------------ Feedback list sizing helper ------------------
     (function () {
         var VISIBLE_COUNT = 6;
         var body = document.querySelector('.feedback-table__body');

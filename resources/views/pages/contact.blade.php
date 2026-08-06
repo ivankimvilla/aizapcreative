@@ -48,7 +48,7 @@
                     <div class="eyebrow">Send Us a Message</div>
                 </div>
 
-                <form class="form-grid" action="{{ route('contact.store') }}" method="POST">
+                <form id="contactForm" class="form-grid" action="{{ route('contact.store') }}" method="POST">
                     @csrf
 
                     <label class="field">
@@ -68,17 +68,12 @@
                         <textarea name="message" rows="5" required>{{ old('message') }}</textarea>
                     </label>
 
-                    <input
-                        type="hidden"
-                        name="g-recaptcha-response"
-                        id="g-recaptcha-response">
-
                     <div class="field field--full field--recaptcha">
                         <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
                         @error('g-recaptcha-response')
                             <div class="recaptcha-error" role="alert">
                                 <strong>reCAPTCHA required</strong>
-                                <span>Please complete the reCAPTCHA before sending your message.</span>
+                                <span>Please complete the reCAPTCHA<br>before sending your message.</span>
                             </div>
                         @enderror
                     </div>
@@ -189,27 +184,12 @@
                 </span>
                 <div>
                     <h3>Ready to Start Your Project?</h3>
-                    <p>We're excited to learn about your goals and explore how AI Creatives can help you achieve them.</p>
+                    <p>We're excited to learn about your goals and explore how Aizap Creatives can help you achieve them.</p>
                 </div>
             </div>
         </section>
     </main>
     @include('footer.footer')
-
-    <script>
-        window.onRecaptchaSuccess = function (token) {
-            var input = document.getElementById('g-recaptcha-response');
-            if (input) {
-                input.value = token || '';
-            }
-        };
-
-        window.onRecaptchaExpired = function () {
-            var input = document.getElementById('g-recaptcha-response');
-            if (input) {
-                input.value = '';
-            }
-        };
-    </script>
+    <script src="{{ asset('js/pages/contact.js') }}"></script>
 </body>
 </html>
