@@ -6,10 +6,15 @@ const timezoneField = document.getElementById('timezoneField');
 const timesDateEl = document.querySelector('.times-date');
 const calendarGrid = document.querySelector('.calendar-grid');
 const calendarMonthEl = document.querySelector('.calendar-month');
-const timezoneButton = document.querySelector('.calendar-tz');
 const timeButtons = Array.from(document.querySelectorAll('.time-slot'));
 const prevMonthBtn = document.querySelectorAll('.calendar-nav')[0];
 const nextMonthBtn = document.querySelectorAll('.calendar-nav')[1];
+
+const timezoneDropdown = document.getElementById('timezoneDropdown');
+const timezoneTrigger = document.getElementById('timezoneTrigger');
+const timezoneTriggerLabel = document.getElementById('timezoneTriggerLabel');
+const timezoneList = document.getElementById('timezoneList');
+const timezoneOptions = Array.from(document.querySelectorAll('.calendar-tz__list li'));
 
 const today = new Date();
 let viewYear = today.getFullYear();
@@ -18,18 +23,6 @@ let selectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate
 
 function pad(value) {
     return String(value).padStart(2, '0');
-}
-
-function buildTimezoneLabel() {
-    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-    const offsetMinutes = -new Date().getTimezoneOffset();
-    const offsetHours = Math.trunc(offsetMinutes / 60);
-    const offsetMins = Math.abs(offsetMinutes % 60);
-    const sign = offsetHours >= 0 ? '+' : '-';
-    const hours = pad(Math.abs(offsetHours));
-    const minutes = pad(offsetMins);
-
-    return `(${sign}${hours}:${minutes}) ${timeZone}`;
 }
 
 function getMonthName(monthIndex) {
@@ -75,13 +68,93 @@ function updateActiveDateText(date) {
     timesDateEl.textContent = date.toLocaleDateString('en-US', options);
 }
 
-function setTimeSlotAvailability(bookedSlots) {
+function getSlotLabel(btn) {
+    const labelEl = btn.querySelector('.time-slot__label');
+    return (labelEl ? labelEl.textContent : btn.textContent).trim();
+}
+
+/* ---------- Past-time helpers ---------- */
+
+function parseSlotToDate(date, timeLabel) {
+    const matches = timeLabel.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
+    if (!matches) {
+        return null;
+    }
+
+    const [, hourString, minuteString, meridiem] = matches;
+    let hour = Number(hourString);
+    const minute = Number(minuteString);
+
+    if (meridiem.toUpperCase() === 'PM' && hour !== 12) hour += 12;
+    if (meridiem.toUpperCase() === 'AM' && hour === 12) hour = 0;
+
+    const slotDate = new Date(date);
+    slotDate.setHours(hour, minute, 0, 0);
+    return slotDate;
+}
+
+function isSlotInPast(date, timeLabel) {
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+    if (normalizedDate.getTime() !== startOfToday.getTime()) {
+        return false;
+    }
+
+    const slotDate = parseSlotToDate(date, timeLabel);
+    if (!slotDate) return false;
+
+    return slotDate.getTime() <= now.getTime();
+}
+
+function updatePastTimeMessage(date) {
+    const msgEl = document.getElementById('pastTimeMessage');
+    if (!msgEl) {
+        return;
+    }
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const isToday = date
+        && date.getFullYear() === startOfToday.getFullYear()
+        && date.getMonth() === startOfToday.getMonth()
+        && date.getDate() === startOfToday.getDate();
+
+    const allDisabled = timeButtons.length > 0 && timeButtons.every(btn => btn.disabled);
+
+    if (isToday && allDisabled) {
+        msgEl.textContent = 'No more available times today. Please pick another date.';
+        msgEl.style.display = 'block';
+    } else {
+        msgEl.style.display = 'none';
+    }
+}
+
+/* ---------- Availability / slot rendering ---------- */
+
+function setTimeSlotAvailability(bookedSlots, date) {
     timeButtons.forEach(btn => {
-        const label = btn.textContent.trim();
-        btn.disabled = bookedSlots.includes(label);
-        btn.classList.toggle('time-slot--disabled', bookedSlots.includes(label));
+        const label = getSlotLabel(btn);
+        const isBooked = bookedSlots.includes(label);
+        const isPast = date ? isSlotInPast(date, label) : false;
+        const isUnavailable = isBooked || isPast;
+
+        btn.disabled = isUnavailable;
+        btn.classList.toggle('time-slot--disabled', isUnavailable);
+        // "Booked" styling/label only applies to slots that are actually booked.
+        // Past slots are simply disabled — no booked label, no extra styling.
+        btn.classList.toggle('time-slot--booked', isBooked);
         btn.classList.remove('time-slot--active');
+
+        if (isBooked) {
+            btn.title = 'This time is already booked';
+        } else {
+            btn.removeAttribute('title');
+        }
     });
+
+    updatePastTimeMessage(date);
 }
 
 function openModal(timeLabel) {
@@ -101,6 +174,18 @@ function closeModal() {
     document.body.style.overflow = '';
 }
 
+function isSunday(date) {
+    return date.getDay() === 0;
+}
+
+function getNextAvailableDate(date) {
+    const next = new Date(date);
+    while (isSunday(next)) {
+        next.setDate(next.getDate() + 1);
+    }
+    return next;
+}
+
 function selectDate(date, button) {
     selectedDate = date;
     const buttons = calendarGrid.querySelectorAll('.calendar-day');
@@ -110,20 +195,45 @@ function selectDate(date, button) {
     fetchAvailabilityForDate(date);
 }
 
-function createCalendarCell(dayNumber, isDisabled, date) {
+function createCalendarCell(dayNumber, date, isOtherMonth) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'calendar-day';
+    button.textContent = dayNumber;
+
+    if (isOtherMonth) {
+        button.classList.add('calendar-day--other-month');
+    }
+
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const normalizedDate = new Date(date);
+    normalizedDate.setHours(0, 0, 0, 0);
+
+    const isPast = normalizedDate < currentDate;
+    const isDisabled = isPast || isSunday(date);
 
     if (isDisabled) {
         button.classList.add('calendar-day--disabled');
         button.disabled = true;
-        button.textContent = dayNumber > 0 ? dayNumber : '';
         return button;
     }
 
-    button.textContent = dayNumber;
-    button.addEventListener('click', () => selectDate(date, button));
+    button.dataset.iso = formatDateValue(date);
+    button.addEventListener('click', () => {
+        if (isOtherMonth) {
+            viewYear = date.getFullYear();
+            viewMonth = date.getMonth();
+            buildCalendar(viewYear, viewMonth);
+            const newBtn = calendarGrid.querySelector(`[data-iso="${formatDateValue(date)}"]`);
+            if (newBtn) {
+                selectDate(date, newBtn);
+            }
+        } else {
+            selectDate(date, button);
+        }
+    });
+
     if (selectedDate && date.toDateString() === selectedDate.toDateString()) {
         button.classList.add('calendar-day--active');
     }
@@ -142,31 +252,41 @@ function buildCalendar(year, month) {
     const firstOfMonth = new Date(year, month, 1);
     const dayOfWeek = firstOfMonth.getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
     const currentDate = new Date();
     currentDate.setHours(0, 0, 0, 0);
 
-    if (selectedDate.getMonth() !== month || selectedDate.getFullYear() !== year || selectedDate < currentDate) {
+    if (
+        selectedDate.getMonth() !== month
+        || selectedDate.getFullYear() !== year
+        || selectedDate < currentDate
+        || isSunday(selectedDate)
+    ) {
+        let base;
         if (year === today.getFullYear() && month === today.getMonth()) {
-            selectedDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            base = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         } else {
-            selectedDate = new Date(year, month, 1);
+            base = new Date(year, month, 1);
         }
+        selectedDate = getNextAvailableDate(base);
     }
 
     for (let i = 0; i < dayOfWeek; i += 1) {
-        calendarGrid.appendChild(createCalendarCell(0, true));
+        const dayNumber = daysInPrevMonth - dayOfWeek + 1 + i;
+        const cellDate = new Date(year, month - 1, dayNumber);
+        calendarGrid.appendChild(createCalendarCell(dayNumber, cellDate, true));
     }
 
     for (let day = 1; day <= daysInMonth; day += 1) {
         const cellDate = new Date(year, month, day);
-        cellDate.setHours(0, 0, 0, 0);
-        const isPast = cellDate < currentDate;
-        const button = createCalendarCell(day, isPast, cellDate);
-        calendarGrid.appendChild(button);
+        calendarGrid.appendChild(createCalendarCell(day, cellDate, false));
     }
 
-    while (calendarGrid.children.length < 42) {
-        calendarGrid.appendChild(createCalendarCell(0, true));
+    const totalCellsSoFar = dayOfWeek + daysInMonth;
+    const trailingCount = (7 - (totalCellsSoFar % 7)) % 7;
+    for (let day = 1; day <= trailingCount; day += 1) {
+        const cellDate = new Date(year, month + 1, day);
+        calendarGrid.appendChild(createCalendarCell(day, cellDate, true));
     }
 
     updateActiveDateText(selectedDate);
@@ -187,13 +307,29 @@ function changeMonth(offset) {
 }
 
 function updateTimezoneDisplay() {
-    if (!timezoneButton) {
+    const selected = timezoneOptions.find(opt => opt.getAttribute('aria-selected') === 'true');
+    if (!selected) {
         return;
     }
+    timezoneField.value = selected.dataset.value;
+}
 
-    const label = buildTimezoneLabel();
-    timezoneButton.textContent = label;
-    timezoneField.value = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+function selectTimezone(option) {
+    timezoneOptions.forEach(opt => opt.removeAttribute('aria-selected'));
+    option.setAttribute('aria-selected', 'true');
+    timezoneTriggerLabel.textContent = option.textContent;
+    updateTimezoneDisplay();
+    fetchAvailabilityForDate(selectedDate);
+}
+
+function openTimezoneList() {
+    timezoneDropdown.classList.add('is-open');
+    timezoneTrigger.setAttribute('aria-expanded', 'true');
+}
+
+function closeTimezoneList() {
+    timezoneDropdown.classList.remove('is-open');
+    timezoneTrigger.setAttribute('aria-expanded', 'false');
 }
 
 async function fetchAvailabilityForDate(date) {
@@ -207,15 +343,32 @@ async function fetchAvailabilityForDate(date) {
     try {
         const response = await fetch(`/book-a-call/availability?date=${encodeURIComponent(dateValue)}&timezone=${encodeURIComponent(timezoneValue)}`);
         if (!response.ok) {
-            setTimeSlotAvailability([]);
+            setTimeSlotAvailability([], date);
             return;
         }
 
         const data = await response.json();
-        setTimeSlotAvailability(Array.isArray(data.booked_slots) ? data.booked_slots : []);
+        const bookedSlots = Array.isArray(data.booked_slots) ? data.booked_slots : [];
+        setTimeSlotAvailability(bookedSlots, date);
+        markDayAsFullyBooked(date, bookedSlots.length > 0 && bookedSlots.length >= timeButtons.length);
     } catch (error) {
-        setTimeSlotAvailability([]);
+        setTimeSlotAvailability([], date);
     }
+}
+
+function markDayAsFullyBooked(date, isFullyBooked) {
+    if (!calendarGrid) {
+        return;
+    }
+
+    const buttons = calendarGrid.querySelectorAll('.calendar-day:not(.calendar-day--disabled)');
+    buttons.forEach(btn => {
+        if (btn.dataset.iso !== formatDateValue(date)) {
+            return;
+        }
+        btn.classList.toggle('calendar-day--booked', isFullyBooked);
+        btn.disabled = isFullyBooked;
+    });
 }
 
 function initializeTimeButtons() {
@@ -227,7 +380,7 @@ function initializeTimeButtons() {
 
             timeButtons.forEach(b => b.classList.remove('time-slot--active'));
             btn.classList.add('time-slot--active');
-            openModal(btn.textContent.trim());
+            openModal(getSlotLabel(btn));
         });
     });
 }
@@ -236,6 +389,29 @@ if (prevMonthBtn && nextMonthBtn) {
     prevMonthBtn.addEventListener('click', () => changeMonth(-1));
     nextMonthBtn.addEventListener('click', () => changeMonth(1));
 }
+
+if (timezoneTrigger) {
+    timezoneTrigger.addEventListener('click', () => {
+        if (timezoneDropdown.classList.contains('is-open')) {
+            closeTimezoneList();
+        } else {
+            openTimezoneList();
+        }
+    });
+}
+
+timezoneOptions.forEach(option => {
+    option.addEventListener('click', () => {
+        selectTimezone(option);
+        closeTimezoneList();
+    });
+});
+
+document.addEventListener('click', e => {
+    if (timezoneDropdown && !timezoneDropdown.contains(e.target)) {
+        closeTimezoneList();
+    }
+});
 
 modalClose.addEventListener('click', closeModal);
 
@@ -248,6 +424,7 @@ modal.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
         closeModal();
+        closeTimezoneList();
     }
 });
 

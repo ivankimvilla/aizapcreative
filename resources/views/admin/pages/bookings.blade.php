@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIZAP Creatives — Bookings</title>
+  <title>Aizap Creatives - Bookings</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -37,242 +37,63 @@
 
         <div class="booking-stats" id="bookingStats">
           <button type="button" class="stat-tile status-all active" data-filter="all">
-            <span class="stat-count">7</span><span class="stat-label">All bookings</span>
+            <span class="stat-count">{{ $stats['all'] ?? 0 }}</span><span class="stat-label">All bookings</span>
           </button>
           <button type="button" class="stat-tile status-confirmed" data-filter="confirmed">
-            <span class="stat-count">3</span><span class="stat-label">Confirmed</span>
+            <span class="stat-count">{{ $stats['confirmed'] ?? 0 }}</span><span class="stat-label">Confirmed</span>
           </button>
           <button type="button" class="stat-tile status-pending" data-filter="pending">
-            <span class="stat-count">1</span><span class="stat-label">Pending</span>
+            <span class="stat-count">{{ $stats['pending'] ?? 0 }}</span><span class="stat-label">Pending</span>
           </button>
           <button type="button" class="stat-tile status-completed" data-filter="completed">
-            <span class="stat-count">2</span><span class="stat-label">Completed</span>
+            <span class="stat-count">{{ $stats['completed'] ?? 0 }}</span><span class="stat-label">Completed</span>
           </button>
           <button type="button" class="stat-tile status-cancelled" data-filter="cancelled">
-            <span class="stat-count">1</span><span class="stat-label">Cancelled</span>
+            <span class="stat-count">{{ $stats['cancelled'] ?? 0 }}</span><span class="stat-label">Cancelled</span>
           </button>
         </div>
 
         <div class="booking-list" id="bookingList">
-
-          <!-- Friday, July 24 -->
-          <div class="day-divider"><span>Friday, July 24</span></div>
-
-          <div class="booking-card" data-status="completed">
-            <div class="booking-card-top">
-              <span class="thread-avatar hue-1">NR</span>
-              <div class="booking-heading">
-                <h3>Nova Retail</h3>
-                <p class="booking-type">Budget check-in</p>
+          @forelse($bookingsByDate as $dateLabel => $dayBookings)
+            <div class="day-divider"><span>{{ $dateLabel }}</span></div>
+            @foreach($dayBookings as $booking)
+              @php
+                $tz = $booking->timezone ?: config('app.timezone');
+                $startTime = $booking->starts_at->copy()->setTimezone($tz);
+                $endTime = $startTime->copy()->addMinutes(30);
+                $initials = strtoupper(substr($booking->name, 0, 2));
+              @endphp
+              <div class="booking-card" data-status="{{ $booking->status }}">
+                <div class="booking-card-top">
+                  <span class="thread-avatar">{{ $initials }}</span>
+                  <div class="booking-heading">
+                    <h3>{{ $booking->company ?: $booking->name }}</h3>
+                    <p class="booking-type">{{ $booking->service }}</p>
+                  </div>
+                  <span class="status-pill {{ $booking->status }}">{{ ucfirst($booking->status) }}</span>
+                </div>
+                <div class="booking-card-details">
+                  <span class="booking-detail">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+                    {{ $startTime->format('g:i A') }} – {{ $endTime->format('g:i A') }} · 30 min
+                  </span>
+                  <span class="booking-detail">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                    {{ $booking->meeting_link ? 'Google Meet' : 'Phone' }}
+                  </span>
+                  <span class="booking-detail">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
+                    Client sees {{ $tz }}
+                  </span>
+                </div>
+                <div class="booking-card-actions">
+                  <button class="btn-ghost">View notes</button>
+                </div>
               </div>
-              <span class="status-pill completed">Completed</span>
-            </div>
-            <div class="booking-card-details">
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                11:30 PM – 12:00 AM · 30 min
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                Phone
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
-                Client sees EDT (UTC-4)
-              </span>
-            </div>
-            <div class="booking-card-actions">
-              <button class="btn-ghost">View notes</button>
-            </div>
-          </div>
-
-          <!-- Wednesday, July 29 -->
-          <div class="day-divider"><span>Wednesday, July 29</span></div>
-
-          <div class="booking-card" data-status="cancelled">
-            <div class="booking-card-top">
-              <span class="thread-avatar hue-2">FC</span>
-              <div class="booking-heading">
-                <h3>Fen &amp; Co.</h3>
-                <p class="booking-type">Testimonial planning call</p>
-              </div>
-              <span class="status-pill cancelled">Cancelled</span>
-            </div>
-            <div class="booking-card-details">
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                6:00 AM – 6:30 AM · 30 min
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                Cancelled by client
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
-                Client sees BST (UTC+1)
-              </span>
-            </div>
-            <div class="booking-card-actions">
-              <button class="btn-ghost">Rebook</button>
-            </div>
-          </div>
-
-          <!-- Thursday, July 30 -->
-          <div class="day-divider"><span>Thursday, July 30</span></div>
-
-          <div class="booking-card" data-status="completed">
-            <div class="booking-card-top">
-              <span class="thread-avatar hue-4">MR</span>
-              <div class="booking-heading">
-                <h3>Marlowe &amp; Rae</h3>
-                <p class="booking-type">Final review — Event Recap</p>
-              </div>
-              <span class="status-pill completed">Completed</span>
-            </div>
-            <div class="booking-card-details">
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                4:00 AM – 4:30 AM · 30 min
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                Google Meet
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
-                Client sees AEST (UTC+10)
-              </span>
-            </div>
-            <div class="booking-card-actions">
-              <button class="btn-ghost">View notes</button>
-            </div>
-          </div>
-
-          <!-- Monday, August 3 -->
-          <div class="day-divider"><span>Monday, August 3</span></div>
-
-          <div class="booking-card" data-status="confirmed">
-            <div class="booking-card-top">
-              <span class="thread-avatar hue-1">NR</span>
-              <div class="booking-heading">
-                <h3>Nova Retail</h3>
-                <p class="booking-type">Discovery call — Summer Campaign</p>
-              </div>
-              <span class="status-pill confirmed">Confirmed</span>
-            </div>
-            <div class="booking-card-details">
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                5:00 AM – 5:30 AM · 30 min
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                Google Meet
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
-                Client sees EDT (UTC-4)
-              </span>
-            </div>
-            <div class="booking-card-actions">
-              <button class="btn-ghost">Reschedule</button>
-              <button class="btn-primary-sm">Join call</button>
-            </div>
-          </div>
-
-          <div class="booking-card" data-status="pending">
-            <div class="booking-card-top">
-              <span class="thread-avatar hue-2">FC</span>
-              <div class="booking-heading">
-                <h3>Fen &amp; Co.</h3>
-                <p class="booking-type">Revision review — Product Launch Reel</p>
-              </div>
-              <span class="status-pill pending">Pending</span>
-            </div>
-            <div class="booking-card-details">
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                8:30 AM – 9:00 AM · 30 min
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                Awaiting confirmation
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
-                Client sees BST (UTC+1)
-              </span>
-            </div>
-            <div class="booking-card-actions">
-              <button class="btn-ghost">Decline</button>
-              <button class="btn-primary-sm">Confirm</button>
-            </div>
-          </div>
-
-          <!-- Tuesday, August 4 -->
-          <div class="day-divider"><span>Tuesday, August 4</span></div>
-
-          <div class="booking-card" data-status="confirmed">
-            <div class="booking-card-top">
-              <span class="thread-avatar hue-3">AS</span>
-              <div class="booking-heading">
-                <h3>Ardent Studio</h3>
-                <p class="booking-type">Kickoff call — Holiday Promo</p>
-              </div>
-              <span class="status-pill confirmed">Confirmed</span>
-            </div>
-            <div class="booking-card-details">
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                2:00 AM – 2:45 AM · 45 min
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                Zoom
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
-                Client sees PHT (UTC+8)
-              </span>
-            </div>
-            <div class="booking-card-actions">
-              <button class="btn-ghost">Reschedule</button>
-              <button class="btn-primary-sm">Join call</button>
-            </div>
-          </div>
-
-          <!-- Thursday, August 6 -->
-          <div class="day-divider"><span>Thursday, August 6</span></div>
-
-          <div class="booking-card" data-status="confirmed">
-            <div class="booking-card-top">
-              <span class="thread-avatar hue-3">AS</span>
-              <div class="booking-heading">
-                <h3>Ardent Studio</h3>
-                <p class="booking-type">Shot list walkthrough</p>
-              </div>
-              <span class="status-pill confirmed">Confirmed</span>
-            </div>
-            <div class="booking-card-details">
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                12:00 AM – 1:00 AM · 60 min
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                Zoom
-              </span>
-              <span class="booking-detail">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
-                Client sees PHT (UTC+8)
-              </span>
-            </div>
-            <div class="booking-card-actions">
-              <button class="btn-ghost">Reschedule</button>
-              <button class="btn-primary-sm">Join call</button>
-            </div>
-          </div>
-
+            @endforeach
+          @empty
+            <div class="day-divider"><span>No bookings yet</span></div>
+          @endforelse
         </div>
 
       </div>

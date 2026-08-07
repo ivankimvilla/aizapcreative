@@ -408,3 +408,325 @@ body {
         border-right: none;
     }
 }
+
+/* ===================== Request a Quote (floating modal) ===================== */
+
+.quote-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    padding: 24px;
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(6px);
+}
+
+.quote-section--hidden {
+    display: none;
+}
+
+body.quote-modal-open {
+    overflow: hidden;
+}
+
+.quote-section__inner {
+    position: relative;
+    width: 100%;
+    max-width: 980px;
+    max-height: 90vh;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--panel);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+/* Scrolling lives here, separate from .quote-section__inner, so the
+rounded-corner overflow clip never slices through the close button */
+.quote-section__body {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 40px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 40px;
+    border-radius: 20px;
+}
+
+.quote-section__close {
+    position: absolute;
+    top: -34px;
+    right: -34px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: var(--gold);
+    color: #000;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.quote-section__close:hover {
+    background: #fff;
+    transform: rotate(90deg) scale(1.05);
+}
+
+.quote-section__intro {
+    align-self: start;
+    /* Locks the intro column to a fixed height so switching between
+    services (shorter/longer names, descriptions, feature lists)
+    never resizes or shifts the modal. Recalculated now that the
+    "Request a Quote" heading has been removed. */
+    min-height: 390px;
+}
+
+.quote-section__package-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+    min-height: 30px;
+}
+
+.quote-section__package-name {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.quote-section__package-description {
+    margin: 0 0 18px;
+    max-width: 420px;
+    min-height: 50px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.quote-section__package-features {
+    margin: 0;
+    padding: 0;
+    min-height: 168px;
+    list-style: none;
+}
+
+.quote-section__package-features li {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    color: #dde4ee;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.quote-section__package-features li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--gold);
+}
+
+.quote-section__points {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.quote-section__points li {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 20px;
+    color: #dde4ee;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.quote-section__points li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--gold);
+}
+
+.quote-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+}
+
+.quote-form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.quote-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.quote-form__field--full {
+    width: 100%;
+}
+
+.quote-form__field label {
+    color: #dde4ee;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.quote-form__field label span {
+    color: var(--muted);
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: normal;
+}
+
+.quote-form__field input,
+.quote-form__field select,
+.quote-form__field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.quote-form__field textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.quote-form__field input::placeholder,
+.quote-form__field textarea::placeholder {
+    color: rgba(170, 179, 196, 0.6);
+}
+
+.quote-form__field input:focus,
+.quote-form__field select:focus,
+.quote-form__field textarea:focus {
+    border-color: var(--gold);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.quote-form__field select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23f7c520' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 34px;
+}
+
+/* Native <option> list renders on a white popup in most browsers,
+so it needs its own dark text color regardless of the closed select's --text color */
+.quote-form__field select option {
+    color: #111111;
+    background: #ffffff;
+}
+
+.quote-form__submit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 6px;
+    padding: 15px 18px;
+    border: none;
+    border-radius: 10px;
+    background: var(--gold);
+    color: #000;
+    font-size: 13px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: transform 0.24s ease, opacity 0.24s ease;
+}
+
+.quote-form__submit:hover {
+    transform: translateY(-2px);
+}
+
+.quote-form__submit span {
+    flex: 1;
+    text-align: center;
+}
+
+.quote-form__note {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+}
+
+.quote-form__note a {
+    color: var(--gold);
+    text-decoration: none;
+}
+
+.quote-form__note a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 980px) {
+    .quote-section__body {
+        grid-template-columns: 1fr;
+        gap: 28px;
+        padding: 32px 24px;
+    }
+
+    .quote-section__intro {
+        min-height: 0;
+    }
+}
+
+@media (max-width: 640px) {
+    .quote-form__row {
+        grid-template-columns: 1fr;
+    }
+
+    .quote-form {
+        padding: 20px;
+    }
+
+    .quote-section {
+        padding: 12px;
+    }
+
+    .quote-section__body {
+        padding: 24px 18px;
+    }
+
+    .quote-section__close {
+        top: -28px;
+        right: -28px;
+        width: 34px;
+        height: 34px;
+    }
+}

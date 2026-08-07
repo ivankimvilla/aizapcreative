@@ -40,9 +40,22 @@ body {
     margin-right: 56px;
 }
 
+/*
+ * FIX: the <img> had no intrinsic size reserved (no width/height
+ * attributes, no aspect-ratio), so before it finished loading the
+ * browser gave it 0 width. Once it loaded, its real width popped in
+ * and pushed everything after it in the flex row (the CTA button,
+ * the mobile toggle) sideways. Setting aspect-ratio here — combined
+ * with width/height attributes on the <img> tag itself in the HTML —
+ * reserves the box up front so nothing shifts on load.
+ *
+ * Replace 1 / 1 below with your logo's real width/height ratio,
+ * e.g. if the source file is 480x168px, use "480 / 168".
+ */
 .site-header__brand img {
     height: 168px;
     width: auto;
+    aspect-ratio: 1 / 1;
     max-height: none;
     object-fit: contain;
     display: block;

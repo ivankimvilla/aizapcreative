@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\BookingAdminController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ProjectVideoController;
@@ -87,6 +88,7 @@ Route::get('/admin/projects', [ProjectVideoController::class, 'index'])->name('a
 Route::post('/admin/projects', [ProjectVideoController::class, 'store'])->name('admin.projects.store');
 Route::delete('/admin/projects', [ProjectVideoController::class, 'destroy'])->name('admin.projects.destroy');
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.store');
+Route::post('/quote', [\App\Http\Controllers\QuoteController::class, 'store'])->name('quote.store');
 
 // Contact routes
 
@@ -95,5 +97,5 @@ Route::get('/admin/messages', [ContactMessageController::class, 'index'])->name(
 Route::redirect('/admin/clients', '/admin/messages');
 // Bookings view removed — keep briefs route unavailable
 Route::redirect('/admin/briefs', '/admin/projects');
-Route::view('/admin/boards', 'admin.pages.bookings')->name('admin.boards');
+Route::get('/admin/boards', [BookingAdminController::class, 'index'])->name('admin.boards');
 Route::view('/admin/change-password', 'admin.change-password')->name('admin.change-password');

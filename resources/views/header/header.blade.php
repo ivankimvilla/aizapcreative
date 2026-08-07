@@ -2,7 +2,25 @@
 
 <header class="site-header">
     <div class="site-header__brand">
-        <img src="{{ asset('logo.png') }}" alt="AI Creatives Logo">
+        {{--
+            FIX: width/height (and loading/fetchpriority) added so the
+            browser reserves this element's box immediately, instead of
+            collapsing it to 0 width until the image file finishes
+            downloading. That collapse-then-pop-in was what pushed the
+            "Book A Call" CTA / mobile toggle sideways.
+
+            Replace 168/168 with your logo's real intrinsic pixel
+            dimensions (from the actual image file), and update the
+            matching aspect-ratio in header.css to the same ratio.
+        --}}
+        <img
+            src="{{ asset('logo.png') }}"
+            alt="AI Creatives Logo"
+            width="168"
+            height="168"
+            loading="eager"
+            fetchpriority="high"
+        >
     </div>
 
     <nav class="site-header__nav" id="siteNav">

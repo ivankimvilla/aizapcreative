@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="{{ asset('css/pages/pricing.css') }}">
 </head>
 <body class="pricing-page">
+    @php
+        $showQuoteSection = $errors->any() || old('first_name') || old('service');
+    @endphp
     @include('header.header')
 
     <main class="pricing-shell">
@@ -46,7 +49,7 @@
                     <li>Multiple formats</li>
                     <li>Commercial use</li>
                 </ul>
-                <a href="#contact" class="pricing-card__button">
+                <a href="#contact" class="pricing-card__button" data-service="AI Commercial Ads">
                     <span>Request a Quote</span>
                     <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7" />
@@ -74,7 +77,7 @@
                     <li>Engaging storytelling</li>
                     <li>Commercial use</li>
                 </ul>
-                <a href="#contact" class="pricing-card__button">
+                <a href="#contact" class="pricing-card__button" data-service="Product Advertising">
                     <span>Request a Quote</span>
                     <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7" />
@@ -103,7 +106,7 @@
                     <li>Background score</li>
                     <li>Multiple revisions</li>
                 </ul>
-                <a href="#contact" class="pricing-card__button">
+                <a href="#contact" class="pricing-card__button" data-service="Storytelling & Short Films">
                     <span>Request a Quote</span>
                     <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7" />
@@ -129,7 +132,7 @@
                     <li>Creative concepts</li>
                     <li>And more</li>
                 </ul>
-                <a href="#contact" class="pricing-card__button">
+                <a href="#contact" class="pricing-card__button" data-service="Custom Project">
                     <span>Let's Talk</span>
                     <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7" />
@@ -198,7 +201,84 @@
                 </a>
             </article>
         </section>
+
+        <section class="quote-section{{ $showQuoteSection ? '' : ' quote-section--hidden' }}" id="contact" data-old-service="{{ old('service') }}">
+            <div class="quote-section__inner">
+                <button type="button" class="quote-section__close" aria-label="Close">&times;</button>
+
+                <div class="quote-section__body">
+                    <div class="quote-section__intro">
+                        <span class="eyebrow">Get Started</span>
+                        <div class="quote-section__package" id="quotePackageSummary">
+                            <div class="quote-section__package-heading">
+                                <h3 class="quote-section__package-name" id="quotePackageName">{{ old('service', 'None selected') }}</h3>
+                            </div>
+                            <p class="quote-section__package-description" id="quotePackageDescription">
+                                Choose a package to see details and pricing.
+                            </p>
+                            <ul class="quote-section__package-features" id="quotePackageFeatures"></ul>
+                        </div>
+                    </div>
+
+                    <form class="quote-form" method="POST" action="{{ route('quote.store') }}" id="quoteForm">
+                        @csrf
+
+                        <div class="quote-form__row">
+                            <div class="quote-form__field">
+                                <label for="quote_first_name">First Name</label>
+                                <input type="text" id="quote_first_name" name="first_name" value="{{ old('first_name') }}" required>
+                            </div>
+                            <div class="quote-form__field">
+                                <label for="quote_last_name">Last Name</label>
+                                <input type="text" id="quote_last_name" name="last_name" value="{{ old('last_name') }}" required>
+                            </div>
+                        </div>
+
+                        <div class="quote-form__row">
+                            <div class="quote-form__field">
+                                <label for="quote_email">Email</label>
+                                <input type="email" id="quote_email" name="email" value="{{ old('email') }}" required>
+                            </div>
+                            <div class="quote-form__field">
+                                <label for="quote_phone">Phone</label>
+                                <input type="tel" id="quote_phone" name="phone" value="{{ old('phone') }}" required>
+                            </div>
+                        </div>
+
+                        <div class="quote-form__row">
+                            <div class="quote-form__field">
+                                <label for="quote_company">Company / Brand</label>
+                                <input type="text" id="quote_company" name="company" value="{{ old('company') }}" required>
+                            </div>
+                            <div class="quote-form__field">
+                                <label for="quote_service">Project Type</label>
+                                <select id="quote_service" name="service" required>
+                                    <option value="AI Commercial Ads" {{ old('service') === 'AI Commercial Ads' ? 'selected' : '' }}>AI Commercial Ads</option>
+                                    <option value="Product Advertising" {{ old('service') === 'Product Advertising' ? 'selected' : '' }}>Product Advertising</option>
+                                    <option value="Storytelling & Short Films" {{ old('service') === 'Storytelling & Short Films' ? 'selected' : '' }}>Storytelling & Short Films</option>
+                                    <option value="Custom Project" {{ old('service') === 'Custom Project' ? 'selected' : '' }}>Custom Project</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="quote-form__submit">
+                            <span>Send Request</span>
+                            <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="7" y1="17" x2="17" y2="7" />
+                                <polyline points="7 7 17 7 17 17" />
+                            </svg>
+                        </button>
+
+                        <p class="quote-form__note">
+                            Prefer to talk it through? <a href="/book-a-call">Book a call</a> instead.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </section>
     </main>
     @include('footer.footer')
+
+    <script src="{{ asset('js/pages/pricing.js') }}"></script>
 </body>
 </html>

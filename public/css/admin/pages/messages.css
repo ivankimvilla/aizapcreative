@@ -12,6 +12,117 @@
     min-height: 480px;
 }
 
+/* Inbox toolbar (Gmail-like) */
+.inbox-toolbar {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--line-on-light);
+    background: linear-gradient(180deg, var(--white) 0%, rgba(255, 255, 255, 0.98) 100%);
+}
+
+.inbox-toolbar-left,
+.inbox-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.compose-btn {
+    background: var(--yellow);
+    color: var(--ink);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.toolbar-action {
+    background: transparent;
+    border: none;
+    padding: 6px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.inbox-toolbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.inbox-toolbar-center input[type="search"] {
+    width: 60%;
+    max-width: 540px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--line-on-light);
+    background: var(--paper);
+}
+
+/* Compose modal */
+.compose-modal {
+    position: fixed;
+    right: 28px;
+    bottom: 28px;
+    width: 420px;
+    max-width: calc(100% - 40px);
+    background: var(--white);
+    border: 1.5px solid var(--line-on-light);
+    border-radius: 10px;
+    box-shadow: 0 8px 30px rgba(10, 10, 10, 0.12);
+    z-index: 60;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.compose-modal.open {
+    display: flex;
+}
+
+.compose-modal .compose-header {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line-on-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.compose-modal .compose-body {
+    padding: 10px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.compose-modal input,
+.compose-modal textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 6px;
+    border: 1.5px solid var(--line-on-light);
+}
+
+.compose-modal textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.compose-modal .compose-actions {
+    display: flex;
+    gap: 8px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--line-on-light);
+    justify-content: flex-end;
+}
+
+
 /* ----- thread list (left) ----- */
 
 .thread-list {

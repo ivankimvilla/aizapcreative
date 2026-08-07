@@ -35,20 +35,60 @@
                     <p class="booking-widget__desc">
                         Schedule a free discovery call with us to talk through your project and how Aizap Creatives can help bring it to life.
                     </p>
+
+                    <div class="booking-widget__note">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M12 8v5"></path>
+                            <path d="M12 16.5v.01"></path>
+                        </svg>
+                        <span>We're closed on Sundays - bookings are only available Monday to Saturday.</span>
+                    </div>
                 </aside>
 
                 <div class="booking-widget__calendar">
                     <div class="calendar-toprow">
-                        <button type="button" class="calendar-tz">
+                        <div class="calendar-tz" id="timezoneDropdown">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20"></path>
                             </svg>
-                            (+08:00) PST - Manila
-                            <svg class="calendar-tz__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M6 9l6 6l6-6"></path>
-                            </svg>
-                        </button>
+                            <button type="button" class="calendar-tz__trigger" id="timezoneTrigger" aria-haspopup="listbox" aria-expanded="false">
+                                <span id="timezoneTriggerLabel">(UTC+08:00) Manila (PHT)</span>
+                                <svg class="calendar-tz__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6l6-6"></path>
+                                </svg>
+                            </button>
+                            <ul class="calendar-tz__list" id="timezoneList" role="listbox" tabindex="-1">
+                                <li role="option" data-value="America/Los_Angeles">(UTC-08:00) Los Angeles (PT)</li>
+                                <li role="option" data-value="America/Denver">(UTC-07:00) Denver (MT)</li>
+                                <li role="option" data-value="America/Chicago">(UTC-06:00) Chicago (CT)</li>
+                                <li role="option" data-value="America/New_York">(UTC-05:00) New York (ET)</li>
+                                <li role="option" data-value="America/Halifax">(UTC-04:00) Halifax (AT)</li>
+                                <li role="option" data-value="America/Sao_Paulo">(UTC-03:00) São Paulo (BRT)</li>
+                                <li role="option" data-value="Europe/London">(UTC+00:00) London (GMT)</li>
+                                <li role="option" data-value="Europe/Paris">(UTC+01:00) Paris (CET)</li>
+                                <li role="option" data-value="Europe/Athens">(UTC+02:00) Athens (EET)</li>
+                                <li role="option" data-value="Asia/Riyadh">(UTC+03:00) Riyadh (AST)</li>
+                                <li role="option" data-value="Asia/Dubai">(UTC+04:00) Dubai (GST)</li>
+                                <li role="option" data-value="Asia/Kolkata">(UTC+05:30) New Delhi (IST)</li>
+                                <li role="option" data-value="Asia/Dhaka">(UTC+06:00) Dhaka (BST)</li>
+                                <li role="option" data-value="Asia/Bangkok">(UTC+07:00) Bangkok (ICT)</li>
+                                <li role="option" data-value="Asia/Jakarta">(UTC+07:00) Jakarta (WIB)</li>
+                                <li role="option" data-value="Asia/Singapore">(UTC+08:00) Singapore (SGT)</li>
+                                <li role="option" data-value="Asia/Manila" aria-selected="true">(UTC+08:00) Manila (PHT)</li>
+                                <li role="option" data-value="Asia/Kuala_Lumpur">(UTC+08:00) Kuala Lumpur (MYT)</li>
+                                <li role="option" data-value="Asia/Shanghai">(UTC+08:00) Beijing (CST)</li>
+                                <li role="option" data-value="Asia/Hong_Kong">(UTC+08:00) Hong Kong (HKT)</li>
+                                <li role="option" data-value="Asia/Taipei">(UTC+08:00) Taipei (TST)</li>
+                                <li role="option" data-value="Asia/Tokyo">(UTC+09:00) Tokyo (JST)</li>
+                                <li role="option" data-value="Asia/Seoul">(UTC+09:00) Seoul (KST)</li>
+                                <li role="option" data-value="Australia/Perth">(UTC+08:00) Perth (AWST)</li>
+                                <li role="option" data-value="Australia/Adelaide">(UTC+09:30) Adelaide (ACST)</li>
+                                <li role="option" data-value="Australia/Sydney">(UTC+10:00) Sydney (AEST)</li>
+                                <li role="option" data-value="Pacific/Auckland">(UTC+12:00) Auckland (NZST)</li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="calendar-header">
@@ -121,27 +161,27 @@
                 <div class="booking-widget__times">
                     <div class="times-date">Monday, August 3</div>
                     <div class="times-list">
-                        <button type="button" class="time-slot">12:30 PM</button>
-                        <button type="button" class="time-slot">1:00 PM</button>
-                        <button type="button" class="time-slot">1:30 PM</button>
-                        <button type="button" class="time-slot">2:00 PM</button>
-                        <button type="button" class="time-slot">2:30 PM</button>
-                        <button type="button" class="time-slot">3:00 PM</button>
-                        <button type="button" class="time-slot">3:30 PM</button>
-                        <button type="button" class="time-slot">4:00 PM</button>
-                        <button type="button" class="time-slot">4:30 PM</button>
-                        <button type="button" class="time-slot">5:00 PM</button>
-                        <button type="button" class="time-slot">5:30 PM</button>
-                        <button type="button" class="time-slot">6:00 PM</button>
-                        <button type="button" class="time-slot">6:30 PM</button>
-                        <button type="button" class="time-slot">7:00 PM</button>
-                        <button type="button" class="time-slot">7:30 PM</button>
-                        <button type="button" class="time-slot">8:00 PM</button>
-                        <button type="button" class="time-slot">8:30 PM</button>
-                        <button type="button" class="time-slot">9:00 PM</button>
-                        <button type="button" class="time-slot">9:30 PM</button>
-                        <button type="button" class="time-slot">10:00 PM</button>
-                        <button type="button" class="time-slot">10:30 PM</button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">12:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">1:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">1:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">2:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">2:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">3:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">3:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">4:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">4:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">5:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">5:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">6:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">6:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">7:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">7:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">8:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">8:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">9:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">9:30 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">10:00 PM</span><span class="time-slot__badge">Booked</span></button>
+                        <button type="button" class="time-slot"><span class="time-slot__label">10:30 PM</span><span class="time-slot__badge">Booked</span></button>
                     </div>
                 </div>
 
@@ -150,14 +190,13 @@
 
     </main>
 
-    <!-- ==================== BOOKING MODAL ==================== -->
     <div class="booking-modal-overlay" id="bookingModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
         <div class="booking-modal">
 
             <div class="booking-modal__header">
                 <div class="booking-modal__meta">
                     <span class="booking-modal__eyebrow">Confirm your call</span>
-                    <h2 class="booking-modal__title" id="modalTitle">Reservation details</h2>
+                    <h2 class="booking-modal__title" id="modalTitle">Confirmation Details</h2>
                     <div class="booking-modal__slot-badge">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <circle cx="12" cy="12" r="9"></circle>
@@ -191,22 +230,22 @@
 
                     <label class="field" for="bookingName">
                         <span>Your Name</span>
-                        <input type="text" id="bookingName" name="name" autocomplete="name" placeholder="Your full name" required>
+                        <input type="text" id="bookingName" name="name" autocomplete="name" required>
                     </label>
 
                     <label class="field" for="bookingEmail">
                         <span>Your Email</span>
-                        <input type="email" id="bookingEmail" name="email" autocomplete="email" placeholder="you@example.com" required>
+                        <input type="email" id="bookingEmail" name="email" autocomplete="email" required>
                     </label>
 
                     <label class="field" for="bookingCompany">
                         <span>Company / Brand</span>
-                        <input type="text" id="bookingCompany" name="company" autocomplete="organization" placeholder="Company or brand name">
+                        <input type="text" id="bookingCompany" name="company" autocomplete="organization">
                     </label>
 
                     <label class="field" for="bookingPhone">
                         <span>Phone Number</span>
-                        <input type="tel" id="bookingPhone" name="phone" autocomplete="tel" placeholder="+1 (555) 123-4567">
+                        <input type="tel" id="bookingPhone" name="phone" autocomplete="tel">
                     </label>
 
                     <label class="field field--full" for="serviceSelect">
@@ -223,7 +262,7 @@
 
                     <label class="field field--full">
                         <span>Tell us about your project</span>
-                        <textarea name="message" rows="3" autocomplete="off" placeholder="Share a brief overview of your goals..."></textarea>
+                        <textarea name="message" rows="3" autocomplete="off"></textarea>
                     </label>
 
                     <div class="booking-form-footer">
@@ -235,7 +274,6 @@
 
         </div>
     </div>
-    <!-- ==================== END MODAL ==================== -->
     @include('footer.footer')
     <script src="{{ asset('js/booking-calendar/booking-calendar.js') }}"></script>
 </body>

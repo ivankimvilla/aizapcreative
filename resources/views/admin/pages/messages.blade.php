@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AIZAP Creatives — Clients</title>
+  <title>Aizap Creatives - Clients</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -29,6 +29,19 @@
       <!-- MESSAGES -->
       <div class="inbox" id="inbox">
 
+        <!-- TOOLBAR (Gmail-style) -->
+        <div class="inbox-toolbar">
+          <div class="inbox-toolbar-left">
+            <button class="compose-btn" id="composeBtn" type="button">Compose</button>
+          </div>
+          <div class="inbox-toolbar-center">
+            <input type="search" id="threadSearch" placeholder="Search messages">
+          </div>
+          <div class="inbox-toolbar-right">
+            <button class="toolbar-action" type="button" title="Refresh" onclick="location.reload()">⟳</button>
+          </div>
+        </div>
+
         <!-- THREAD LIST -->
         <div class="thread-list">
           <div class="thread-list-head">
@@ -36,7 +49,7 @@
             <span class="thread-count">{{ $messages->count() }}</span>
           </div>
 
-          <div class="thread-items">
+          <div class="thread-items" id="threadItems">
             @forelse ($messages as $message)
               <button class="thread-item{{ $loop->first ? ' active' : '' }}" data-name="{{ e($message->name) }}" data-role="{{ e($message->role ?: 'Client') }}" data-subject="{{ e($message->subject ?: 'New message') }}" data-email="{{ e($message->email ?: 'No email provided') }}" data-message="{{ e($message->message) }}" data-created-at="{{ $message->created_at?->format('M j, Y H:i') ?: '' }}">
                 <span class="thread-avatar hue-{{ ($loop->index % 4) + 1 }}">{{ strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $message->name), 0, 2)) }}</span>
@@ -120,6 +133,22 @@
         </div>
 
       </div>
+
+      <!-- COMPOSE MODAL (already styled in CSS, now wired to the button) -->
+      <div class="compose-modal" id="composeModal">
+        <div class="compose-header">
+          <strong>New message</strong>
+          <button class="toolbar-action" id="composeClose" type="button">✕</button>
+        </div>
+        <div class="compose-body">
+          <input type="text" placeholder="To">
+          <input type="text" placeholder="Subject">
+          <textarea placeholder="Message"></textarea>
+        </div>
+        <div class="compose-actions">
+          <button class="toolbar-action" id="composeCancel" type="button">Discard</button>
+        </div>
+      </div>
     </main>
   </div>
 
@@ -177,6 +206,36 @@
         renderThread(item);
       });
     });
+
+    // Toolbar: search filters the existing thread list (no new data, just show/hide)
+    var searchInput = document.getElementById('threadSearch');
+    if (searchInput) {
+      searchInput.addEventListener('input', function () {
+        var q = searchInput.value.trim().toLowerCase();
+        threadItems.forEach(function (item) {
+          var haystack = ((item.dataset.name || '') + ' ' + (item.dataset.subject || '')).toLowerCase();
+          item.style.display = haystack.indexOf(q) === -1 ? 'none' : '';
+        });
+      });
+    }
+
+    // Toolbar: compose button opens/closes the modal (cosmetic only, no send logic)
+    var composeBtn = document.getElementById('composeBtn');
+    var composeModal = document.getElementById('composeModal');
+    var composeClose = document.getElementById('composeClose');
+    var composeCancel = document.getElementById('composeCancel');
+
+    function closeCompose() {
+      if (composeModal) composeModal.classList.remove('open');
+    }
+
+    if (composeBtn && composeModal) {
+      composeBtn.addEventListener('click', function () {
+        composeModal.classList.add('open');
+      });
+    }
+    if (composeClose) composeClose.addEventListener('click', closeCompose);
+    if (composeCancel) composeCancel.addEventListener('click', closeCompose);
   </script>
 </body>
 </html>
