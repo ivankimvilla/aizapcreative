@@ -439,7 +439,7 @@ a {
     min-height: 0;
 }
 
-..panel {
+.panel {
     background: var(--white);
     border: 1.5px solid var(--line-on-light);
     border-radius: 10px;

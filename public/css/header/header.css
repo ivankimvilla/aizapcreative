@@ -5,9 +5,18 @@
     --muted: #949aa5;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 html,
 body {
     overflow-x: hidden;
+}
+
+html {
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
 }
 
 .site-header {
@@ -15,7 +24,6 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    transform: none;
     z-index: 10;
     display: flex;
     align-items: center;
@@ -23,9 +31,6 @@ body {
     padding: 0 32px;
     backdrop-filter: blur(14px);
     width: 100%;
-    max-width: 100%;
-    margin: 0;
-    border-radius: 0;
     background: rgba(0, 0, 0, 0.72);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
     overflow: visible;
@@ -37,21 +42,8 @@ body {
     flex-shrink: 0;
     height: 100%;
     max-height: 100%;
-    margin-right: 56px;
 }
 
-/*
- * FIX: the <img> had no intrinsic size reserved (no width/height
- * attributes, no aspect-ratio), so before it finished loading the
- * browser gave it 0 width. Once it loaded, its real width popped in
- * and pushed everything after it in the flex row (the CTA button,
- * the mobile toggle) sideways. Setting aspect-ratio here — combined
- * with width/height attributes on the <img> tag itself in the HTML —
- * reserves the box up front so nothing shifts on load.
- *
- * Replace 1 / 1 below with your logo's real width/height ratio,
- * e.g. if the source file is 480x168px, use "480 / 168".
- */
 .site-header__brand img {
     height: 168px;
     width: auto;
@@ -74,16 +66,12 @@ body {
 }
 
 .site-header__nav {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 1;
     flex-wrap: nowrap;
     gap: 28px;
-    max-width: calc(100% - 220px);
     font-size: 13px;
     font-weight: 600;
     letter-spacing: 0.08em;
@@ -92,7 +80,12 @@ body {
     min-width: 0;
 }
 
+/* ---------- NAV LINKS ----------
+   Pattern: border-bottom is ALWAYS 2px, transparent by default.
+   Only the color/opacity changes on hover/active — width never
+   changes, so nothing shifts. Same idea as .nav a in the sidebar. */
 .site-header__nav-link {
+    position: relative;
     display: inline-flex;
     align-items: center;
     color: #f4f5f5;
@@ -100,25 +93,177 @@ body {
     border-bottom: 2px solid transparent;
     text-decoration: none;
     white-space: nowrap;
+    font-weight: 600;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.site-header__nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: center;
+    opacity: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    pointer-events: none;
 }
 
 .site-header__nav-link:hover {
     color: #fff;
 }
 
+.site-header__nav-link:hover::after,
+.site-header__nav-link--active::after {
+    transform: scaleX(1);
+    opacity: 1;
+}
+
 .site-header__nav-link--active {
     color: var(--gold);
 }
 
+.site-header__nav-link:active,
+.site-header__nav-link:focus,
+.site-header__nav-link:focus-visible {
+    outline: none;
+    transform: none;
+}
+
+/* ---------- SERVICES DROPDOWN BUTTON ---------- */
+.site-header__nav-item--services {
+    position: relative;
+}
+
+.site-header__nav-link--button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 0 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f4f5f5;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.site-header__nav-link--button span,
+.site-header__nav-link--button svg {
+    color: inherit;
+}
+
+.site-header__nav-link--button:hover,
+.site-header__nav-link--button:hover span,
+.site-header__nav-link--button:hover svg {
+    color: #fff;
+}
+
+.site-header__nav-link--button.site-header__nav-link--active,
+.site-header__nav-link--button.site-header__nav-link--active span,
+.site-header__nav-link--button.site-header__nav-link--active svg {
+    color: var(--gold);
+}
+
+.site-header__nav-link--button:focus,
+.site-header__nav-link--button:focus-visible,
+.site-header__nav-link--button:active {
+    outline: none;
+    transform: none;
+}
+
+.site-header__nav-caret {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.site-header__nav-link--open .site-header__nav-caret {
+    transform: rotate(180deg);
+}
+
+.site-header__services-dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 520px;
+    max-width: 86vw;
+    background: #0b0b0b;
+    color: var(--text);
+    border: 1.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    padding: 28px 36px;
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.5);
+    z-index: 1100;
+}
+
+.site-header__services-links {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px 36px;
+    align-items: start;
+}
+
+.site-header__services-links a {
+    display: inline-block;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 0;
+    border-bottom: 1.5px solid transparent;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.site-header__services-links a:hover {
+    color: var(--gold);
+}
+
+/* FIX: font-weight kept identical to the default (600) instead of
+   jumping to 700 on active — that weight change was widening the
+   active link's text box and reflowing the 2-column grid, which is
+   what caused the "random shifting" in the header. Color alone now
+   differentiates the active state, matching the pattern used for
+   .site-header__nav-link and .icon-btn elsewhere in this file. */
+.site-header__services-links a.site-header__services-link--active {
+    color: var(--gold);
+    font-weight: 600;
+}
+
+.site-header__services-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1.5px solid rgba(255, 255, 255, 0.1);
+}
+
+.site-header__services-footer .site-header__cta {
+    margin-left: 0;
+}
+
+/* ---------- CTA BUTTON ----------
+   Border-width is ALWAYS 1.5px, on every state. Only border-color
+   and background change — exactly like .icon-btn in the sidebar. */
 .site-header__cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-    margin-left: auto;
     flex-shrink: 0;
     padding: 8px 18px 8px 8px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
     border-radius: 999px;
     background: #141414;
     color: var(--text);
@@ -128,7 +273,8 @@ body {
     font-weight: 600;
     letter-spacing: 0.01em;
     white-space: nowrap;
-    transition: background-color .25s ease, border-color .25s ease;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .site-header__cta:hover {
@@ -137,16 +283,47 @@ body {
     color: #050505;
 }
 
-.site-header__cta:active {
-    transform: none;
-}
-
 .site-header__cta--active {
     background: var(--gold);
     border-color: var(--gold);
     color: #050505;
 }
 
+.site-header__cta:active,
+.site-header__cta:focus,
+.site-header__cta:focus-visible {
+    outline: none;
+    transform: none;
+}
+
+.site-header__cta-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.6px solid var(--text);
+    color: var(--text);
+    flex-shrink: 0;
+    transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.site-header__cta-icon svg {
+    display: block;
+}
+
+.site-header__cta:hover .site-header__cta-icon {
+    border-color: #050505;
+    color: #050505;
+}
+
+.site-header__cta--active .site-header__cta-icon {
+    border-color: #050505;
+    color: #050505;
+}
+
+/* ---------- STATUS TOAST ---------- */
 .site-header__status {
     position: absolute;
     left: 50%;
@@ -166,7 +343,7 @@ body {
     color: #ffffff;
     z-index: 1200;
     opacity: 1;
-    transition: opacity .25s ease, transform .25s ease;
+    transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
 .site-header__status-icon {
@@ -197,35 +374,7 @@ body {
     color: #d2f8e1;
 }
 
-.site-header__cta-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    border: 1.6px solid var(--text);
-    color: var(--text);
-    flex-shrink: 0;
-    transition: transform .25s ease, border-color .25s ease, color .25s ease;
-}
-
-.site-header__cta-icon svg {
-    display: block;
-}
-
-.site-header__cta:hover .site-header__cta-icon {
-    border-color: #050505;
-    color: #050505;
-    transform: translateX(2px);
-}
-
-.site-header__cta--active .site-header__cta-icon {
-    border-color: #050505;
-    color: #050505;
-    transform: translateX(2px);
-}
-
+/* ---------- MOBILE TOGGLE ---------- */
 .site-header__toggle {
     display: none;
     flex-direction: column;
@@ -241,6 +390,7 @@ body {
     cursor: pointer;
     flex-shrink: 0;
     z-index: 1200;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .site-header__toggle span {
@@ -256,6 +406,10 @@ body {
     background: #fff;
 }
 
+/* Intentional animation (hamburger -> X). This is the ONLY
+   transform allowed in the header, and it's on the inner <span>
+   icon bars, not on the button itself — so the button's own box
+   never moves or resizes. */
 .site-header__toggle--open span:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
@@ -266,6 +420,13 @@ body {
 
 .site-header__toggle--open span:nth-child(3) {
     transform: translateY(-7px) rotate(-45deg);
+}
+
+.site-header__toggle:focus,
+.site-header__toggle:focus-visible,
+.site-header__toggle:active {
+    outline: none;
+    transform: none;
 }
 
 body {
@@ -290,7 +451,7 @@ body {
         top: 64px;
         left: 0;
         right: 0;
-        transform: none;
+        flex: none;
         max-width: 100%;
         width: 100%;
         flex-direction: column;
@@ -323,8 +484,23 @@ body {
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .site-header__nav-link--active {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    .site-header__services-dropdown {
+        position: static;
+        transform: none;
+        min-width: auto;
+        width: 100%;
+        box-shadow: none;
+        padding: 18px 20px;
+        border: none;
+        border-radius: 0;
+    }
+
+    .site-header__services-footer {
+        justify-content: stretch;
+    }
+
+    .site-header__services-footer .site-header__cta {
+        width: 100%;
     }
 }
 
@@ -345,7 +521,7 @@ body {
     }
 
     .site-header__brand {
-        margin-right: 28px;
+        margin-right: 0;
     }
 
     .site-header__brand img {
@@ -353,131 +529,11 @@ body {
     }
 }
 
-.site-header__nav-item--services {
-    position: relative;
+#app-content {
+    opacity: 1;
+    transition: opacity 0.15s ease;
 }
 
-.site-header__nav-link--button {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.site-header__nav-caret {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.2s ease;
-}
-
-.site-header__nav-link--open .site-header__nav-caret {
-    transform: rotate(180deg);
-}
-
-.site-header__nav-link--button,
-.site-header__nav-link--button span,
-.site-header__nav-link--button svg {
-    color: #f4f5f5;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.site-header__nav-link--button:hover,
-.site-header__nav-link--button:hover span,
-.site-header__nav-link--button:hover svg {
-    color: #fff;
-}
-
-.site-header__nav-link--button.site-header__nav-link--active,
-.site-header__nav-link--button.site-header__nav-link--active span,
-.site-header__nav-link--button.site-header__nav-link--active svg {
-    color: var(--gold);
-}
-
-.site-header__nav-link--button {
-    padding: 2px 0 6px;
-}
-
-.site-header__nav-link--button:focus {
-    outline: none;
-}
-
-.site-header__services-dropdown {
-    position: absolute;
-    top: calc(100% + 12px);
-    left: 50%;
-    transform: translateX(-50%);
-    min-width: 520px;
-    max-width: 86vw;
-    background: #0b0b0b;
-    color: var(--text);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 18px;
-    padding: 28px 36px;
-    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.5);
-    z-index: 1100;
-}
-
-.site-header__services-links {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px 36px;
-    align-items: start;
-}
-
-.site-header__services-links a {
-    display: inline-block;
-    color: var(--text);
-    text-decoration: none;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    padding: 6px 0;
-}
-
-.site-header__services-links a:hover {
-    color: var(--gold);
-}
-
-.site-header__services-links a.site-header__services-link--active {
-    color: var(--gold);
-    font-weight: 700;
-}
-
-.site-header__services-footer {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 22px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.site-header__services-footer .site-header__cta {
-    margin-left: 0;
-}
-
-@media (max-width: 900px) {
-    .site-header__services-dropdown {
-        position: static;
-        transform: none;
-        min-width: auto;
-        width: 100%;
-        box-shadow: none;
-        padding: 18px 20px;
-    }
-
-    .site-header__services-footer {
-        justify-content: stretch;
-    }
-
-    .site-header__services-footer .site-header__cta {
-        width: 100%;
-    }
+#app-content.is-loading {
+    opacity: 0;
 }

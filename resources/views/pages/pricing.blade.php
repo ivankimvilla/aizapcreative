@@ -14,7 +14,8 @@
     @endphp
     @include('header.header')
 
-    <main class="pricing-shell">
+    <main id="app-content">
+        <div class="pricing-shell">
         <section class="pricing-hero">
             <div class="pricing-hero__copy">
                 <h1 class="pricing-hero__title">Flexible <span>Pricing</span></h1>
@@ -276,6 +277,7 @@
                 </div>
             </div>
         </section>
+        </div>
     </main>
     @include('footer.footer')
 

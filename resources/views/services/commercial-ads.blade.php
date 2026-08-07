@@ -12,7 +12,8 @@
 <body class="service-page service-page--commercial">
     @include('header.header')
 
-    <main class="service-shell">
+    <main id="app-content">
+        <div class="service-shell">
         <section class="service-hero-split">
             <div class="service-hero-split__copy">
                 <div class="eyebrow">What We Do</div>
@@ -42,6 +43,7 @@
             </div>
         </section>
 
+        </div>
     </main>
 
     @include('footer.footer')

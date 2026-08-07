@@ -12,7 +12,8 @@
 <body class="contact-page">
     @include('header.header')
 
-    <main class="contact-shell">
+    <main id="app-content">
+        <div class="contact-shell">
         <section class="contact-hero">
             <div class="contact-hero__copy">
                 <div class="eyebrow"></div>
@@ -188,6 +189,7 @@
                 </div>
             </div>
         </section>
+        </div>
     </main>
     @include('footer.footer')
     <script src="{{ asset('js/pages/contact.js') }}"></script>

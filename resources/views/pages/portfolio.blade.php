@@ -11,7 +11,8 @@
 <body class="portfolio-page">
     @include('header.header')
 
-    <main class="portfolio-shell">
+    <main id="app-content">
+        <div class="portfolio-shell">
         <section class="portfolio-hero">
             <div class="portfolio-hero__copy">
                 <h1 class="portfolio-hero__title">Creative work.<br><span>Real impact.</span></h1>
@@ -53,6 +54,7 @@
             </div>
             <a href="/contact" class="portfolio-footer-cta__button">Let's Work Together</a>
         </section>
+        </div>
     </main>
     @include('footer.footer')
     <script src="{{ asset('js/video-player.js') }}"></script>

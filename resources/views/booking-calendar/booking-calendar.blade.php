@@ -11,7 +11,8 @@
 <body class="booking-page">
     @include('header.header')
 
-    <main class="booking-shell">
+    <main id="app-content">
+        <div class="booking-shell">
 
         <section id="booking" class="booking-widget">
             <div class="booking-widget__card">

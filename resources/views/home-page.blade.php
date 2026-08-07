@@ -13,8 +13,9 @@
 </head>
 <body class="home-page-page">
     @include('header.header')
-    <div class="background-glow">
-        <div class="container">
+    <main id="app-content">
+        <div class="background-glow">
+            <div class="container">
 
             <section class="hero-section" id="services">
                 <div class="hero-copy">
@@ -509,8 +510,9 @@
                 </div>
             </section>
 
+            </div>
         </div>
-    </div>
+    </main>
     @include('footer.footer')
     <script src="{{ asset('js/video-player.js') }}"></script>
     <script src="{{ asset('js/home-page.js') }}"></script>

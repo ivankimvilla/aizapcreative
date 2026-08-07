@@ -10,7 +10,8 @@
 </head>
 <body class="about-us-page">
     @include('header.header')
-    <div class="about-page-shell">
+    <main id="app-content">
+        <div class="about-page-shell">
         <section class="about-hero-block">
             <div class="about-copy">
                 <h1 class="about-title">
@@ -153,7 +154,8 @@
                 <p>Working with brands around the world</p>
             </article>
         </section>
-    </div>
+        </div>
+    </main>
     @include('footer.footer')
 </body>
 </html>

@@ -49,7 +49,6 @@
         e.stopPropagation();
     });
 
-    // Close when clicking outside
     document.addEventListener('click', function (e) {
         var target = e.target;
         if (!svcDropdown.contains(target) && target !== svcToggle) {
@@ -75,30 +74,12 @@
     }, 4200);
 })();
 
-/**
- * AJAX navigation ("pjax"-style).
- *
- * Intercepts clicks on same-origin links, fetches the destination page,
- * swaps out #app-content, updates <title>, active nav states, and the
- * URL via history.pushState — avoiding a full page reload.
- *
- * Requirements on the Blade side:
- *   - Wrap page content in a container with id="app-content" in the
- *     master layout, e.g. <main id="app-content"> @yield('content') </main>
- *   - This header.js must be loaded on every page that uses the layout.
- *
- * Optional server-side optimization: if the request has header
- * X-Requested-With: XMLHttpRequest, your controller/layout can skip
- * rendering the header/footer and return just the #app-content markup,
- * which reduces payload size. The script works either way since it
- * only reads #app-content out of whatever HTML comes back.
- */
 (function () {
     var CONTENT_SELECTOR = '#app-content';
+    var FADE_MS = 150;
 
     var contentEl = document.querySelector(CONTENT_SELECTOR);
     if (!contentEl) {
-        // No content container found — AJAX nav disabled, links behave normally.
         return;
     }
 
@@ -114,6 +95,8 @@
 
     function shouldIntercept(link) {
         if (!link || !link.getAttribute) return false;
+        if (link.tagName && link.tagName.toLowerCase() !== 'a') return false;
+        if (link.closest && link.closest('[data-no-ajax]')) return false;
         if (link.hasAttribute('data-no-ajax')) return false;
         if (link.target && link.target !== '') return false;
         if (link.hasAttribute('download')) return false;
@@ -121,8 +104,14 @@
         var href = link.getAttribute('href');
         if (!href || href.charAt(0) === '#') return false;
         if (href.indexOf('mailto:') === 0 || href.indexOf('tel:') === 0) return false;
-        if (!isSameOrigin(link.href)) return false;
-        if (link.href === window.location.href) return false;
+
+        try {
+            var parsed = new URL(href, window.location.href);
+            if (parsed.origin !== window.location.origin) return false;
+            if (parsed.pathname === window.location.pathname && parsed.search === window.location.search) return false;
+        } catch (e) {
+            return false;
+        }
 
         return true;
     }
@@ -132,8 +121,6 @@
         if (window.__closeServicesDropdown) window.__closeServicesDropdown();
     }
 
-    // Recomputes which nav/dropdown links should carry the "active" class,
-    // mirroring the request()->is(...) checks used server-side in Blade.
     function updateActiveStates(pathname) {
         var path = pathname.replace(/\/+$/, '') || '/';
 
@@ -171,8 +158,6 @@
     }
 
     function runInlineScripts(container) {
-        // Fetched HTML's <script> tags don't execute when injected via
-        // innerHTML — re-create them so any page-specific JS still runs.
         container.querySelectorAll('script').forEach(function (oldScript) {
             var newScript = document.createElement('script');
             for (var i = 0; i < oldScript.attributes.length; i++) {
@@ -184,7 +169,11 @@
         });
     }
 
+    var navInProgress = false;
+
     function loadPage(url, pushState) {
+        if (navInProgress) return;
+        navInProgress = true;
         contentEl.setAttribute('aria-busy', 'true');
         contentEl.classList.add('is-loading');
 
@@ -203,38 +192,46 @@
                 var newContent = doc.querySelector(CONTENT_SELECTOR);
 
                 if (!newContent) {
-                    // Response doesn't have the expected container
-                    // (e.g. redirected to an external/full page) — fall back.
                     window.location.href = url;
                     return;
                 }
 
-                contentEl.innerHTML = newContent.innerHTML;
-                runInlineScripts(contentEl);
+                var fadeElapsed = new Promise(function (resolve) {
+                    window.setTimeout(resolve, FADE_MS);
+                });
 
-                var newTitle = doc.querySelector('title');
-                if (newTitle) {
-                    document.title = newTitle.textContent;
-                }
+                fadeElapsed.then(function () {
+                    contentEl.innerHTML = newContent.innerHTML;
+                    runInlineScripts(contentEl);
 
-                if (pushState) {
-                    window.history.pushState({ ajaxNav: true }, '', url);
-                }
+                    var newTitle = doc.querySelector('title');
+                    if (newTitle) {
+                        document.title = newTitle.textContent;
+                    }
 
-                updateActiveStates(window.location.pathname);
-                closeAnyOpenMenus();
-                window.scrollTo(0, 0);
+                    var resolvedUrl = new URL(url, window.location.href);
+                    if (pushState) {
+                        window.history.pushState({ ajaxNav: true }, '', resolvedUrl.pathname + resolvedUrl.search + resolvedUrl.hash);
+                    }
 
-                document.dispatchEvent(new CustomEvent('ajaxnav:loaded', { detail: { url: url } }));
+                    updateActiveStates(window.location.pathname);
+                    closeAnyOpenMenus();
+                    window.scrollTo(0, 0);
+
+                    requestAnimationFrame(function () {
+                        requestAnimationFrame(function () {
+                            contentEl.classList.remove('is-loading');
+                            contentEl.removeAttribute('aria-busy');
+                            navInProgress = false;
+                        });
+                    });
+
+                    document.dispatchEvent(new CustomEvent('ajaxnav:loaded', { detail: { url: url } }));
+                });
             })
             .catch(function (err) {
                 console.error('[ajax-nav]', err);
-                // Fail safe: do a normal navigation so the user isn't stuck.
                 window.location.href = url;
-            })
-            .finally(function () {
-                contentEl.removeAttribute('aria-busy');
-                contentEl.classList.remove('is-loading');
             });
     }
 
@@ -242,10 +239,11 @@
         if (e.defaultPrevented || e.button !== 0) return;
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
 
-        var link = e.target.closest ? e.target.closest('a[href]') : null;
+        var link = e.target && e.target.closest ? e.target.closest('a[href]') : null;
         if (!shouldIntercept(link)) return;
 
         e.preventDefault();
+        e.stopPropagation();
         loadPage(link.href, true);
     });
 
@@ -253,6 +251,5 @@
         loadPage(window.location.href, false);
     });
 
-    // Mark the very first load as a history entry we can return to.
     window.history.replaceState({ ajaxNav: true }, '', window.location.href);
 })();
