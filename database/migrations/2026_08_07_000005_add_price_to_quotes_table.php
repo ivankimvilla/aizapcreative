@@ -8,15 +8,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::table('quotes', function (Blueprint $table) {
-            $table->string('price')->nullable()->after('service');
-        });
+        if (! Schema::hasColumn('quotes', 'price')) {
+            Schema::table('quotes', function (Blueprint $table) {
+                $table->string('price')->nullable()->after('service');
+            });
+        }
     }
 
     public function down(): void
     {
-        Schema::table('quotes', function (Blueprint $table) {
-            $table->dropColumn('price');
-        });
+        // This migration is redundant because the original quotes table already includes the
+        // price column, so rollback should not remove it.
     }
 };
