@@ -266,6 +266,8 @@
                         <textarea name="message" rows="3" autocomplete="off"></textarea>
                     </label>
 
+                    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-booking-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" value="">
+
                     <div class="booking-form-footer">
                         <button type="submit" class="booking-submit">Book Call</button>
                         <p class="booking-note">You'll receive a confirmation email & calendar invite after booking.</p>

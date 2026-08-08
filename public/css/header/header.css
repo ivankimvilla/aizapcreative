@@ -230,12 +230,6 @@ html {
     color: var(--gold);
 }
 
-/* FIX: font-weight kept identical to the default (600) instead of
-   jumping to 700 on active — that weight change was widening the
-   active link's text box and reflowing the 2-column grid, which is
-   what caused the "random shifting" in the header. Color alone now
-   differentiates the active state, matching the pattern used for
-   .site-header__nav-link and .icon-btn elsewhere in this file. */
 .site-header__services-links a.site-header__services-link--active {
     color: var(--gold);
     font-weight: 600;
@@ -253,9 +247,6 @@ html {
     margin-left: 0;
 }
 
-/* ---------- CTA BUTTON ----------
-   Border-width is ALWAYS 1.5px, on every state. Only border-color
-   and background change — exactly like .icon-btn in the sidebar. */
 .site-header__cta {
     display: inline-flex;
     align-items: center;

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\RecaptchaEnterprise;
 use App\Models\ContactMessage;
 use App\Models\Quote;
 use Illuminate\Http\Request;
 
 class QuoteController extends Controller
 {
+    use RecaptchaEnterprise;
+
     public function index()
     {
         $quotes = Quote::latest()->get();
@@ -25,7 +28,14 @@ class QuoteController extends Controller
             'company' => ['nullable', 'string', 'max:255'],
             'service' => ['required', 'string', 'max:255'],
             'price' => ['required', 'string', 'max:255'],
+            'g-recaptcha-response' => ['required'],
+        ], [
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before sending your quote request.',
         ]);
+
+        if (! $this->verifyRecaptcha($request, 'quote')) {
+            return $this->recaptchaFailed($request);
+        }
 
         $data = [
             'name' => trim($validated['first_name'].' '.$validated['last_name']),

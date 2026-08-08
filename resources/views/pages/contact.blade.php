@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('css/pages/contact.css') }}">
-    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 <body class="contact-page">
     @include('header.header')
@@ -70,7 +69,7 @@
                     </label>
 
                     <div class="field field--full field--recaptcha">
-                        <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-action="LOGIN" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}">
                         @error('g-recaptcha-response')
                             <div class="recaptcha-error" role="alert">
                                 <strong>reCAPTCHA required</strong>

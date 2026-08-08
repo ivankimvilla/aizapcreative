@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\RecaptchaEnterprise;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Config;
 
 class ContactMessageController extends Controller
 {
+    use RecaptchaEnterprise;
+
     public function index()
     {
         $messages = ContactMessage::latest()
@@ -33,36 +35,9 @@ class ContactMessageController extends Controller
             'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before sending your message.',
         ]);
 
-        // reCAPTCHA server-side verification (optional if keys set)
-        $recaptcha = $request->input('g-recaptcha-response');
-        if (config('services.recaptcha.secret')) {
-            if (! $recaptcha) {
-                if ($request->expectsJson()) {
-                    return response()->json(['message' => 'Please complete the reCAPTCHA.'], 422);
-                }
-                return redirect()->back()->with('contact_status', 'Please complete the reCAPTCHA.');
-            }
-
-            try {
-                $res = Http::asForm()->post('https://www.google.com/recaptcha/api/siteverify', [
-                    'secret' => config('services.recaptcha.secret'),
-                    'response' => $recaptcha,
-                    'remoteip' => $request->ip(),
-                ]);
-                $body = $res->json() ?: [];
-                if (empty($body['success'])) {
-                    if ($request->expectsJson()) {
-                        return response()->json(['message' => 'reCAPTCHA verification failed.'], 422);
-                    }
-                    return redirect()->back()->with('contact_status', 'reCAPTCHA verification failed.');
-                }
-            } catch (\Exception $e) {
-                // allow through if verification cannot be performed
-            }
+        if (! $this->verifyRecaptcha($request, 'contact')) {
+            return $this->recaptchaFailed($request);
         }
-
-        // We no longer require email verification or domain checks here.
-        // reCAPTCHA server-side verification above is used to deter bots.
 
         $data = [
             'name' => trim($validated['first_name'].' '.$validated['last_name']),

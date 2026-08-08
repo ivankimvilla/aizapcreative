@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\RecaptchaEnterprise;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
+    use RecaptchaEnterprise;
+
     public function index()
     {
         return view('booking-calendar.booking-calendar');
@@ -25,7 +28,14 @@ class BookingController extends Controller
             'message' => 'nullable|string|max:2000',
             'selected_slot' => 'required|string',
             'timezone' => 'required|string|max:100',
+            'g-recaptcha-response' => ['required'],
+        ], [
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before booking.',
         ]);
+
+        if (! $this->verifyRecaptcha($request, 'booking')) {
+            return $this->recaptchaFailed($request);
+        }
 
         $timezone = in_array($data['timezone'], timezone_identifiers_list())
             ? new \DateTimeZone($data['timezone'])

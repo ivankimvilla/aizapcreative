@@ -86,6 +86,65 @@
         return '';
     }
 
+    function getRecaptchaInput(form) {
+        return form ? form.querySelector('input[name="g-recaptcha-response"]') : null;
+    }
+
+    function getRecaptchaSiteKey(form) {
+        var input = getRecaptchaInput(form);
+        return input ? input.dataset.sitekey : '';
+    }
+
+    function executeRecaptcha(action, form, retryCount = 0) {
+        return new Promise(function (resolve, reject) {
+            var siteKey = getRecaptchaSiteKey(form);
+            if (!siteKey) {
+                return reject(new Error('reCAPTCHA site key is missing.'));
+            }
+
+            if (typeof grecaptcha === 'undefined' || !grecaptcha.enterprise || !grecaptcha.enterprise.execute) {
+                if (retryCount < 5) {
+                    return window.setTimeout(function () {
+                        executeRecaptcha(action, form, retryCount + 1).then(resolve).catch(reject);
+                    }, 200);
+                }
+                return reject(new Error('reCAPTCHA is not loaded.'));
+            }
+
+            try {
+                grecaptcha.enterprise.ready(function () {
+                    grecaptcha.enterprise.execute(siteKey, { action: action }).then(function (token) {
+                        resolve(token);
+                    }).catch(function (error) {
+                        reject(error || new Error('reCAPTCHA execution failed.'));
+                    });
+                });
+            } catch (e) {
+                reject(e);
+            }
+        });
+    }
+
+    // Turns a failed-fetch Error (with .data attached from the server's JSON
+    // body) into a human-readable list of messages. Shared by both forms so
+    // the feedback form no longer swallows the real server error.
+    function extractErrorMessages(error, fallback) {
+        var messages = [];
+        if (error && error.data && error.data.errors) {
+            Object.keys(error.data.errors).forEach(function (k) {
+                messages = messages.concat(error.data.errors[k]);
+            });
+        } else if (error && error.data && error.data.message) {
+            messages = [error.data.message];
+        } else if (error && error.message) {
+            messages = [error.message];
+        }
+        if (!messages.length && fallback) {
+            messages = [fallback];
+        }
+        return messages;
+    }
+
     (function () {
         var backdrop = document.getElementById('reviewModalBackdrop');
         var openBtn = document.getElementById('openReviewModalBtn');
@@ -163,69 +222,92 @@
             var submitButton = fbForm.querySelector('button[type="submit"]');
             if (submitButton) submitButton.disabled = true;
 
-            var fd = new FormData(fbForm);
-            var action = fbForm.getAttribute('action') || window.location.href;
-            var headers = { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
-            var csrfToken = getCsrfToken(fbForm);
-            if (csrfToken) {
-                headers['X-CSRF-TOKEN'] = csrfToken;
+            var recaptchaInput = getRecaptchaInput(fbForm);
+            if (!recaptchaInput) {
+                var errAlert = createAlert('error', "Couldn't submit feedback", null, ['reCAPTCHA is not configured.']);
+                fbForm.insertBefore(errAlert, fbForm.firstChild);
+                if (submitButton) submitButton.disabled = false;
+                isSubmitting = false;
+                return;
             }
-            fetch(action, {
-                method: 'POST',
-                body: fd,
-                headers: headers,
-                credentials: 'same-origin'
-            })
-                .then(function (res) {
-                    return res.json().then(function (data) {
-                        if (!res.ok) {
-                            var err = new Error('Submission failed');
-                            err.data = data;
-                            throw err;
-                        }
-                        return data;
-                    });
+
+            executeRecaptcha('feedback', fbForm).then(function (token) {
+                recaptchaInput.value = token || '';
+                var fd = new FormData(fbForm);
+                var action = fbForm.getAttribute('action') || window.location.href;
+                var headers = { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
+                var csrfToken = getCsrfToken(fbForm);
+                if (csrfToken) {
+                    headers['X-CSRF-TOKEN'] = csrfToken;
+                }
+                fetch(action, {
+                    method: 'POST',
+                    body: fd,
+                    headers: headers,
+                    credentials: 'same-origin'
                 })
-                .then(function (data) {
-                    var header = document.querySelector('.site-header');
-                    var headerMessage = data.message || 'Thanks for sharing your experience.';
-
-                    if (header) {
-                        var existingStatus = header.querySelector('.site-header__status');
-                        if (existingStatus) {
-                            existingStatus.remove();
-                        }
-
-                        var headerStatus = createHeaderStatus('Feedback submitted', headerMessage);
-                        header.appendChild(headerStatus);
-
-                        window.setTimeout(function () {
-                            headerStatus.style.opacity = '0';
-                            headerStatus.style.transform = 'translateX(-50%) translateY(-4px)';
-                        }, 4200);
-
-                        window.setTimeout(function () {
-                            if (headerStatus && headerStatus.parentNode) {
-                                headerStatus.parentNode.removeChild(headerStatus);
+                    .then(function (res) {
+                        return res.json().then(function (data) {
+                            if (!res.ok) {
+                                var err = new Error('Submission failed');
+                                err.data = data;
+                                throw err;
                             }
-                        }, 4450);
-                    }
+                            return data;
+                        });
+                    })
+                    .then(function (data) {
+                        var header = document.querySelector('.site-header');
+                        var headerMessage = data.message || 'Thanks for sharing your experience.';
 
-                    closeModal();
-                    fbForm.reset();
-                    if (!data.duplicate && data.feedback) {
-                        appendFeedbackCard(data.feedback);
-                        updateCounts();
-                    }
-                    if (submitButton) submitButton.disabled = false;
-                    isSubmitting = false;
-                })
-                .catch(function (err) {
-                    var errAlert = createAlert('error', "Couldn't submit feedback", err && err.message ? [err.message] : null);
-                    fbForm.insertBefore(errAlert, fbForm.firstChild);
-                    if (submitButton) submitButton.disabled = false;
-                    isSubmitting = false;
-                });
+                        if (header) {
+                            var existingStatus = header.querySelector('.site-header__status');
+                            if (existingStatus) {
+                                existingStatus.remove();
+                            }
+
+                            var headerStatus = createHeaderStatus('Feedback submitted', headerMessage);
+                            header.appendChild(headerStatus);
+
+                            window.setTimeout(function () {
+                                headerStatus.style.opacity = '0';
+                                headerStatus.style.transform = 'translateX(-50%) translateY(-4px)';
+                            }, 4200);
+
+                            window.setTimeout(function () {
+                                if (headerStatus && headerStatus.parentNode) {
+                                    headerStatus.parentNode.removeChild(headerStatus);
+                                }
+                            }, 4450);
+                        }
+
+                        closeModal();
+                        fbForm.reset();
+                        if (!data.duplicate && data.feedback) {
+                            appendFeedbackCard(data.feedback);
+                            updateCounts();
+                        }
+                        if (submitButton) submitButton.disabled = false;
+                        isSubmitting = false;
+                    })
+                    .catch(function (err) {
+                        // FIX: previously only read err.message (always the
+                        // generic "Submission failed" string), so the real
+                        // server-side reason in err.data was thrown away.
+                        // Now uses the same extraction logic as the contact
+                        // form so the actual validation/error message shows.
+                        var messages = extractErrorMessages(err, null);
+                        var errAlert = createAlert('error', "Couldn't submit feedback", null, messages);
+                        fbForm.insertBefore(errAlert, fbForm.firstChild);
+                        if (submitButton) submitButton.disabled = false;
+                        isSubmitting = false;
+                    });
+            }).catch(function (err) {
+                var errAlert = createAlert('error', "Couldn't submit feedback", null, [err && err.message ? err.message : 'Unable to verify reCAPTCHA.']);
+                fbForm.insertBefore(errAlert, fbForm.firstChild);
+                if (submitButton) submitButton.disabled = false;
+                isSubmitting = false;
+            });
         });
     })();
 
@@ -240,25 +322,6 @@
 
         var emailInput = document.getElementById('cf-email');
         var isSubmitting = false;
-
-        var recaptchaCompleted = false;
-
-        window.onRecaptchaSuccess = function (token) {
-            recaptchaCompleted = !!token;
-        };
-
-        window.onRecaptchaExpired = function () {
-            recaptchaCompleted = false;
-        };
-
-        function getWidgetToken() {
-            try {
-                if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && grecaptcha.enterprise.getResponse) {
-                    return (grecaptcha.enterprise.getResponse() || '').trim();
-                }
-            } catch (e) { }
-            return '';
-        }
 
         function submitFormData() {
             clearFormAlerts();
@@ -320,16 +383,13 @@
                     }
                     form.reset();
                     if (submitButton) submitButton.disabled = false;
-                    recaptchaCompleted = false;
                     if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && grecaptcha.enterprise.reset) {
                         grecaptcha.enterprise.reset();
                     }
                     isSubmitting = false;
                 })
                 .catch(function (error) {
-                    var messages = [];
-                    if (error.data && error.data.errors) { Object.keys(error.data.errors).forEach(function (k) { messages = messages.concat(error.data.errors[k]); }); }
-                    else if (error.data && error.data.message) messages = [error.data.message]; else if (error.message) messages = [error.message];
+                    var messages = extractErrorMessages(error, null);
                     var errAlert = createAlert('error', "Couldn't send message", null, messages);
                     form.insertBefore(errAlert, form.firstChild); if (submitButton) submitButton.disabled = false; isSubmitting = false;
                 });
@@ -344,16 +404,17 @@
             var email = emailInput && emailInput.value ? emailInput.value.trim() : '';
             if (!email) { form.insertBefore(createAlert('error', 'Missing email', 'Please enter your email address.'), form.firstChild); if (submitButton) submitButton.disabled = false; isSubmitting = false; return; }
 
-            var hasToken = recaptchaCompleted || !!getWidgetToken();
-
-            if (!hasToken) {
-                form.insertBefore(createAlert('error', 'reCAPTCHA required', 'Please complete the reCAPTCHA before sending your message.'), form.firstChild);
+            executeRecaptcha('contact', form).then(function (token) {
+                var input = getRecaptchaInput(form);
+                if (input) {
+                    input.value = token || '';
+                }
+                submitFormData();
+            }).catch(function (error) {
+                form.insertBefore(createAlert('error', 'reCAPTCHA failed', error && error.message ? error.message : 'Unable to verify reCAPTCHA.'), form.firstChild);
                 if (submitButton) submitButton.disabled = false;
                 isSubmitting = false;
-                return;
-            }
-
-            submitFormData();
+            });
         });
 
     })();

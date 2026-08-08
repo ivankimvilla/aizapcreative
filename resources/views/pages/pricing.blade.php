@@ -223,6 +223,7 @@
 
                     <form class="quote-form" method="POST" action="{{ route('quote.store') }}" id="quoteForm">
                         @csrf
+                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-quote-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" value="">
 
                         <div class="quote-form__row">
                             <div class="quote-form__field">
@@ -269,6 +270,16 @@
                                 <polyline points="7 7 17 7 17 17" />
                             </svg>
                         </button>
+
+                        @if ($errors->has('g-recaptcha-response'))
+                            <div class="form-alert form-alert--error" role="alert">
+                                <ul>
+                                    @foreach ($errors->get('g-recaptcha-response') as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 
                         <p class="quote-form__note">
                             Prefer to talk it through? <a href="/book-a-call">Book a call</a> instead.

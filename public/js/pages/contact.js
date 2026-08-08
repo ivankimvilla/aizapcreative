@@ -1,26 +1,40 @@
 (function () {
-    var recaptchaCompleted = false;
+    function getRecaptchaSiteKey() {
+        var input = document.getElementById('g-recaptcha-response');
+        return input ? input.dataset.sitekey : '';
+    }
 
-    window.onRecaptchaSuccess = function (token) {
-        recaptchaCompleted = !!token;
-    };
-
-    window.onRecaptchaExpired = function () {
-        recaptchaCompleted = false;
-    };
-
-    function getWidgetToken() {
-        try {
-            if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && grecaptcha.enterprise.getResponse) {
-                return (grecaptcha.enterprise.getResponse() || '').trim();
+    function executeRecaptcha(action) {
+        return new Promise(function (resolve, reject) {
+            var siteKey = getRecaptchaSiteKey();
+            if (!siteKey) {
+                return reject(new Error('reCAPTCHA site key is missing.'));
             }
-        } catch (e) { }
-        return '';
+
+            if (typeof grecaptcha === 'undefined' || !grecaptcha.enterprise || !grecaptcha.enterprise.execute) {
+                return reject(new Error('reCAPTCHA is not loaded.'));
+            }
+
+            try {
+                grecaptcha.enterprise.ready(function () {
+                    grecaptcha.enterprise.execute(siteKey, { action: action }).then(function (token) {
+                        resolve(token);
+                    }).catch(function (error) {
+                        reject(error || new Error('reCAPTCHA execution failed.'));
+                    });
+                });
+            } catch (e) {
+                reject(e);
+            }
+        });
     }
 
     function resetRecaptcha() {
-        recaptchaCompleted = false;
         try {
+            var input = document.getElementById('g-recaptcha-response');
+            if (input) {
+                input.value = '';
+            }
             if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && grecaptcha.enterprise.reset) {
                 grecaptcha.enterprise.reset();
             }
@@ -147,63 +161,63 @@
 
         clearAlerts(form);
 
-        var currentToken = getWidgetToken();
-        if (!currentToken) {
-            showRecaptchaError(form);
-            return;
-        }
+        executeRecaptcha('contact').then(function (token) {
+            var input = document.getElementById('g-recaptcha-response');
+            if (input) {
+                input.value = token || '';
+            }
 
-        isSubmitting = true;
-        var submitButton = form.querySelector('.contact-submit');
-        if (submitButton) submitButton.disabled = true;
+            isSubmitting = true;
+            var submitButton = form.querySelector('.contact-submit');
+            if (submitButton) submitButton.disabled = true;
 
-        var fd = new FormData(form);
-        var action = form.getAttribute('action') || window.location.href;
+            var fd = new FormData(form);
+            var action = form.getAttribute('action') || window.location.href;
 
-        fetch(action, {
-            method: 'POST',
-            body: fd,
-            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-            credentials: 'same-origin'
-        })
-            .then(function (res) {
-                return res.json().then(function (data) {
-                    if (!res.ok) {
-                        var err = new Error('Submission failed');
-                        err.data = data;
-                        throw err;
-                    }
-                    return data;
-                });
+            fetch(action, {
+                method: 'POST',
+                body: fd,
+                headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+                credentials: 'same-origin'
             })
-            .then(function (data) {
-                showSuccess(data.message || 'Thank you for your message. We will be in touch soon.');
-                form.reset();
-                resetRecaptcha();
-                isSubmitting = false;
-                if (submitButton) submitButton.disabled = false;
-            })
-            .catch(function (error) {
-                var messages = [];
-                if (error.data && error.data.errors) {
-                    Object.keys(error.data.errors).forEach(function (key) {
-                        if (key === 'g-recaptcha-response') {
-                            showRecaptchaError(form);
-                        } else {
-                            messages = messages.concat(error.data.errors[key]);
+                .then(function (res) {
+                    return res.json().then(function (data) {
+                        if (!res.ok) {
+                            var err = new Error('Submission failed');
+                            err.data = data;
+                            throw err;
                         }
+                        return data;
                     });
-                } else if (error.data && error.data.message) {
-                    messages = [error.data.message];
-                } else if (error.message) {
-                    messages = [error.message];
-                }
+                })
+                .then(function (data) {
+                    showSuccess(data.message || 'Thank you for your message. We will be in touch soon.');
+                    form.reset();
+                    resetRecaptcha();
+                    isSubmitting = false;
+                    if (submitButton) submitButton.disabled = false;
+                })
+                .catch(function (error) {
+                    var messages = [];
+                    if (error.data && error.data.errors) {
+                        Object.keys(error.data.errors).forEach(function (key) {
+                            if (key === 'g-recaptcha-response') {
+                                showRecaptchaError(form);
+                            } else {
+                                messages = messages.concat(error.data.errors[key]);
+                            }
+                        });
+                    } else if (error.data && error.data.message) {
+                        messages = [error.data.message];
+                    } else if (error.message) {
+                        messages = [error.message];
+                    }
 
-                if (messages.length) showGeneralError(form, messages);
+                    if (messages.length) showGeneralError(form, messages);
 
-                resetRecaptcha();
-                isSubmitting = false;
-                if (submitButton) submitButton.disabled = false;
-            });
-    });
-})();
+                    resetRecaptcha();
+                    isSubmitting = false;
+                    if (submitButton) submitButton.disabled = false;
+                });
+        });
+    })();

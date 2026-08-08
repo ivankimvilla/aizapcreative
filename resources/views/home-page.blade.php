@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="{{ asset('css/home-page/home-page.css') }}">
     <link rel="stylesheet" href="{{ asset('css/pages/process.css') }}">
     <link rel="stylesheet" href="{{ asset('css/home-page/contact-section.css') }}">
-    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 <body class="home-page-page">
     @include('header.header')
@@ -421,6 +420,8 @@
                                 <textarea id="fb-message" name="message" rows="4" autocomplete="off" required>{{ old('message') }}</textarea>
                             </div>
 
+                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-feedback-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" value="">
+
                             <button type="submit" class="btn btn-primary feedback-submit">Submit Feedback</button>
                         </form>
                     </div>
@@ -489,7 +490,7 @@
                                 </div>
 
                                 <div class="aizap-form__recaptcha">
-                                    <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}" data-action="LOGIN" data-theme="dark" data-callback="onRecaptchaSuccess" data-expired-callback="onRecaptchaExpired"></div>
+                                    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-contact-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" value="">
                                     @error('g-recaptcha-response')
                                         <div class="recaptcha-error" role="alert">
                                             <strong>reCAPTCHA required</strong>

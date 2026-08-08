@@ -73,6 +73,51 @@ function getSlotLabel(btn) {
     return (labelEl ? labelEl.textContent : btn.textContent).trim();
 }
 
+function getRecaptchaInput() {
+    return document.querySelector('input[name="g-recaptcha-response"]');
+}
+
+function getRecaptchaSiteKey() {
+    var input = getRecaptchaInput();
+    return input ? input.dataset.sitekey : '';
+}
+
+function executeRecaptcha(action) {
+    return new Promise(function (resolve, reject) {
+        var siteKey = getRecaptchaSiteKey();
+        if (!siteKey) {
+            return reject(new Error('reCAPTCHA site key is missing.'));
+        }
+
+        if (typeof grecaptcha === 'undefined' || !grecaptcha.enterprise || !grecaptcha.enterprise.execute) {
+            return reject(new Error('reCAPTCHA is not loaded.'));
+        }
+
+        try {
+            grecaptcha.enterprise.ready(function () {
+                grecaptcha.enterprise.execute(siteKey, { action: action }).then(function (token) {
+                    resolve(token);
+                }).catch(function (error) {
+                    reject(error || new Error('reCAPTCHA execution failed.'));
+                });
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+function showBookingError(message) {
+    var form = document.querySelector('.booking-form');
+    if (!form) return;
+    var existingAlert = form.querySelector('.booking-alert.booking-alert--error');
+    if (existingAlert) existingAlert.remove();
+    var errorAlert = document.createElement('div');
+    errorAlert.className = 'booking-alert booking-alert--error';
+    errorAlert.textContent = message;
+    form.insertBefore(errorAlert, form.firstChild);
+}
+
 /* ---------- Past-time helpers ---------- */
 
 function parseSlotToDate(date, timeLabel) {
@@ -397,6 +442,45 @@ if (timezoneTrigger) {
         } else {
             openTimezoneList();
         }
+    });
+}
+
+var bookingForm = document.querySelector('.booking-form');
+if (bookingForm) {
+    var bookingSubmitting = false;
+    bookingForm.addEventListener('submit', function (event) {
+        if (bookingSubmitting) {
+            event.preventDefault();
+            return;
+        }
+
+        event.preventDefault();
+        bookingSubmitting = true;
+        var submitButton = bookingForm.querySelector('button[type="submit"]');
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+
+        var recaptchaInput = getRecaptchaInput();
+        if (!recaptchaInput) {
+            showBookingError('reCAPTCHA is not configured.');
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
+            bookingSubmitting = false;
+            return;
+        }
+
+        executeRecaptcha('booking').then(function (token) {
+            recaptchaInput.value = token || '';
+            bookingForm.submit();
+        }).catch(function (error) {
+            showBookingError(error && error.message ? error.message : 'Unable to verify reCAPTCHA.');
+            if (submitButton) {
+                submitButton.disabled = false;
+            }
+            bookingSubmitting = false;
+        });
     });
 }
 

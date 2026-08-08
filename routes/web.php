@@ -78,7 +78,7 @@ Route::get('/contact', function () {
 
 Route::get('/book-a-call', [\App\Http\Controllers\BookingController::class, 'index'])->name('book-a-call');
 Route::get('/book-a-call/availability', [\App\Http\Controllers\BookingController::class, 'availability'])->name('book-a-call.availability');
-Route::post('/book-a-call', [\App\Http\Controllers\BookingController::class, 'store'])->name('book-a-call.store');
+Route::post('/book-a-call', [\App\Http\Controllers\BookingController::class, 'store'])->name('book-a-call.store')->middleware('throttle:10,1');
 
 Route::view('/admin/login', 'admin.login')->name('admin.login');
 Route::view('/admin/reset-password', 'admin.reset-password')->name('admin.reset-password');
@@ -87,8 +87,8 @@ Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name
 Route::get('/admin/projects', [ProjectVideoController::class, 'index'])->name('admin.projects');
 Route::post('/admin/projects', [ProjectVideoController::class, 'store'])->name('admin.projects.store');
 Route::delete('/admin/projects', [ProjectVideoController::class, 'destroy'])->name('admin.projects.destroy');
-Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.store');
-Route::post('/quote', [\App\Http\Controllers\QuoteController::class, 'store'])->name('quote.store');
+Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.store')->middleware('throttle:10,1');
+Route::post('/quote', [\App\Http\Controllers\QuoteController::class, 'store'])->name('quote.store')->middleware('throttle:10,1');
 
 // Contact routes
 

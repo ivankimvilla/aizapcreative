@@ -1,3 +1,37 @@
+function getRecaptchaInput() {
+    return document.querySelector('input[name="g-recaptcha-response"]');
+}
+
+function getRecaptchaSiteKey() {
+    var input = getRecaptchaInput();
+    return input ? input.dataset.sitekey : '';
+}
+
+function executeRecaptcha(action) {
+    return new Promise(function (resolve, reject) {
+        var siteKey = getRecaptchaSiteKey();
+        if (!siteKey) {
+            return reject(new Error('reCAPTCHA site key is missing.'));
+        }
+
+        if (typeof grecaptcha === 'undefined' || !grecaptcha.enterprise || !grecaptcha.enterprise.execute) {
+            return reject(new Error('reCAPTCHA is not loaded.'));
+        }
+
+        try {
+            grecaptcha.enterprise.ready(function () {
+                grecaptcha.enterprise.execute(siteKey, { action: action }).then(function (token) {
+                    resolve(token);
+                }).catch(function (error) {
+                    reject(error || new Error('reCAPTCHA execution failed.'));
+                });
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     var serviceSelect = document.getElementById('quote_service');
     var quotePackageName = document.getElementById('quotePackageName');
@@ -140,6 +174,51 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     initializeQuoteSummary();
+
+    var quoteForm = document.getElementById('quoteForm');
+    if (quoteForm) {
+        var quoteSubmitting = false;
+        quoteForm.addEventListener('submit', function (event) {
+            if (quoteSubmitting) {
+                event.preventDefault();
+                return;
+            }
+
+            event.preventDefault();
+            quoteSubmitting = true;
+            var submitButton = quoteForm.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+            }
+
+            var recaptchaInput = getRecaptchaInput();
+            if (!recaptchaInput) {
+                var errorMessage = document.createElement('div');
+                errorMessage.className = 'form-alert form-alert--error';
+                errorMessage.textContent = 'reCAPTCHA is not configured. Please refresh the page and try again.';
+                quoteForm.insertBefore(errorMessage, quoteForm.firstChild);
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+                quoteSubmitting = false;
+                return;
+            }
+
+            executeRecaptcha('quote').then(function (token) {
+                recaptchaInput.value = token || '';
+                quoteForm.submit();
+            }).catch(function (error) {
+                var errorMessage = document.createElement('div');
+                errorMessage.className = 'form-alert form-alert--error';
+                errorMessage.textContent = error && error.message ? error.message : 'Unable to verify reCAPTCHA.';
+                quoteForm.insertBefore(errorMessage, quoteForm.firstChild);
+                if (submitButton) {
+                    submitButton.disabled = false;
+                }
+                quoteSubmitting = false;
+            });
+        });
+    }
 
     document.addEventListener('keydown', function (event) {
         if (event.key === 'Escape' && quoteSection && !quoteSection.classList.contains('quote-section--hidden')) {

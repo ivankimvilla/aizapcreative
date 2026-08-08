@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\RecaptchaEnterprise;
 use App\Models\Feedback;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
+    use RecaptchaEnterprise;
+
     public function index()
     {
         $feedbacks = Feedback::latest()->get();
@@ -22,7 +25,14 @@ class FeedbackController extends Controller
             'last_name' => ['required', 'string', 'max:255'],
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
             'message' => ['required', 'string', 'max:2000'],
+            'g-recaptcha-response' => ['required'],
+        ], [
+            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before submitting your feedback.',
         ]);
+
+        if (! $this->verifyRecaptcha($request, 'feedback')) {
+            return $this->recaptchaFailed($request);
+        }
 
         $data = [
             'name' => trim($validated['first_name'].' '.$validated['last_name']),

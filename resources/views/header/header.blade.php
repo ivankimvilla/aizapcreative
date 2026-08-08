@@ -1,4 +1,5 @@
     <link rel="stylesheet" href="{{ asset('css/header/header.css') }}">
+    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" async defer></script>
 
     <header class="site-header">
         <div class="site-header__brand">
