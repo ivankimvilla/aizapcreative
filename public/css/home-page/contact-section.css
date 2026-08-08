@@ -22,6 +22,11 @@
 
 .aizap-contact__left {
     padding-top: 16px;
+    gap: 2rem;
+}
+
+.aizap-contact__right {
+    justify-content: flex-end;
 }
 
 .aizap-contact__title {

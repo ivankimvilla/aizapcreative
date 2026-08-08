@@ -55,16 +55,16 @@
                 <a href="https://www.facebook.com/profile.php?id=61555466491031&mibextid=wwXIfr&rdid=d4amKcQ6qw8cRg7x&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1D3GqsevBs%2F%3Fmibextid%3DwwXIfr#" class="site-footer__social site-footer__social--facebook" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.23 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22C18.34 21.23 22 17.08 22 12.06z"/></svg>
                 </a>
-                <a href="#" class="site-footer__social site-footer__social--instagram" aria-label="Instagram">
+                <a href="https://www.instagram.com/@aizap_creatives?fbclid=IwY2xjawTkFYpwZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAUQDvDUxFShoWWbHougyHjr0tFz3E38fX8e0bnTUpya-P0mXW-SGhI9q0gFS8E_aem_xbYaUp-p45jZ67aagl8wvg" class="site-footer__social site-footer__social--instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg>
                 </a>
-                <a href="#" class="site-footer__social site-footer__social--youtube" aria-label="YouTube">
+                <a href="https://www.youtube.com/@aizap_creatives?fbclid=IwY2xjawTkFcVwZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEevPjgYuqkCcObexL0RcVwouMlqHPpTwVnAYk3JsO9snXfQgy_UJ2REgsM7to_aem_plCGj1IPh5AHCzQH_BA0zg" class="site-footer__social site-footer__social--youtube" aria-label="YouTube" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 15.5v-7l6 3.5-6 3.5z"/></svg>
                 </a>
-                <a href="#" class="site-footer__social site-footer__social--tiktok" aria-label="TikTok">
+                <a href="https://www.tiktok.com/@aizap_creatives?fbclid=IwY2xjawTkFU9wZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeyUJ-bbTz8OfVqveHDob6DW1lmmaJkP1z_oOEffUQDvDUxFShoWWbHougyHjr0tFz3E38fX8e0bnTUpya-P0mXW" class="site-footer__social site-footer__social--tiktok" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.4 2.1 1.8 3.6 4 3.9v2.6c-1.4 0-2.7-.4-4-1.2v6.1c0 3.1-2.5 5.6-5.6 5.6S5.3 17.5 5.3 14.4c0-3 2.3-5.4 5.3-5.6v2.7c-1.4.2-2.5 1.4-2.5 2.9 0 1.6 1.3 2.9 2.9 2.9s2.9-1.3 2.9-2.9V3h2.6z"/></svg>
                 </a>
-                <a href="#" class="site-footer__social site-footer__social--linkedin" aria-label="LinkedIn">
+                <a href="https://www.linkedin.com/@aizap_creatives?_l=en_US" class="site-footer__social site-footer__social--linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3.5a1.96 1.96 0 100 3.92 1.96 1.96 0 000-3.92zM20.44 20h-3.37v-6.06c0-1.45-.03-3.31-2.02-3.31-2.03 0-2.34 1.58-2.34 3.2V20H9.34V8.5h3.24v1.57h.05c.45-.86 1.56-1.77 3.21-1.77 3.43 0 4.6 2.26 4.6 5.2V20z"/></svg>
                 </a>
             </div>
