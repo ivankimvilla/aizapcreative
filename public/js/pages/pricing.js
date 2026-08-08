@@ -52,13 +52,33 @@ function executeRecaptcha(action, retryCount = 0) {
 
         if (retryCount < 5) {
             window.setTimeout(function () {
-                executeRecaptcha(action, (retryCount || 0) + 1).then(resolve).catch(reject);
+                executeRecaptcha(action, retryCount + 1).then(resolve).catch(reject);
             }, 200);
             return;
         }
 
         reject(new Error('reCAPTCHA is not loaded.'));
     });
+}
+
+function createSuccessToast(message) {
+    var alert = document.createElement('div');
+    alert.className = 'form-alert form-alert--success form-alert--toast';
+    alert.setAttribute('role', 'status');
+    alert.innerHTML = '<span class="form-alert--success__icon" aria-hidden="true">' +
+        '<svg viewBox="0 0 24 24" fill="none"><polyline points="4 12 10 18 20 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>' +
+        '</span>' +
+        '<div class="form-alert--success__body">' +
+        '<div class="form-alert--success__title">Quote request submitted</div>' +
+        '<div class="form-alert--success__text">' + message + '</div>' +
+        '</div>';
+
+    document.body.appendChild(alert);
+    window.setTimeout(function () {
+        if (alert && alert.parentNode) {
+            alert.parentNode.removeChild(alert);
+        }
+    }, 5200);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -235,7 +255,57 @@ document.addEventListener('DOMContentLoaded', function () {
 
             executeRecaptcha('quote').then(function (token) {
                 recaptchaInput.value = token || '';
-                quoteForm.submit();
+
+                var fd = new FormData(quoteForm);
+                var action = quoteForm.getAttribute('action') || window.location.href;
+                var headers = { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
+                var csrfToken = document.querySelector('meta[name="csrf-token"]');
+                if (csrfToken && csrfToken.getAttribute('content')) {
+                    headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
+                }
+
+                fetch(action, {
+                    method: 'POST',
+                    body: fd,
+                    headers: headers,
+                    credentials: 'same-origin'
+                })
+                    .then(function (res) {
+                        return res.json().then(function (data) {
+                            if (!res.ok) {
+                                var err = new Error('Submission failed');
+                                err.data = data;
+                                throw err;
+                            }
+                            return data;
+                        });
+                    })
+                    .then(function (data) {
+                        createSuccessToast(data.message || 'Thank you for your request. We will be in touch soon.');
+                        closeQuoteSection();
+                        quoteForm.reset();
+                        quoteSubmitting = false;
+                        if (submitButton) {
+                            submitButton.disabled = false;
+                        }
+                    })
+                    .catch(function (error) {
+                        var message = 'Unable to submit quote. Please try again.';
+                        if (error.data && error.data.message) {
+                            message = error.data.message;
+                        } else if (error.message) {
+                            message = error.message;
+                        }
+
+                        var errorMessage = document.createElement('div');
+                        errorMessage.className = 'form-alert form-alert--error';
+                        errorMessage.textContent = message;
+                        quoteForm.insertBefore(errorMessage, quoteForm.firstChild);
+                        if (submitButton) {
+                            submitButton.disabled = false;
+                        }
+                        quoteSubmitting = false;
+                    });
             }).catch(function (error) {
                 var errorMessage = document.createElement('div');
                 errorMessage.className = 'form-alert form-alert--error';

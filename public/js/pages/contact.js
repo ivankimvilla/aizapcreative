@@ -75,28 +75,48 @@
     }
 
     function showRecaptchaError(form) {
-        var wrapper = form.querySelector('.field--recaptcha');
-        if (!wrapper) return;
-        var el = document.createElement('div');
-        el.className = 'recaptcha-error';
-        el.setAttribute('role', 'alert');
-        el.innerHTML = '<strong>reCAPTCHA required</strong><span>Please complete the reCAPTCHA<br>before sending your message.</span>';
-        wrapper.appendChild(el);
+        showGeneralError(form, ['Please complete the reCAPTCHA before sending your message.'], "Couldn't send message");
     }
 
-    function showGeneralError(form, messages) {
+    function showGeneralError(form, messages, title) {
         var container = form.querySelector('.form-footer__left') || form;
         var el = document.createElement('div');
         el.className = 'form-alert form-alert--error';
         el.setAttribute('role', 'alert');
+
+        var icon = document.createElement('div');
+        icon.className = 'form-alert__icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5L23 21H1L12 2.5Z" fill="#ef4444"/><rect x="11" y="9" width="2" height="6" rx="1" fill="#fff"/><rect x="11" y="16.5" width="2" height="2" rx="1" fill="#fff"/></svg>';
+        el.appendChild(icon);
+
+        var body = document.createElement('div');
+        var titleEl = document.createElement('div');
+        titleEl.className = 'form-alert__title';
+        titleEl.textContent = title || "Couldn't send message";
+        body.appendChild(titleEl);
+
         var ul = document.createElement('ul');
         messages.forEach(function (msg) {
             var li = document.createElement('li');
             li.textContent = msg;
             ul.appendChild(li);
         });
-        el.appendChild(ul);
+        body.appendChild(ul);
+        el.appendChild(body);
+
         container.insertBefore(el, container.firstChild);
+    }
+
+    function clearAlerts(form) {
+        if (!form) return;
+        form.querySelectorAll('.recaptcha-error, .form-alert.form-alert--error').forEach(function (el) {
+            el.remove();
+        });
+        var headerStatus = document.querySelector('.site-header__status');
+        if (headerStatus) {
+            headerStatus.remove();
+        }
     }
 
     function createHeaderStatus(titleText, messageText) {
@@ -189,14 +209,23 @@
 
         clearAlerts(form);
 
+        var submitButton = form.querySelector('.contact-submit');
+
         executeRecaptcha('contact').then(function (token) {
             var input = document.getElementById('g-recaptcha-response');
             if (input) {
                 input.value = token || '';
             }
 
+            if (!token) {
+                showRecaptchaError(form);
+                resetRecaptcha();
+                if (submitButton) submitButton.disabled = false;
+                isSubmitting = false;
+                return;
+            }
+
             isSubmitting = true;
-            var submitButton = form.querySelector('.contact-submit');
             if (submitButton) submitButton.disabled = true;
 
             var fd = new FormData(form);
@@ -248,4 +277,5 @@
                     if (submitButton) submitButton.disabled = false;
                 });
         });
-    })();
+    });
+})();

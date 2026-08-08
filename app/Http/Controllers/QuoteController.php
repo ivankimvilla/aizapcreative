@@ -27,7 +27,6 @@ class QuoteController extends Controller
             'phone' => ['nullable', 'string', 'max:50'],
             'company' => ['nullable', 'string', 'max:255'],
             'service' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'string', 'max:255'],
             'g-recaptcha-response' => ['required'],
         ], [
             'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before sending your quote request.',
@@ -43,7 +42,6 @@ class QuoteController extends Controller
             'phone' => $validated['phone'] ?? null,
             'company' => $validated['company'] ?? null,
             'service' => $validated['service'],
-            'price' => $validated['price'],
             'message' => $request->input('message', ''),
         ];
 
@@ -53,7 +51,7 @@ class QuoteController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'role' => 'Quote Request',
-            'subject' => $data['service'] . ' — ' . $data['price'],
+            'subject' => $data['service'],
             'message' => trim('Company: ' . ($data['company'] ?? 'N/A') . '\nPhone: ' . ($data['phone'] ?? 'N/A') . '\n\n' . ($data['message'] ?: 'No additional message.')),
         ]);
 

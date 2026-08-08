@@ -70,23 +70,23 @@
 
                     <div class="field field--full field--recaptcha">
                         <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" data-sitekey="{{ config('services.recaptcha.site_key') }}">
-                        @error('g-recaptcha-response')
-                            <div class="recaptcha-error" role="alert">
-                                <strong>reCAPTCHA required</strong>
-                                <span>Please complete the reCAPTCHA<br>before sending your message.</span>
-                            </div>
-                        @enderror
                     </div>
 
                     <div class="form-footer">
                         <div class="form-footer__left">
                             @if ($errors->any())
                                 <div class="form-alert form-alert--error" role="alert">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
+                                    <div class="form-alert__icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5L23 21H1L12 2.5Z" fill="#ef4444"/><rect x="11" y="9" width="2" height="6" rx="1" fill="#fff"/><rect x="11" y="16.5" width="2" height="2" rx="1" fill="#fff"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="form-alert__title">Couldn't send message</div>
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                 </div>
                             @endif
 
