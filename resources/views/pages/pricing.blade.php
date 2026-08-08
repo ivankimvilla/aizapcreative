@@ -223,7 +223,7 @@
 
                     <form class="quote-form" method="POST" action="{{ route('quote.store') }}" id="quoteForm">
                         @csrf
-                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-quote-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" value="">
+                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-quote-response" data-sitekey="{{ config('services.recaptcha.site_key') }}" value="">
 
                         <div class="quote-form__row">
                             <div class="quote-form__field">

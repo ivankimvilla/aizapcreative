@@ -1,5 +1,12 @@
     <link rel="stylesheet" href="{{ asset('css/header/header.css') }}">
-    <script src="https://www.google.com/recaptcha/enterprise.js?render={{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" async defer></script>
+    @php
+        $recaptchaSiteKey = config('services.recaptcha.site_key');
+        $recaptchaUseEnterprise = config('services.recaptcha.use_enterprise', false);
+        $recaptchaScript = $recaptchaUseEnterprise
+            ? "https://www.google.com/recaptcha/enterprise.js?render={$recaptchaSiteKey}"
+            : "https://www.google.com/recaptcha/api.js?render={$recaptchaSiteKey}";
+    @endphp
+    <script src="{{ $recaptchaScript }}" async defer></script>
 
     <header class="site-header">
         <div class="site-header__brand">

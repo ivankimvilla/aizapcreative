@@ -69,7 +69,7 @@
                     </label>
 
                     <div class="field field--full field--recaptcha">
-                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}">
+                        <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-response" data-sitekey="{{ config('services.recaptcha.site_key') }}">
                         @error('g-recaptcha-response')
                             <div class="recaptcha-error" role="alert">
                                 <strong>reCAPTCHA required</strong>

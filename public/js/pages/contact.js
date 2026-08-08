@@ -4,28 +4,57 @@
         return input ? input.dataset.sitekey : '';
     }
 
-    function executeRecaptcha(action) {
+    function executeRecaptcha(action, retryCount = 0) {
         return new Promise(function (resolve, reject) {
             var siteKey = getRecaptchaSiteKey();
             if (!siteKey) {
                 return reject(new Error('reCAPTCHA site key is missing.'));
             }
 
-            if (typeof grecaptcha === 'undefined' || !grecaptcha.enterprise || !grecaptcha.enterprise.execute) {
-                return reject(new Error('reCAPTCHA is not loaded.'));
-            }
-
-            try {
-                grecaptcha.enterprise.ready(function () {
-                    grecaptcha.enterprise.execute(siteKey, { action: action }).then(function (token) {
-                        resolve(token);
-                    }).catch(function (error) {
+            function execute() {
+                if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && typeof grecaptcha.enterprise.execute === 'function') {
+                    grecaptcha.enterprise.execute(siteKey, { action: action }).then(resolve).catch(function (error) {
                         reject(error || new Error('reCAPTCHA execution failed.'));
                     });
-                });
-            } catch (e) {
-                reject(e);
+                    return;
+                }
+
+                if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.execute === 'function') {
+                    grecaptcha.execute(siteKey, { action: action }).then(resolve).catch(function (error) {
+                        reject(error || new Error('reCAPTCHA execution failed.'));
+                    });
+                    return;
+                }
+
+                reject(new Error('reCAPTCHA is not loaded.'));
             }
+
+            if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && typeof grecaptcha.enterprise.ready === 'function') {
+                try {
+                    grecaptcha.enterprise.ready(execute);
+                } catch (e) {
+                    reject(e);
+                }
+                return;
+            }
+
+            if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.ready === 'function') {
+                try {
+                    grecaptcha.ready(execute);
+                } catch (e) {
+                    reject(e);
+                }
+                return;
+            }
+
+            if (retryCount < 5) {
+                window.setTimeout(function () {
+                    executeRecaptcha(action, retryCount + 1).then(resolve).catch(reject);
+                }, 200);
+                return;
+            }
+
+            reject(new Error('reCAPTCHA is not loaded.'));
         });
     }
 
@@ -35,15 +64,14 @@
             if (input) {
                 input.value = '';
             }
-            if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && grecaptcha.enterprise.reset) {
-                grecaptcha.enterprise.reset();
+            if (typeof grecaptcha !== 'undefined') {
+                if (grecaptcha.enterprise && typeof grecaptcha.enterprise.reset === 'function') {
+                    grecaptcha.enterprise.reset();
+                } else if (typeof grecaptcha.reset === 'function') {
+                    grecaptcha.reset();
+                }
             }
         } catch (e) { }
-    }
-
-    function clearAlerts(form) {
-        var alerts = form.querySelectorAll('.form-alert, .recaptcha-error');
-        Array.prototype.forEach.call(alerts, function (a) { a.remove(); });
     }
 
     function showRecaptchaError(form) {

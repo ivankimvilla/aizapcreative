@@ -420,7 +420,7 @@
                                 <textarea id="fb-message" name="message" rows="4" autocomplete="off" required>{{ old('message') }}</textarea>
                             </div>
 
-                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-feedback-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" value="">
+                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-feedback-response" data-sitekey="{{ config('services.recaptcha.site_key') }}" value="">
 
                             <button type="submit" class="btn btn-primary feedback-submit">Submit Feedback</button>
                         </form>
@@ -490,7 +490,7 @@
                                 </div>
 
                                 <div class="aizap-form__recaptcha">
-                                    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-contact-response" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY', config('services.recaptcha.site_key')) }}" value="">
+                                    <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-contact-response" data-sitekey="{{ config('services.recaptcha.site_key') }}" value="">
                                     @error('g-recaptcha-response')
                                         <div class="recaptcha-error" role="alert">
                                             <strong>reCAPTCHA required</strong>

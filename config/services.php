@@ -39,7 +39,9 @@ return [
         'site_key' => env('GOOGLE_RECAPTCHA_KEY'),
         'site_key_local' => env('GOOGLE_RECAPTCHA_KEY'),
         'secret' => env('GOOGLE_RECAPTCHA_SECRET'),
+        'enterprise_api_key' => env('GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY'),
         'project_id' => env('GOOGLE_RECAPTCHA_PROJECT_ID'),
+        'use_enterprise' => env('GOOGLE_RECAPTCHA_ENTERPRISE', false),
         'score_threshold' => env('GOOGLE_RECAPTCHA_SCORE_THRESHOLD', 0.3),
     ],
 
