@@ -753,7 +753,7 @@ so it needs its own dark text color regardless of the closed select's --text col
 
 .form-alert--toast {
     position: fixed;
-    top: 64px;
+    top: 72px;
     left: 50%;
     transform: translateX(-50%);
     margin-top: 0;
