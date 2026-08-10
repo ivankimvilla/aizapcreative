@@ -19,6 +19,8 @@ class BookingController extends Controller
 
     public function store(Request $request)
     {
+        $recaptchaRule = app()->environment(['local', 'testing']) ? ['nullable'] : ['required'];
+
         $data = $request->validate([
             'service' => 'required|string|max:255',
             'name' => 'required|string|max:255',
@@ -28,7 +30,7 @@ class BookingController extends Controller
             'message' => 'nullable|string|max:2000',
             'selected_slot' => 'required|string',
             'timezone' => 'required|string|max:100',
-            'g-recaptcha-response' => ['required'],
+            'g-recaptcha-response' => $recaptchaRule,
         ], [
             'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before booking.',
         ]);
@@ -111,6 +113,12 @@ class BookingController extends Controller
 
             return $isBooked || $isPast;
         });
+
+        $dateInPast = Carbon::createFromFormat('Y-m-d', $data['date'], $timezone)->endOfDay()->isPast();
+
+        if ($dateInPast) {
+            $fullyBooked = false;
+        }
 
         return response()->json([
             'booked_slots' => $bookedSlots,

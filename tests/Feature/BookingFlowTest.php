@@ -59,3 +59,12 @@ it('returns booked slots for a date and disables them on availability lookup', f
     $response->assertStatus(200);
     $response->assertJsonFragment(['booked_slots' => ['3:00 PM']]);
 });
+
+it('does not mark a future date fully booked when there are no bookings', function () {
+    $targetDate = Carbon::now()->addDays(3)->startOfDay();
+
+    $response = $this->get('/book-a-call/availability?date=' . $targetDate->format('Y-m-d') . '&timezone=UTC');
+
+    $response->assertStatus(200);
+    $response->assertJson(['booked_slots' => [], 'fully_booked' => false]);
+});

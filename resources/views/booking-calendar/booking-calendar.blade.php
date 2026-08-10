@@ -67,39 +67,41 @@
                                 <path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20"></path>
                             </svg>
                             <button type="button" class="calendar-tz__trigger" id="timezoneTrigger" aria-haspopup="listbox" aria-expanded="false">
+
                                 <span id="timezoneTriggerLabel">(UTC+08:00) Manila (PHT)</span>
                                 <svg class="calendar-tz__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M6 9l6 6l6-6"></path>
                                 </svg>
                             </button>
+
                             <ul class="calendar-tz__list" id="timezoneList" role="listbox" tabindex="-1">
-                                <li role="option" data-value="America/Los_Angeles">(UTC-08:00) Los Angeles (PT)</li>
-                                <li role="option" data-value="America/Denver">(UTC-07:00) Denver (MT)</li>
-                                <li role="option" data-value="America/Chicago">(UTC-06:00) Chicago (CT)</li>
-                                <li role="option" data-value="America/New_York">(UTC-05:00) New York (ET)</li>
-                                <li role="option" data-value="America/Halifax">(UTC-04:00) Halifax (AT)</li>
-                                <li role="option" data-value="America/Sao_Paulo">(UTC-03:00) São Paulo (BRT)</li>
-                                <li role="option" data-value="Europe/London">(UTC+00:00) London (GMT)</li>
-                                <li role="option" data-value="Europe/Paris">(UTC+01:00) Paris (CET)</li>
-                                <li role="option" data-value="Europe/Athens">(UTC+02:00) Athens (EET)</li>
-                                <li role="option" data-value="Asia/Riyadh">(UTC+03:00) Riyadh (AST)</li>
-                                <li role="option" data-value="Asia/Dubai">(UTC+04:00) Dubai (GST)</li>
-                                <li role="option" data-value="Asia/Kolkata">(UTC+05:30) New Delhi (IST)</li>
-                                <li role="option" data-value="Asia/Dhaka">(UTC+06:00) Dhaka (BST)</li>
-                                <li role="option" data-value="Asia/Bangkok">(UTC+07:00) Bangkok (ICT)</li>
-                                <li role="option" data-value="Asia/Jakarta">(UTC+07:00) Jakarta (WIB)</li>
-                                <li role="option" data-value="Asia/Singapore">(UTC+08:00) Singapore (SGT)</li>
-                                <li role="option" data-value="Asia/Manila" aria-selected="true">(UTC+08:00) Manila (PHT)</li>
-                                <li role="option" data-value="Asia/Kuala_Lumpur">(UTC+08:00) Kuala Lumpur (MYT)</li>
-                                <li role="option" data-value="Asia/Shanghai">(UTC+08:00) Beijing (CST)</li>
-                                <li role="option" data-value="Asia/Hong_Kong">(UTC+08:00) Hong Kong (HKT)</li>
-                                <li role="option" data-value="Asia/Taipei">(UTC+08:00) Taipei (TST)</li>
-                                <li role="option" data-value="Asia/Tokyo">(UTC+09:00) Tokyo (JST)</li>
-                                <li role="option" data-value="Asia/Seoul">(UTC+09:00) Seoul (KST)</li>
-                                <li role="option" data-value="Australia/Perth">(UTC+08:00) Perth (AWST)</li>
-                                <li role="option" data-value="Australia/Adelaide">(UTC+09:30) Adelaide (ACST)</li>
-                                <li role="option" data-value="Australia/Sydney">(UTC+10:00) Sydney (AEST)</li>
-                                <li role="option" data-value="Pacific/Auckland">(UTC+12:00) Auckland (NZST)</li>
+                                <li role="option" data-value="America/Los_Angeles" data-label="Los Angeles (PT)">(UTC-08:00) Los Angeles (PT)</li>
+                                <li role="option" data-value="America/Denver" data-label="Denver (MT)">(UTC-07:00) Denver (MT)</li>
+                                <li role="option" data-value="America/Chicago" data-label="Chicago (CT)">(UTC-06:00) Chicago (CT)</li>
+                                <li role="option" data-value="America/New_York" data-label="New York (ET)">(UTC-05:00) New York (ET)</li>
+                                <li role="option" data-value="America/Halifax" data-label="Halifax (AT)">(UTC-04:00) Halifax (AT)</li>
+                                <li role="option" data-value="America/Sao_Paulo" data-label="São Paulo (BRT)">(UTC-03:00) São Paulo (BRT)</li>
+                                <li role="option" data-value="Europe/London" data-label="London (GMT)">(UTC+00:00) London (GMT)</li>
+                                <li role="option" data-value="Europe/Paris" data-label="Paris (CET)">(UTC+01:00) Paris (CET)</li>
+                                <li role="option" data-value="Europe/Athens" data-label="Athens (EET)">(UTC+02:00) Athens (EET)</li>
+                                <li role="option" data-value="Asia/Riyadh" data-label="Riyadh (AST)">(UTC+03:00) Riyadh (AST)</li>
+                                <li role="option" data-value="Asia/Dubai" data-label="Dubai (GST)">(UTC+04:00) Dubai (GST)</li>
+                                <li role="option" data-value="Asia/Kolkata" data-label="New Delhi (IST)">(UTC+05:30) New Delhi (IST)</li>
+                                <li role="option" data-value="Asia/Dhaka" data-label="Dhaka (BST)">(UTC+06:00) Dhaka (BST)</li>
+                                <li role="option" data-value="Asia/Bangkok" data-label="Bangkok (ICT)">(UTC+07:00) Bangkok (ICT)</li>
+                                <li role="option" data-value="Asia/Jakarta" data-label="Jakarta (WIB)">(UTC+07:00) Jakarta (WIB)</li>
+                                <li role="option" data-value="Asia/Singapore" data-label="Singapore (SGT)">(UTC+08:00) Singapore (SGT)</li>
+                                <li role="option" data-value="Asia/Manila" data-label="Manila (PHT)" aria-selected="true">(UTC+08:00) Manila (PHT)</li>
+                                <li role="option" data-value="Asia/Kuala_Lumpur" data-label="Kuala Lumpur (MYT)">(UTC+08:00) Kuala Lumpur (MYT)</li>
+                                <li role="option" data-value="Asia/Shanghai" data-label="Beijing (CST)">(UTC+08:00) Beijing (CST)</li>
+                                <li role="option" data-value="Asia/Hong_Kong" data-label="Hong Kong (HKT)">(UTC+08:00) Hong Kong (HKT)</li>
+                                <li role="option" data-value="Asia/Taipei" data-label="Taipei (TST)">(UTC+08:00) Taipei (TST)</li>
+                                <li role="option" data-value="Asia/Tokyo" data-label="Tokyo (JST)">(UTC+09:00) Tokyo (JST)</li>
+                                <li role="option" data-value="Asia/Seoul" data-label="Seoul (KST)">(UTC+09:00) Seoul (KST)</li>
+                                <li role="option" data-value="Australia/Perth" data-label="Perth (AWST)">(UTC+08:00) Perth (AWST)</li>
+                                <li role="option" data-value="Australia/Adelaide" data-label="Adelaide (ACST)">(UTC+09:30) Adelaide (ACST)</li>
+                                <li role="option" data-value="Australia/Sydney" data-label="Sydney (AEST)">(UTC+10:00) Sydney (AEST)</li>
+                                <li role="option" data-value="Pacific/Auckland" data-label="Auckland (NZST)">(UTC+12:00) Auckland (NZST)</li>
                             </ul>
                         </div>
                     </div>
