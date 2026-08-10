@@ -51,7 +51,9 @@ class BookingController extends Controller
         }
 
         $startsAtUtc = $startsAt->copy()->setTimezone('UTC');
-        $booked = Booking::where('starts_at', $startsAtUtc)->exists();
+        $booked = Booking::where('starts_at', $startsAtUtc)
+            ->where('timezone', $data['timezone'])
+            ->exists();
         if ($booked) {
             return back()->withErrors(['selected_slot' => 'This time slot is no longer available. Please choose another slot.'])->withInput();
         }
@@ -92,6 +94,7 @@ class BookingController extends Controller
         $utcEnd = $dayEnd->copy()->setTimezone('UTC');
 
         $bookedSlots = Booking::whereBetween('starts_at', [$utcStart, $utcEnd])
+            ->where('timezone', $timezone->getName())
             ->get()
             ->map(function (Booking $booking) use ($timezone) {
                 return $booking->starts_at->copy()->setTimezone($timezone)->format('g:i A');

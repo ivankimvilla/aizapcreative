@@ -263,18 +263,19 @@ function setTimeSlotAvailability(bookedSlots, date, timeZone, fullyBooked = fals
     timeButtons.forEach(btn => {
         const label = getSlotLabel(btn);
         const isBooked = bookedSlots.includes(label);
-        const isPast = date ? isSlotInPast(date, label, timeZone) : false;
+        const isPast = !isBooked && date ? isSlotInPast(date, label, timeZone) : false;
         const isUnavailable = isBooked || isPast;
 
         btn.disabled = isUnavailable;
         btn.classList.toggle('time-slot--disabled', isUnavailable);
-        // "Booked" styling/label only applies to slots that are actually booked.
-        // Past slots are simply disabled — no booked label, no extra styling.
         btn.classList.toggle('time-slot--booked', isBooked);
+        btn.classList.toggle('time-slot--past', isPast);
         btn.classList.remove('time-slot--active');
 
         if (isBooked) {
             btn.title = 'This time is already booked';
+        } else if (isPast) {
+            btn.title = 'This time has already passed';
         } else {
             btn.removeAttribute('title');
         }

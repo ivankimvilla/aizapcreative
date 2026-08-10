@@ -465,6 +465,12 @@ body {
     background: rgba(255, 255, 255, 0.02);
 }
 
+.time-slot--past {
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.35);
+}
+
 /* Booked = genuinely taken slots only. Shows the "Booked" badge.
    (JS only adds this class when the slot is actually in bookedSlots,
    never for past-but-unbooked slots.) */
