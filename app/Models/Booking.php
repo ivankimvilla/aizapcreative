@@ -17,9 +17,11 @@ class Booking extends Model
         'timezone',
         'meeting_link',
         'status',
+        'is_read',
     ];
 
     protected $casts = [
         'starts_at' => 'datetime',
+        'is_read' => 'boolean',
     ];
 }

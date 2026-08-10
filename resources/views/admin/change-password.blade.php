@@ -39,7 +39,7 @@
 
         <div class="divider"></div>
 
-        <form action="#" method="post">
+        <form method="POST" action="{{ route('admin.change-password.post') }}">
             @csrf
 
             <div class="field">
@@ -62,20 +62,21 @@
                         </svg>
                     </button>
                 </div>
+                @error('current_password') <div class="field-error">{{ $message }}</div> @enderror
             </div>
 
             <div class="field">
-                <label for="new_password">New password</label>
+                <label for="password">New password</label>
                 <div class="field-wrap">
                     <input
-                        id="new_password"
-                        name="new_password"
+                        id="password"
+                        name="password"
                         type="password"
                         placeholder="At least 8 characters"
                         required
                         autocomplete="new-password"
                     >
-                    <button type="button" class="eye-btn" aria-label="Show new password" data-target="new_password">
+                    <button type="button" class="eye-btn" aria-label="Show new password" data-target="password">
                         <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                              aria-hidden="true">
@@ -84,20 +85,21 @@
                         </svg>
                     </button>
                 </div>
+                @error('password') <div class="field-error">{{ $message }}</div> @enderror
             </div>
 
             <div class="field">
-                <label for="confirm_password">Confirm new password</label>
+                <label for="password_confirmation">Confirm new password</label>
                 <div class="field-wrap">
                     <input
-                        id="confirm_password"
-                        name="confirm_password"
+                        id="password_confirmation"
+                        name="password_confirmation"
                         type="password"
                         placeholder="Re-enter new password"
                         required
                         autocomplete="new-password"
                     >
-                    <button type="button" class="eye-btn" aria-label="Show confirm password" data-target="confirm_password">
+                    <button type="button" class="eye-btn" aria-label="Show confirm password" data-target="password_confirmation">
                         <svg class="eye-icon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                              aria-hidden="true">
@@ -106,6 +108,7 @@
                         </svg>
                     </button>
                 </div>
+                @error('password_confirmation') <div class="field-error">{{ $message }}</div> @enderror
             </div>
 
             <button class="btn" type="submit">
@@ -123,20 +126,6 @@
     </main>
   </div>
 
-  <script>
-        document.querySelectorAll('.eye-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var targetId = btn.getAttribute('data-target');
-                var input = document.getElementById(targetId);
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    btn.setAttribute('aria-label', 'Hide ' + targetId.replace(/_/g, ' '));
-                } else {
-                    input.type = 'password';
-                    btn.setAttribute('aria-label', 'Show ' + targetId.replace(/_/g, ' '));
-                }
-            });
-        });
-    </script>
+    <script src="{{ asset('js/admin/change-password.js') }}"></script>
 </body>
 </html>

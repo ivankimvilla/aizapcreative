@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\AdminNotificationController;
 use App\Http\Controllers\BookingAdminController;
 use App\Http\Controllers\ContactMessageController;
 use App\Http\Controllers\FeedbackController;
@@ -80,22 +82,36 @@ Route::get('/book-a-call', [\App\Http\Controllers\BookingController::class, 'ind
 Route::get('/book-a-call/availability', [\App\Http\Controllers\BookingController::class, 'availability'])->name('book-a-call.availability');
 Route::post('/book-a-call', [\App\Http\Controllers\BookingController::class, 'store'])->name('book-a-call.store')->middleware('throttle:10,1');
 
-Route::view('/admin/login', 'admin.login')->name('admin.login');
-Route::view('/admin/reset-password', 'admin.reset-password')->name('admin.reset-password');
-Route::view('/admin/change-password', 'admin.change-password')->name('admin.change-password');
-Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-Route::get('/admin/projects', [ProjectVideoController::class, 'index'])->name('admin.projects');
-Route::post('/admin/projects', [ProjectVideoController::class, 'store'])->name('admin.projects.store');
-Route::delete('/admin/projects', [ProjectVideoController::class, 'destroy'])->name('admin.projects.destroy');
+Route::get('/admin/login', [AdminAuthController::class, 'showLogin'])->name('admin.login')->middleware('guest');
+Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.login.post')->middleware('guest');
+Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login')->middleware('guest');
+
+Route::get('/admin/password/reset', [AdminAuthController::class, 'showLinkRequestForm'])->name('admin.password.request')->middleware('guest');
+Route::post('/admin/password/email', [AdminAuthController::class, 'sendResetLinkEmail'])->name('admin.password.email')->middleware('guest');
+Route::get('/admin/password/reset/{token}', [AdminAuthController::class, 'showResetForm'])->name('admin.password.reset')->middleware('guest');
+Route::post('/admin/password/reset', [AdminAuthController::class, 'reset'])->name('admin.password.update')->middleware('guest');
+
+Route::middleware('auth')->group(function () {
+    Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
+    Route::get('/admin/change-password', [AdminAuthController::class, 'showChangePassword'])->name('admin.change-password');
+    Route::post('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change-password.post');
+
+    Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::patch('/admin/notifications/{type}/{id}/read', [AdminNotificationController::class, 'markRead'])->name('admin.notifications.markRead');
+    Route::post('/admin/notifications/mark-all-read', [AdminNotificationController::class, 'markAllRead'])->name('admin.notifications.markAllRead');
+    Route::get('/admin/projects', [ProjectVideoController::class, 'index'])->name('admin.projects');
+    Route::post('/admin/projects', [ProjectVideoController::class, 'store'])->name('admin.projects.store');
+    Route::delete('/admin/projects', [ProjectVideoController::class, 'destroy'])->name('admin.projects.destroy');
+    Route::get('/admin/messages', [ContactMessageController::class, 'index'])->name('admin.messages');
+    Route::redirect('/admin/clients', '/admin/messages');
+    // Bookings view removed — keep briefs route unavailable
+    Route::redirect('/admin/briefs', '/admin/projects');
+    Route::get('/admin/boards', [BookingAdminController::class, 'index'])->name('admin.boards');
+});
+
 Route::post('/feedback', [\App\Http\Controllers\FeedbackController::class, 'store'])->name('feedback.store')->middleware('throttle:10,1');
 Route::post('/quote', [\App\Http\Controllers\QuoteController::class, 'store'])->name('quote.store')->middleware('throttle:10,1');
 
 // Contact routes
 
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store')->middleware('throttle:10,1');
-Route::get('/admin/messages', [ContactMessageController::class, 'index'])->name('admin.messages');
-Route::redirect('/admin/clients', '/admin/messages');
-// Bookings view removed — keep briefs route unavailable
-Route::redirect('/admin/briefs', '/admin/projects');
-Route::get('/admin/boards', [BookingAdminController::class, 'index'])->name('admin.boards');
-Route::view('/admin/change-password', 'admin.change-password')->name('admin.change-password');

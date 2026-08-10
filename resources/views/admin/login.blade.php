@@ -52,16 +52,21 @@
       <h2 class="form-title">Sign in</h2>
       <p class="form-desc">Enter your details to access your projects and client boards.</p>
 
-      <form action="#" method="post">
+      <form method="POST" action="{{ route('admin.login.post') }}">
+        @csrf
+        @if(session('status'))
+          <div class="form-status">{{ session('status') }}</div>
+        @endif
         <div class="field">
           <label for="email">Email address</label>
-          <input id="email" type="email" placeholder="you@studio.com" autocomplete="email">
+          <input id="email" name="email" type="email" value="{{ old('email') }}" placeholder="you@studio.com" autocomplete="email" required class="@error('email') field-input-error @enderror">
+          @error('email') <div class="field-error">{{ $message }}</div> @enderror
         </div>
 
         <div class="field">
           <label for="password">Password</label>
           <div class="password-wrap">
-            <input id="password" type="password" placeholder="Password" autocomplete="current-password">
+            <input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" required class="@error('password') field-input-error @enderror @error('credentials') field-input-error @enderror">
             <button type="button" class="toggle-password" aria-label="Show password" aria-pressed="false">
               <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/>
@@ -74,14 +79,16 @@
               </svg>
             </button>
           </div>
+          @error('password') <div class="field-error">{{ $message }}</div> @enderror
+          @error('credentials') <div class="field-error">{{ $message }}</div> @enderror
         </div>
 
         <div class="row-between">
           <label class="remember">
-            <input type="checkbox">
+            <input type="checkbox" name="remember">
             Remember me
           </label>
-          <a href="{{ route('admin.reset-password') }}">Forgot password?</a>
+          <a href="{{ route('admin.password.request') }}">Forgot password?</a>
         </div>
 
         <button class="btn-primary" type="submit">

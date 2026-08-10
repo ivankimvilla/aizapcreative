@@ -14,5 +14,10 @@ class ContactMessage extends Model
         'role',
         'subject',
         'message',
+        'is_read',
+    ];
+
+    protected $casts = [
+        'is_read' => 'boolean',
     ];
 }

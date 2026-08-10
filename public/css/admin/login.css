@@ -304,6 +304,18 @@ body {
     box-shadow: 0 0 0 3px rgba(255, 212, 0, 0.28);
 }
 
+.field input.field-input-error {
+    border-color: #b91c1c;
+}
+
+/* Inline field error */
+.field-error {
+    margin-top: 8px;
+    color: #b91c1c;
+    font-size: 13px;
+    font-weight: 600;
+}
+
 .password-wrap {
     position: relative;
 }

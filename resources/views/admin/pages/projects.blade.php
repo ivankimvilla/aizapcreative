@@ -89,7 +89,7 @@
                   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
                 </button>
               @endif
-              <span class="duration">--:--</span>
+              <span class="duration"></span>
             </div>
             <div class="video-info">
               <div class="video-title-row"><h3>{{ $video->title }}</h3></div>
