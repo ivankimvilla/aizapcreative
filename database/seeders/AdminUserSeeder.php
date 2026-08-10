@@ -13,7 +13,7 @@ class AdminUserSeeder extends Seeder
         $email = env('ADMIN_EMAIL', 'admin@example.com');
         $password = env('ADMIN_PASSWORD', 'secret123');
 
-        User::firstOrCreate([
+        User::updateOrCreate([
             'email' => $email,
         ], [
             'name' => 'Admin',
