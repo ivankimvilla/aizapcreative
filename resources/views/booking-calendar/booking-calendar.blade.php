@@ -12,6 +12,18 @@
     @include('header.header')
 
     <main id="app-content">
+        @if (session('status'))
+            <div class="booking-toast booking-toast--success" role="status">
+                <span class="booking-toast__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                </span>
+                <div class="booking-toast__body">
+                    <div class="booking-toast__title">Booking confirmed</div>
+                    <div class="booking-toast__text">{{ session('status') }}</div>
+                </div>
+            </div>
+        @endif
+
         <div class="booking-shell">
 
         <section id="booking" class="booking-widget">
@@ -161,6 +173,7 @@
 
                 <div class="booking-widget__times">
                     <div class="times-date">Monday, August 3</div>
+                    <div id="availabilityMessage" class="times-message" aria-live="polite"></div>
                     <div class="times-list">
                         <button type="button" class="time-slot"><span class="time-slot__label">12:30 PM</span><span class="time-slot__badge">Booked</span></button>
                         <button type="button" class="time-slot"><span class="time-slot__label">1:00 PM</span><span class="time-slot__badge">Booked</span></button>
@@ -215,10 +228,6 @@
                     <input type="hidden" name="selected_slot" id="hiddenSlot">
                     <input type="hidden" name="timezone" id="timezoneField">
 
-                    @if (session('status'))
-                        <div class="booking-alert booking-alert--success">{{ session('status') }}</div>
-                    @endif
-
                     @if ($errors->any())
                         <div class="booking-alert booking-alert--error">
                             <ul>
@@ -246,7 +255,7 @@
 
                     <label class="field" for="bookingPhone">
                         <span>Phone Number</span>
-                        <input type="tel" id="bookingPhone" name="phone" autocomplete="tel">
+                        <input type="tel" id="bookingPhone" name="phone" autocomplete="tel" required>
                     </label>
 
                     <label class="field field--full" for="serviceSelect">
@@ -269,8 +278,8 @@
                     <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-booking-response" data-sitekey="{{ config('services.recaptcha.site_key') }}" value="">
 
                     <div class="booking-form-footer">
+                        <p class="booking-note">You'll receive a confirmation email &amp; calendar invite after booking.</p>
                         <button type="submit" class="booking-submit">Book Call</button>
-                        <p class="booking-note">You'll receive a confirmation email & calendar invite after booking.</p>
                     </div>
                 </form>
             </div>

@@ -9,6 +9,10 @@ trait RecaptchaEnterprise
 {
     protected function verifyRecaptcha(Request $request, string $expectedAction): bool
     {
+        if (app()->environment(['local', 'testing'])) {
+            return true;
+        }
+
         $token = $request->input('g-recaptcha-response');
         if (! $token) {
             return false;

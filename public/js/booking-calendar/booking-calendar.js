@@ -37,17 +37,12 @@ function formatSelectedSlot(date, timeLabel) {
 
     const [, hourString, minuteString, meridiem] = matches;
     const hour = Number(hourString);
-    const minute = Number(minuteString);
-    const normalizedHour = meridiem.toUpperCase() === 'PM' && hour !== 12 ? hour + 12 : meridiem.toUpperCase() === 'AM' && hour === 12 ? 0 : hour;
 
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1);
     const day = pad(date.getDate());
-    const hour12 = date.getHours() % 12 || 12;
-    const minutePad = pad(date.getMinutes());
-    const labelHour = pad(hour12);
 
-    return `${year}-${month}-${day} ${hour12}:${minuteString} ${meridiem.toUpperCase()}`;
+    return `${year}-${month}-${day} ${hour}:${minuteString} ${meridiem.toUpperCase()}`;
 }
 
 function formatDateValue(date) {
@@ -86,7 +81,7 @@ function executeRecaptcha(action, retryCount = 0) {
     return new Promise(function (resolve, reject) {
         var siteKey = getRecaptchaSiteKey();
         if (!siteKey) {
-            return reject(new Error('reCAPTCHA site key is missing.'));
+            return resolve('');
         }
 
         function execute() {
@@ -150,6 +145,17 @@ function showBookingError(message) {
 /* ---------- Past-time helpers ---------- */
 
 function parseSlotToDate(date, timeLabel) {
+    const slotTime = parseSlotTime(timeLabel);
+    if (!slotTime) {
+        return null;
+    }
+
+    const slotDate = new Date(date);
+    slotDate.setHours(slotTime.hour, slotTime.minute, 0, 0);
+    return slotDate;
+}
+
+function parseSlotTime(timeLabel) {
     const matches = timeLabel.match(/^(\d{1,2}):(\d{2})\s?(AM|PM)$/i);
     if (!matches) {
         return null;
@@ -162,28 +168,71 @@ function parseSlotToDate(date, timeLabel) {
     if (meridiem.toUpperCase() === 'PM' && hour !== 12) hour += 12;
     if (meridiem.toUpperCase() === 'AM' && hour === 12) hour = 0;
 
-    const slotDate = new Date(date);
-    slotDate.setHours(hour, minute, 0, 0);
-    return slotDate;
+    return { hour, minute };
 }
 
-function isSlotInPast(date, timeLabel) {
-    const now = new Date();
-    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const normalizedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+function getCurrentDateTimeInTimeZone(timeZone) {
+    try {
+        const now = new Date();
+        const formatter = new Intl.DateTimeFormat('en-US', {
+            timeZone,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false,
+        });
 
-    if (normalizedDate.getTime() !== startOfToday.getTime()) {
+        const parts = formatter.formatToParts(now).reduce((acc, part) => {
+            if (part.type !== 'literal') {
+                acc[part.type] = part.value;
+            }
+            return acc;
+        }, {});
+
+        return {
+            year: Number(parts.year),
+            month: Number(parts.month),
+            day: Number(parts.day),
+            hour: Number(parts.hour),
+            minute: Number(parts.minute),
+            second: Number(parts.second),
+        };
+    } catch (error) {
+        return null;
+    }
+}
+
+function isSlotInPast(date, timeLabel, timeZone) {
+    const nowInTZ = getCurrentDateTimeInTimeZone(timeZone || 'UTC');
+    if (!nowInTZ) {
         return false;
     }
 
-    const slotDate = parseSlotToDate(date, timeLabel);
-    if (!slotDate) return false;
+    const slotTime = parseSlotTime(timeLabel);
+    if (!slotTime) {
+        return false;
+    }
 
-    return slotDate.getTime() <= now.getTime();
+    const selectedDateYMD = [date.getFullYear(), date.getMonth() + 1, date.getDate()];
+    const nowYMD = [nowInTZ.year, nowInTZ.month, nowInTZ.day];
+    if (
+        selectedDateYMD[0] !== nowYMD[0] ||
+        selectedDateYMD[1] !== nowYMD[1] ||
+        selectedDateYMD[2] !== nowYMD[2]
+    ) {
+        return false;
+    }
+
+    const slotMinutes = slotTime.hour * 60 + slotTime.minute;
+    const nowMinutes = nowInTZ.hour * 60 + nowInTZ.minute;
+    return slotMinutes <= nowMinutes;
 }
 
-function updatePastTimeMessage(date) {
-    const msgEl = document.getElementById('pastTimeMessage');
+function updatePastTimeMessage(date, fullyBooked = false) {
+    const msgEl = document.getElementById('availabilityMessage');
     if (!msgEl) {
         return;
     }
@@ -197,7 +246,10 @@ function updatePastTimeMessage(date) {
 
     const allDisabled = timeButtons.length > 0 && timeButtons.every(btn => btn.disabled);
 
-    if (isToday && allDisabled) {
+    if (fullyBooked) {
+        msgEl.textContent = 'This date is fully booked. Please choose another date.';
+        msgEl.style.display = 'block';
+    } else if (isToday && allDisabled) {
         msgEl.textContent = 'No more available times today. Please pick another date.';
         msgEl.style.display = 'block';
     } else {
@@ -207,11 +259,11 @@ function updatePastTimeMessage(date) {
 
 /* ---------- Availability / slot rendering ---------- */
 
-function setTimeSlotAvailability(bookedSlots, date) {
+function setTimeSlotAvailability(bookedSlots, date, timeZone, fullyBooked = false) {
     timeButtons.forEach(btn => {
         const label = getSlotLabel(btn);
         const isBooked = bookedSlots.includes(label);
-        const isPast = date ? isSlotInPast(date, label) : false;
+        const isPast = date ? isSlotInPast(date, label, timeZone) : false;
         const isUnavailable = isBooked || isPast;
 
         btn.disabled = isUnavailable;
@@ -228,7 +280,7 @@ function setTimeSlotAvailability(bookedSlots, date) {
         }
     });
 
-    updatePastTimeMessage(date);
+    updatePastTimeMessage(date, fullyBooked);
 }
 
 function openModal(timeLabel) {
@@ -364,8 +416,16 @@ function buildCalendar(year, month) {
     }
 
     updateActiveDateText(selectedDate);
-    fetchAvailabilityForDate(selectedDate);
+    // IMPORTANT: the timezone hidden field must be populated BEFORE we fetch
+    // availability. fetchAvailabilityForDate() reads timezoneField.value
+    // synchronously the instant it's called (before its internal await),
+    // so if updateTimezoneDisplay() ran after it instead of before, the very
+    // first load would fetch/compute "is this slot in the past" using the
+    // fallback 'UTC' instead of the actually-selected timezone (e.g. Manila),
+    // which is why a slot like 12:30 PM could still show as available at
+    // 12:47 PM local time — it was comparing against the wrong clock.
     updateTimezoneDisplay();
+    fetchAvailabilityForDate(selectedDate);
 }
 
 function changeMonth(offset) {
@@ -417,16 +477,18 @@ async function fetchAvailabilityForDate(date) {
     try {
         const response = await fetch(`/book-a-call/availability?date=${encodeURIComponent(dateValue)}&timezone=${encodeURIComponent(timezoneValue)}`);
         if (!response.ok) {
-            setTimeSlotAvailability([], date);
+            setTimeSlotAvailability([], date, timezoneValue, false);
             return;
         }
 
         const data = await response.json();
         const bookedSlots = Array.isArray(data.booked_slots) ? data.booked_slots : [];
-        setTimeSlotAvailability(bookedSlots, date);
-        markDayAsFullyBooked(date, bookedSlots.length > 0 && bookedSlots.length >= timeButtons.length);
+        const fullyBooked = data.fully_booked === true;
+
+        setTimeSlotAvailability(bookedSlots, date, timezoneValue, fullyBooked);
+        markDayAsFullyBooked(date, fullyBooked);
     } catch (error) {
-        setTimeSlotAvailability([], date);
+        setTimeSlotAvailability([], date, timezoneValue, false);
     }
 }
 
@@ -543,3 +605,17 @@ document.addEventListener('keydown', e => {
 
 initializeTimeButtons();
 buildCalendar(viewYear, viewMonth);
+
+var bookingToast = document.querySelector('.booking-toast');
+if (bookingToast) {
+    window.setTimeout(function () {
+        bookingToast.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+        bookingToast.style.opacity = '0';
+        bookingToast.style.transform = 'translateX(-50%) translateY(-8px)';
+        window.setTimeout(function () {
+            if (bookingToast.parentNode) {
+                bookingToast.parentNode.removeChild(bookingToast);
+            }
+        }, 250);
+    }, 5200);
+}

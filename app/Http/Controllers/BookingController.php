@@ -99,6 +99,38 @@ class BookingController extends Controller
             ->unique()
             ->values();
 
-        return response()->json(['booked_slots' => $bookedSlots]);
+        $allSlots = $this->getDailyTimeSlots($timezone, $dayStart->toDateString());
+        $now = Carbon::now($timezone);
+        $fullyBooked = collect($allSlots)->every(function ($slot) use ($bookedSlots, $timezone, $now) {
+            $slotDate = Carbon::createFromFormat('Y-m-d g:i A', $slot['date'] . ' ' . $slot['label'], $timezone);
+            $isBooked = $bookedSlots->contains($slot['label']);
+            $isPast = $slotDate->isPast();
+
+            return $isBooked || $isPast;
+        });
+
+        return response()->json([
+            'booked_slots' => $bookedSlots,
+            'fully_booked' => $fullyBooked,
+        ]);
+    }
+
+    private function getDailyTimeSlots(\DateTimeZone $timezone, string $date): array
+    {
+        $start = Carbon::createFromFormat('Y-m-d g:i A', $date . ' 12:30 PM', $timezone);
+        $end = Carbon::createFromFormat('Y-m-d g:i A', $date . ' 10:30 PM', $timezone);
+
+        $slots = [];
+        $current = $start->copy();
+
+        while ($current->lte($end)) {
+            $slots[] = [
+                'date' => $date,
+                'label' => $current->format('g:i A'),
+            ];
+            $current->addMinutes(30);
+        }
+
+        return $slots;
     }
 }

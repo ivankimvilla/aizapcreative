@@ -238,6 +238,11 @@
     white-space: nowrap;
 }
 
+.booking-detail--note {
+    white-space: normal;
+    max-width: calc(100% - 40px);
+}
+
 .booking-detail svg {
     width: 14px;
     height: 14px;

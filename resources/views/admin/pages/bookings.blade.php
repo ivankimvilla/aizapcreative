@@ -85,6 +85,34 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
                     Client sees {{ $tz }}
                   </span>
+                  <span class="booking-detail">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    {{ $booking->email }}
+                  </span>
+                  @if($booking->phone)
+                    <span class="booking-detail">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+                      {{ $booking->phone }}
+                    </span>
+                  @endif
+                  @if($booking->company)
+                    <span class="booking-detail">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v12H3V7Z"/><path d="M8 7v10"/><path d="M16 7v10"/></svg>
+                      {{ $booking->company }}
+                    </span>
+                  @endif
+                  @if($booking->meeting_link)
+                    <span class="booking-detail booking-detail--note">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 10.5V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-4.5"/><path d="M10 14l3-3-3-3"/></svg>
+                      <a href="{{ $booking->meeting_link }}" target="_blank" rel="noopener noreferrer">Meet link</a>
+                    </span>
+                  @endif
+                  @if($booking->message)
+                    <span class="booking-detail booking-detail--note">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+                      {{ $booking->message }}
+                    </span>
+                  @endif
                 </div>
                 <div class="booking-card-actions">
                   <button class="btn-ghost">View notes</button>
