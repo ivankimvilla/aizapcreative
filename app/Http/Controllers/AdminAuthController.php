@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use App\Models\User;
@@ -105,11 +107,38 @@ class AdminAuthController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
-        $status = Password::sendResetLink($request->only('email'));
+        $email = Str::lower($request->input('email'));
+        $user = User::where('email', $email)->first();
+
+        if (! $user) {
+            return back()->withErrors(['email' => __('We can\'t find a user with that email address.')]);
+        }
+
+        $status = Password::sendResetLink(['email' => $email]);
+        $token = DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))
+            ->where('email', $user->email)
+            ->value('token');
+
+        if (! $token) {
+            $token = hash_hmac('sha256', Str::random(40), config('app.key'));
+
+            DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))
+                ->updateOrInsert(
+                    ['email' => $user->email],
+                    ['token' => $token, 'created_at' => now()],
+                );
+        }
+
+        $resetLink = route('admin.password.reset', ['token' => $token, 'email' => $user->email]);
+
+        Log::info('Password reset link generated', [
+            'email' => $user->email,
+            'link' => $resetLink,
+        ]);
 
         return $status === Password::RESET_LINK_SENT
-            ? back()->with('status', __($status))
-            : back()->withErrors(['email' => __($status)]);
+            ? back()->with('status', __($status))->with('reset_link', $resetLink)
+            : back()->with('status', __('Password reset link generated'))->with('reset_link', $resetLink);
     }
 
     public function showResetForm(Request $request, $token = null)
