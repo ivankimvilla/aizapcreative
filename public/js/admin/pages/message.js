@@ -121,9 +121,28 @@ if (deleteSelectedMessages) {
     });
 }
 
+function markMessageRead(messageId) {
+    var csrfToken = document.querySelector('meta[name="csrf-token"]');
+    if (!messageId || !csrfToken) {
+        return;
+    }
+
+    fetch('/admin/notifications/message/' + encodeURIComponent(messageId) + '/read', {
+        method: 'PATCH',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken.content,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+    }).catch(function () {
+        // Ignore errors; local view state still reflects the message as read.
+    });
+}
+
 function applyViewedState() {
     document.querySelectorAll('.message-row-wrap').forEach(function (wrap) {
-        if (viewedIds.indexOf(wrap.dataset.msgId) !== -1) {
+        if (viewedIds.indexOf(wrap.dataset.msgId) !== -1 || wrap.dataset.isRead === '1') {
             wrap.classList.add('viewed');
         }
     });
@@ -143,8 +162,11 @@ if (messageList) {
 
         var wrap = row.closest('.message-row-wrap');
 
-        wrap.classList.add('viewed');
-        markAsViewed(wrap.dataset.msgId);
+        if (!wrap.classList.contains('viewed')) {
+            wrap.classList.add('viewed');
+            markAsViewed(wrap.dataset.msgId);
+            markMessageRead(wrap.dataset.msgId);
+        }
 
         document.getElementById('fullViewName').textContent = wrap.dataset.name;
         document.getElementById('fullViewEmail').textContent = wrap.dataset.email;

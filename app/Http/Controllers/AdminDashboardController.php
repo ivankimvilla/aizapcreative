@@ -107,6 +107,7 @@ class AdminDashboardController extends Controller
             'feedbackCount',
             'videosCount',
             'bookingsCount',
+            'unreadMessagesCount',
             'notifications',
             'notificationsCount',
             'siteVisits',
@@ -140,6 +141,42 @@ class AdminDashboardController extends Controller
         return response()->json([
             'chartMax' => max(1250, ceil(($points->max('count') ?: 1) / 250) * 250),
             'points' => $points->values(),
+            'stats' => [
+                'siteVisits' => [
+                    'value' => $weekVisits = SiteVisit::whereBetween('created_at', [Carbon::today()->subDays(6)->startOfDay(), Carbon::today()->endOfDay()])->distinct('ip_address')->count('ip_address'),
+                    'trend' => $this->trendLabel(
+                        $weekVisits,
+                        SiteVisit::whereBetween('created_at', [Carbon::today()->subDays(13)->startOfDay(), Carbon::today()->subDays(7)->endOfDay()])->distinct('ip_address')->count('ip_address')
+                    ),
+                ],
+                'messages' => [
+                    'value' => ContactMessage::count(),
+                    'trend' => ContactMessage::where('is_read', false)->count().' new',
+                ],
+                'videos' => [
+                    'value' => ProjectVideo::count(),
+                    'trend' => '+'.ProjectVideo::where('created_at', '>=', Carbon::today()->subDays(6)->startOfDay())->count().' new',
+                ],
+                'feedback' => [
+                    'value' => Feedback::count(),
+                    'trend' => Feedback::where('created_at', '>=', Carbon::today()->subDays(6)->startOfDay())->count().' new',
+                ],
+                'bookings' => [
+                    'value' => Booking::count(),
+                    'trend' => '+'.Booking::where('created_at', '>=', Carbon::today()->subDays(6)->startOfDay())->count().' this week',
+                ],
+            ],
         ]);
+    }
+
+    protected function trendLabel(int $current, int $previous): string
+    {
+        if ($previous === 0) {
+            return $current > 0 ? '+100% this week' : '+0% this week';
+        }
+
+        $percent = round((($current - $previous) / $previous) * 100);
+
+        return ($percent >= 0 ? '+' : '').$percent.'% this week';
     }
 }

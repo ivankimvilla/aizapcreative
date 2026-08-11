@@ -1,6 +1,7 @@
 @forelse ($messages as $message)
-  <div class="message-row-wrap"
+  <div class="message-row-wrap{{ $message->is_read ? ' viewed' : '' }}"
        data-msg-id="{{ $message->id }}"
+       data-is-read="{{ $message->is_read ? '1' : '0' }}"
        data-name="{{ e($message->name) }}"
        data-email="{{ e($message->email ?: 'Not provided') }}"
       data-phone="{{ e($message->phone ?: 'Not provided') }}"

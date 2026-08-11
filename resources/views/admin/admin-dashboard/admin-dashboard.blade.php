@@ -87,9 +87,9 @@
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
-          <span class="stat-trend">{{ $visitsTrendLabel ?? '+0% this week' }}</span>
+          <span class="stat-trend" data-stat-trend="siteVisits">{{ $visitsTrendLabel ?? '+0% this week' }}</span>
         </div>
-        <div class="stat-value">{{ number_format($siteVisits ?? 0) }}</div>
+        <div class="stat-value" data-stat-value="siteVisits">{{ number_format($siteVisits ?? 0) }}</div>
         <div class="stat-label">Site visits</div>
       </div>
 
@@ -98,9 +98,9 @@
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z"/></svg>
           </div>
-          <span class="stat-trend down">{{ $messagesCount > 0 ? $messagesCount.' new' : '0 new' }}</span>
+          <span class="stat-trend" data-stat-trend="messages">{{ $unreadMessagesCount ?? 0 }} new</span>
         </div>
-        <div class="stat-value">{{ number_format($messagesCount ?? 0) }}</div>
+        <div class="stat-value" data-stat-value="messages">{{ number_format($messagesCount ?? 0) }}</div>
         <div class="stat-label">Messages</div>
       </div>
 
@@ -109,9 +109,9 @@
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7Z"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
           </div>
-          <span class="stat-trend">{{ $videosCount > 0 ? '+'.max(0, round($videosCount / 5)).' new' : '0 new' }}</span>
+          <span class="stat-trend" data-stat-trend="videos">{{ $videosCount > 0 ? '+'.max(0, round($videosCount / 5)).' new' : '0 new' }}</span>
         </div>
-        <div class="stat-value">{{ number_format($videosCount ?? 0) }}</div>
+        <div class="stat-value" data-stat-value="videos">{{ number_format($videosCount ?? 0) }}</div>
         <div class="stat-label">Videos</div>
       </div>
 
@@ -120,9 +120,9 @@
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 7-6.2-3.8-6.2 3.8 1.6-7L2 9.2l7.1-.6L12 2Z"/></svg>
           </div>
-          <span class="stat-trend">4.8 avg</span>
+          <span class="stat-trend" data-stat-trend="feedback">{{ $feedbackCount > 0 ? $feedbackCount.' total' : '0 new' }}</span>
         </div>
-        <div class="stat-value">{{ number_format($feedbackCount ?? 0) }}</div>
+        <div class="stat-value" data-stat-value="feedback">{{ number_format($feedbackCount ?? 0) }}</div>
         <div class="stat-label">Feedback</div>
       </div>
 
@@ -131,9 +131,9 @@
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
           </div>
-          <span class="stat-trend">+6 this week</span>
+          <span class="stat-trend" data-stat-trend="bookings">+0 this week</span>
         </div>
-        <div class="stat-value">{{ number_format($bookingsCount ?? 0) }}</div>
+        <div class="stat-value" data-stat-value="bookings">{{ number_format($bookingsCount ?? 0) }}</div>
         <div class="stat-label">Bookings</div>
       </div>
     </div>

@@ -68,6 +68,17 @@ document.addEventListener('DOMContentLoaded', function () {
             label.textContent = new Date(point.date + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
             return label;
         }));
+
+        if (data.stats) {
+            Object.keys(data.stats).forEach(function (key) {
+                var stat = data.stats[key];
+                var value = document.querySelector('[data-stat-value="' + key + '"]');
+                var trend = document.querySelector('[data-stat-trend="' + key + '"]');
+
+                if (value) value.textContent = Number(stat.value).toLocaleString();
+                if (trend) trend.textContent = stat.trend;
+            });
+        }
     }
 
     function refreshTraffic() {

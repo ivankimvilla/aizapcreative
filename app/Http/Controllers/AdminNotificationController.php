@@ -16,6 +16,10 @@ class AdminNotificationController extends Controller
             Booking::findOrFail($id)->update(['is_read' => true]);
         }
 
+        if (request()->expectsJson()) {
+            return response()->json(['status' => 'success']);
+        }
+
         return back();
     }
 
