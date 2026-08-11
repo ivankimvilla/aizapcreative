@@ -107,14 +107,14 @@ class AdminAuthController extends Controller
     {
         $request->validate(['email' => 'required|email']);
 
-        $email = Str::lower($request->input('email'));
-        $user = User::where('email', $email)->first();
+        $email = trim($request->input('email'));
+        $user = User::whereRaw('LOWER(email) = ?', [Str::lower($email)])->first();
 
         if (! $user) {
             return back()->withErrors(['email' => __('We can\'t find a user with that email address.')]);
         }
 
-        $status = Password::sendResetLink(['email' => $email]);
+        $status = Password::sendResetLink(['email' => $user->email]);
         $token = DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))
             ->where('email', $user->email)
             ->value('token');
