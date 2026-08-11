@@ -23,109 +23,74 @@
       <div class="topbar">
         <div class="topbar-title">
           <p class="crumb">Studio / Bookings</p>
+          <form method="POST" action="{{ route('admin.boards.bulk-destroy') }}" id="bulkDeleteBookingsForm" class="booking-bulk-actions">
+            @csrf
+            @method('DELETE')
+            <label class="booking-select-all">
+              <input type="checkbox" id="selectAllBookings" aria-label="Select all bookings">
+              <span>Select all</span>
+            </label>
+            <button type="submit" id="deleteSelectedBookings" class="booking-bulk-delete" disabled>Delete selected</button>
+          </form>
+        </div>
+
+        <div class="topbar-stats" id="topbarStats">
+          <span class="topbar-stat topbar-stat-all">
+            <strong>{{ $stats['all'] ?? 0 }}</strong> All bookings
+          </span>
+          <span class="topbar-stat topbar-stat-confirmed">
+            <strong>{{ $stats['confirmed'] ?? 0 }}</strong> Confirmed
+          </span>
+          <span class="topbar-stat topbar-stat-pending">
+            <strong>{{ $stats['pending'] ?? 0 }}</strong> Pending
+          </span>
+          <span class="topbar-stat topbar-stat-completed">
+            <strong>{{ $stats['completed'] ?? 0 }}</strong> Completed
+          </span>
+          <span class="topbar-stat topbar-stat-cancelled">
+            <strong>{{ $stats['cancelled'] ?? 0 }}</strong> Cancelled
+          </span>
         </div>
       </div>
 
-      <!-- BOOKING REPOSITORY -->
       <div class="booking-panel" id="bookingPanel">
 
-        <div class="booking-toolbar">
-          <div class="booking-toolbar-left">
-            <h2>Bookings</h2>
+        <div class="booking-table-wrap">
+          <table class="booking-table">
+            <thead>
+              <tr>
+                <th class="booking-select-column" aria-label="Select booking"></th>
+                <th>Client</th>
+                <th>Service</th>
+                <th>Time</th>
+                <th>Platform</th>
+                <th>Timezone</th>
+                <th>Contact</th>
+                <th>Note</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @include('admin.pages.partials.booking-rows', ['bookingsByDate' => $bookingsByDate])
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <div class="booking-note-modal" id="bookingNoteModal" hidden>
+        <div class="booking-note-dialog" role="dialog" aria-modal="true" aria-labelledby="bookingNoteTitle">
+          <div class="booking-note-dialog-header">
+            <h2 id="bookingNoteTitle">Note</h2>
+            <button type="button" class="booking-note-close" id="bookingNoteClose" aria-label="Close note">&times;</button>
           </div>
+          <p class="booking-note-author" id="bookingNoteAuthor"></p>
+          <p id="bookingNoteText"></p>
         </div>
-
-        <div class="booking-stats" id="bookingStats">
-          <button type="button" class="stat-tile status-all active" data-filter="all">
-            <span class="stat-count">{{ $stats['all'] ?? 0 }}</span><span class="stat-label">All bookings</span>
-          </button>
-          <button type="button" class="stat-tile status-confirmed" data-filter="confirmed">
-            <span class="stat-count">{{ $stats['confirmed'] ?? 0 }}</span><span class="stat-label">Confirmed</span>
-          </button>
-          <button type="button" class="stat-tile status-pending" data-filter="pending">
-            <span class="stat-count">{{ $stats['pending'] ?? 0 }}</span><span class="stat-label">Pending</span>
-          </button>
-          <button type="button" class="stat-tile status-completed" data-filter="completed">
-            <span class="stat-count">{{ $stats['completed'] ?? 0 }}</span><span class="stat-label">Completed</span>
-          </button>
-          <button type="button" class="stat-tile status-cancelled" data-filter="cancelled">
-            <span class="stat-count">{{ $stats['cancelled'] ?? 0 }}</span><span class="stat-label">Cancelled</span>
-          </button>
-        </div>
-
-        <div class="booking-list" id="bookingList">
-          @forelse($bookingsByDate as $dateLabel => $dayBookings)
-            <div class="day-divider"><span>{{ $dateLabel }}</span></div>
-            @foreach($dayBookings as $booking)
-              @php
-                $tz = $booking->timezone ?: config('app.timezone');
-                $startTime = $booking->starts_at->copy()->setTimezone($tz);
-                $endTime = $startTime->copy()->addMinutes(30);
-                $initials = strtoupper(substr($booking->name, 0, 2));
-              @endphp
-              <div class="booking-card" data-status="{{ $booking->status }}">
-                <div class="booking-card-top">
-                  <span class="thread-avatar">{{ $initials }}</span>
-                  <div class="booking-heading">
-                    <h3>{{ $booking->company ?: $booking->name }}</h3>
-                    <p class="booking-type">{{ $booking->service }}</p>
-                  </div>
-                  <span class="status-pill {{ $booking->status }}">{{ ucfirst($booking->status) }}</span>
-                </div>
-                <div class="booking-card-details">
-                  <span class="booking-detail">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-                    {{ $startTime->format('g:i A') }} – {{ $endTime->format('g:i A') }} · 30 min
-                  </span>
-                  <span class="booking-detail">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                    {{ $booking->meeting_link ? 'Google Meet' : 'Phone' }}
-                  </span>
-                  <span class="booking-detail">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.5 2.6 4 5.8 4 9s-1.5 6.4-4 9c-2.5-2.6-4-5.8-4-9s1.5-6.4 4-9Z"/></svg>
-                    Client sees {{ $tz }}
-                  </span>
-                  <span class="booking-detail">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-                    {{ $booking->email }}
-                  </span>
-                  @if($booking->phone)
-                    <span class="booking-detail">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
-                      {{ $booking->phone }}
-                    </span>
-                  @endif
-                  @if($booking->company)
-                    <span class="booking-detail">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v12H3V7Z"/><path d="M8 7v10"/><path d="M16 7v10"/></svg>
-                      {{ $booking->company }}
-                    </span>
-                  @endif
-                  @if($booking->meeting_link)
-                    <span class="booking-detail booking-detail--note">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 10.5V6a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-4.5"/><path d="M10 14l3-3-3-3"/></svg>
-                      <a href="{{ $booking->meeting_link }}" target="_blank" rel="noopener noreferrer">Meet link</a>
-                    </span>
-                  @endif
-                  @if($booking->message)
-                    <span class="booking-detail booking-detail--note">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-                      {{ $booking->message }}
-                    </span>
-                  @endif
-                </div>
-                <div class="booking-card-actions">
-                  <button class="btn-ghost">View notes</button>
-                </div>
-              </div>
-            @endforeach
-          @empty
-            <div class="day-divider"><span>No bookings yet</span></div>
-          @endforelse
-        </div>
-
       </div>
     </main>
   </div>
+  <script src="{{ asset('js/admin/pages/bookings.js') }}?v={{ filemtime(public_path('js/admin/pages/bookings.js')) }}"></script>
 </body>
 </html>

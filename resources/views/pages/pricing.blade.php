@@ -133,7 +133,7 @@
                     <li>Creative concepts</li>
                     <li>And more</li>
                 </ul>
-                <a href="#contact" class="pricing-card__button" data-service="Custom Project">
+                <a href="#contact" class="pricing-card__button" data-service="Custom Projects">
                     <span>Let's Talk</span>
                     <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="7" y1="17" x2="17" y2="7" />
@@ -258,7 +258,7 @@
                                     <option value="AI Commercial Ads" {{ old('service') === 'AI Commercial Ads' ? 'selected' : '' }}>AI Commercial Ads</option>
                                     <option value="Product Advertising" {{ old('service') === 'Product Advertising' ? 'selected' : '' }}>Product Advertising</option>
                                     <option value="Storytelling & Short Films" {{ old('service') === 'Storytelling & Short Films' ? 'selected' : '' }}>Storytelling & Short Films</option>
-                                    <option value="Custom Project" {{ old('service') === 'Custom Project' ? 'selected' : '' }}>Custom Project</option>
+                                    <option value="Custom Projects" {{ old('service') === 'Custom Projects' ? 'selected' : '' }}>Custom Projects</option>
                                 </select>
                             </div>
                         </div>

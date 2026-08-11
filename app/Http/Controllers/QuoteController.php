@@ -47,12 +47,43 @@ class QuoteController extends Controller
 
         Quote::create($data);
 
+        $packageDetails = [
+            'AI Commercial Ads' => [
+                'High-converting cinematic advertisements for brands.',
+                ['30-60 sec AI commercial', 'Script assistance', 'Cinematic quality', 'Fast turnaround', 'Multiple formats', 'Commercial use'],
+            ],
+            'Product Advertising' => [
+                'Showcase your product with premium AI visuals.',
+                ['Product-focused videos', 'Social media ready', 'Multiple aspect ratios', 'High-quality visuals', 'Engaging storytelling', 'Commercial use'],
+            ],
+            'Storytelling & Short Films' => [
+                'Emotional AI films that connect with audiences.',
+                ['Story development', 'Cinematic scenes', 'Character consistency', 'Creative direction', 'Background score', 'Multiple revisions'],
+            ],
+            'Custom Projects' => [
+                "Need something unique? We'll build it together.",
+                ['Brand campaigns', 'Music videos', 'Explainer videos', 'Social media content', 'Creative concepts', 'And more'],
+            ],
+        ];
+
+        [$packageDescription, $packageFeatures] = $packageDetails[$data['service']] ?? [
+            'Custom AI video project.',
+            [],
+        ];
+
         ContactMessage::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'role' => 'Quote Request',
+            'phone' => $data['phone'],
+            'role' => $data['company'] ?? 'N/A',
             'subject' => $data['service'],
-            'message' => trim('Company: ' . ($data['company'] ?? 'N/A') . '\nPhone: ' . ($data['phone'] ?? 'N/A') . '\n\n' . ($data['message'] ?: 'No additional message.')),
+            'message' => trim(
+                "Project Type: {$data['service']}\n\n" .
+                "{$data['service']}\n" .
+                "{$packageDescription}\n\n" .
+                implode("\n", array_map(fn ($feature) => '- '.$feature, $packageFeatures)) .
+                ($data['message'] ? "\n\nAdditional message:\n{$data['message']}" : '')
+            ),
         ]);
 
         if ($request->expectsJson()) {

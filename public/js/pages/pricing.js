@@ -126,9 +126,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Multiple revisions',
             ],
         },
-        'Custom Project': {
-            packageName: 'Custom Project',
-            description: 'Need something unique? We’ll build it together.',
+        'Custom Projects': {
+            packageName: 'Custom Projects',
+            description: "Need something unique? We'll build it together.",
             features: [
                 'Brand campaigns',
                 'Music videos',

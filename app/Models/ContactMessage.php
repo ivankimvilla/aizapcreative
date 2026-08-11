@@ -11,6 +11,7 @@ class ContactMessage extends Model
     protected $fillable = [
         'name',
         'email',
+        'phone',
         'role',
         'subject',
         'message',
@@ -20,4 +21,13 @@ class ContactMessage extends Model
     protected $casts = [
         'is_read' => 'boolean',
     ];
+
+    public function getMessageAttribute($value): string
+    {
+        return str_replace(
+            ['\\r\\n', '\\n', '\\r'],
+            [PHP_EOL, PHP_EOL, PHP_EOL],
+            (string) $value
+        );
+    }
 }

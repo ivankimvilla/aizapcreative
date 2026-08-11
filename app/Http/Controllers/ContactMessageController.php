@@ -11,7 +11,7 @@ class ContactMessageController extends Controller
 {
     use RecaptchaEnterprise;
 
-    public function index()
+    public function index(Request $request)
     {
         $messages = ContactMessage::latest()
             ->get()
@@ -20,7 +20,48 @@ class ContactMessageController extends Controller
             })
             ->values();
 
+        if ($request->expectsJson()) {
+            return response()->json([
+                'html' => view('admin.pages.partials.message-rows', compact('messages'))->render(),
+                'count' => $messages->count(),
+            ]);
+        }
+
         return view('admin.pages.messages', compact('messages'));
+    }
+
+    public function destroy(Request $request)
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'distinct', 'exists:contact_messages,id'],
+        ]);
+
+        $selectedMessages = ContactMessage::whereIn('id', $validated['ids'])->get([
+            'id',
+            'name',
+            'email',
+            'subject',
+            'message',
+        ]);
+
+        $deleted = ContactMessage::where(function ($query) use ($selectedMessages) {
+            foreach ($selectedMessages as $selectedMessage) {
+                $query->orWhere(function ($duplicateQuery) use ($selectedMessage) {
+                    $duplicateQuery
+                        ->where('name', $selectedMessage->name)
+                        ->where('email', $selectedMessage->email)
+                        ->where('subject', $selectedMessage->subject)
+                        ->where('message', $selectedMessage->getRawOriginal('message'));
+                });
+            }
+        })->delete();
+
+        if ($request->expectsJson()) {
+            return response()->json(['deleted' => $deleted]);
+        }
+
+        return redirect()->route('admin.messages');
     }
 
     public function store(Request $request)

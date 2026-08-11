@@ -8,6 +8,8 @@ const hiddenSlot = document.getElementById("hiddenSlot");
 
 const timezoneField = document.getElementById("timezoneField");
 
+const timezoneLabelField = document.getElementById("timezoneLabelField");
+
 const timesDateEl = document.querySelector(".times-date");
 
 const calendarGrid = document.querySelector(".calendar-grid");
@@ -30,32 +32,12 @@ const timezoneList = document.getElementById("timezoneList");
 
 const timezoneOptions = Array.from(document.querySelectorAll(".calendar-tz__list li"));
 
-function getUTCOffsetLabel(timeZone, date = new Date) {
-    try {
-        const parts = new Intl.DateTimeFormat("en-US", {
-            timeZone: timeZone,
-            timeZoneName: "longOffset"
-        }).formatToParts(date);
-        const tzPart = parts.find(part => part.type === "timeZoneName");
-        let offset = tzPart ? tzPart.value : "GMT+00:00";
-        if (offset === "GMT") {
-            offset = "GMT+00:00";
-        }
-        return offset.replace("GMT", "UTC");
-    } catch (error) {
-        return "UTC+00:00";
-    }
-}
-
 function refreshTimezoneLabels() {
     timezoneOptions.forEach(option => {
-        const timeZone = option.dataset.value;
-        if (!timeZone) {
+        if (!option.dataset.value) {
             return;
         }
-        const cityLabel = option.dataset.label || option.textContent.replace(/^\([^)]*\)\s*/, "").trim();
-        const offset = getUTCOffsetLabel(timeZone);
-        const fullLabel = `(${offset}) ${cityLabel}`;
+        const fullLabel = option.dataset.displayLabel || option.textContent.trim();
         option.textContent = fullLabel;
         if (option.getAttribute("aria-selected") === "true" && timezoneTriggerLabel) {
             timezoneTriggerLabel.textContent = fullLabel;
@@ -536,6 +518,9 @@ function updateTimezoneDisplay() {
         return;
     }
     timezoneField.value = selected.dataset.value;
+    if (timezoneLabelField) {
+        timezoneLabelField.value = selected.dataset.displayLabel || selected.textContent.trim();
+    }
 }
 
 function selectTimezone(option) {

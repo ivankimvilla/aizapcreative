@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aizap Creatives - Clients</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>Aizap Creatives - Messages</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('css/admin/pages/messages.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/admin/pages/messages.css') }}?v={{ filemtime(public_path('css/admin/pages/messages.css')) }}">
 </head>
 <body>
   <div class="shell">
@@ -26,216 +27,75 @@
         </div>
       </div>
 
-      <!-- MESSAGES -->
-      <div class="inbox" id="inbox">
+      <div class="inbox-panel" id="inbox" data-delete-url="{{ route('admin.messages.destroy') }}">
 
-        <!-- TOOLBAR (Gmail-style) -->
         <div class="inbox-toolbar">
           <div class="inbox-toolbar-left">
-            <button class="compose-btn" id="composeBtn" type="button">Compose</button>
+            <label class="select-all-control" title="Select all messages">
+              <input type="checkbox" id="selectAllMessages" aria-label="Select all messages">
+              <span>Select all</span>
+            </label>
+            <h2>Messages</h2>
+            <span class="message-count">{{ $messages->count() }}</span>
           </div>
-          <div class="inbox-toolbar-center">
-            <input type="search" id="threadSearch" placeholder="Search messages">
-          </div>
-          <div class="inbox-toolbar-right">
-            <button class="toolbar-action" type="button" title="Refresh" onclick="location.reload()">⟳</button>
+          <button type="button" class="delete-selected-btn" id="deleteSelectedMessages" hidden aria-label="Delete selected messages" title="Delete selected messages">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <path d="M4 7h16M10 11v6M14 11v6M6 7l1 14h10l1-14M9 7V4h6v3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Delete</span>
+          </button>
+        </div>
+
+        <div class="message-list-wrap" id="messageListWrap">
+          <div class="message-list" id="messageList">
+            @include('admin.pages.partials.message-rows', ['messages' => $messages])
           </div>
         </div>
 
-        <!-- THREAD LIST -->
-        <div class="thread-list">
-          <div class="thread-list-head">
-            <h2>Conversations</h2>
-            <span class="thread-count">{{ $messages->count() }}</span>
+        <div class="message-full-view" id="messageFullView">
+          <button type="button" class="back-btn" id="backToList">← Back to Messages</button>
+
+          <div class="message-full-header">
+            <h3 id="fullViewName"></h3>
           </div>
 
-          <div class="thread-items" id="threadItems">
-            @forelse ($messages as $message)
-              <button class="thread-item{{ $loop->first ? ' active' : '' }}" data-name="{{ e($message->name) }}" data-role="{{ e($message->role ?: 'Client') }}" data-subject="{{ e($message->subject ?: 'New message') }}" data-email="{{ e($message->email ?: 'No email provided') }}" data-message="{{ e($message->message) }}" data-created-at="{{ $message->created_at?->format('M j, Y H:i') ?: '' }}">
-                <span class="thread-avatar hue-{{ ($loop->index % 4) + 1 }}">{{ strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $message->name), 0, 2)) }}</span>
-                <span class="thread-body">
-                  <span class="thread-top">
-                    <span class="thread-name">{{ $message->name }}</span>
-                    <span class="thread-time">{{ $message->created_at?->format('M j') ?? 'Now' }}</span>
-                  </span>
-                  <span class="thread-preview">{{ \Illuminate\Support\Str::limit($message->subject ?: $message->message, 40) }}</span>
-                </span>
-              </button>
-            @empty
-              <div class="thread-empty">
-                <p class="thread-empty__text">no message</p>
-              </div>
-            @endforelse
-          </div>
-        </div>
-
-        <!-- THREAD VIEW -->
-        <div class="thread-view">
-          @php $firstMessage = $messages->first(); @endphp
-          <div class="thread-view-head">
-            <div class="thread-view-title">
-              <span class="thread-avatar hue-1">{{ $firstMessage ? strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $firstMessage->name), 0, 2)) : 'CM' }}</span>
-              <div>
-                <h3>{{ $firstMessage->name ?? 'Contact Messages' }}</h3>
-                <div class="thread-info-list">
-                  <div class="thread-info-item">
-                    <span class="thread-info-label">Email</span>
-                    <span class="thread-info-value">{{ $firstMessage->email ?? 'Not provided' }}</span>
-                  </div>
-                  <div class="thread-info-item">
-                    <span class="thread-info-label">Company / Role</span>
-                    <span class="thread-info-value">{{ $firstMessage->role ?? 'Not provided' }}</span>
-                  </div>
-                  <div class="thread-info-item">
-                    <span class="thread-info-label">Subject</span>
-                    <span class="thread-info-value">{{ $firstMessage->subject ?? 'No subject' }}</span>
-                  </div>
-                </div>
-                <p class="thread-subject">{{ $firstMessage->subject ? '' : 'Select a message on the left to review it.' }}</p>
-              </div>
+          <div class="message-full-meta">
+            <div class="message-detail-field">
+              <span class="detail-label">Email</span>
+              <span id="fullViewEmail"></span>
+            </div>
+            <div class="message-detail-field" id="fullViewPhoneField" style="display: none;">
+              <span class="detail-label">Phone</span>
+              <span id="fullViewPhone"></span>
+            </div>
+            <div class="message-detail-field">
+              <span class="detail-label">Company / Brand</span>
+              <span id="fullViewRole"></span>
+            </div>
+            <div class="message-detail-field">
+              <span class="detail-label">Date</span>
+              <span id="fullViewDate"></span>
             </div>
           </div>
 
-          <div class="thread-messages" id="threadMessages">
-            @if ($firstMessage)
-              <div class="message received">
-                <span class="thread-avatar hue-1">{{ strtoupper(substr(preg_replace('/[^A-Za-z]/', '', $firstMessage->name), 0, 2)) }}</span>
-                <div class="message-bubble">
-                  <p>{{ $firstMessage->message }}</p>
-                  <span class="message-time">{{ $firstMessage->created_at?->format('M j, Y H:i') }}</span>
-                </div>
-              </div>
-            @else
-              <div class="message received message--empty">
-                <div class="message-bubble">
-                  <p>no message</p>
-                </div>
-              </div>
-            @endif
+          <div class="message-body-block">
+            <span class="detail-label">Message</span>
+            <p class="message-full-body" id="fullViewBody"></p>
           </div>
 
-          <div class="thread-meta" id="threadMeta">
-            @if ($firstMessage)
-              <div class="thread-meta-item">
-                <span class="thread-meta-label">Email</span>
-                <span class="thread-meta-value">{{ $firstMessage->email ?: 'Not provided' }}</span>
-              </div>
-              <div class="thread-meta-item">
-                <span class="thread-meta-label">Company / Role</span>
-                <span class="thread-meta-value">{{ $firstMessage->role ?: 'Not provided' }}</span>
-              </div>
-              <div class="thread-meta-item">
-                <span class="thread-meta-label">Subject</span>
-                <span class="thread-meta-value">{{ $firstMessage->subject ?: 'No subject' }}</span>
-              </div>
-            @endif
-          </div>
+          <button type="button" class="reply-btn" id="replyBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 17L4 12L9 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 12H14C17.3137 12 20 14.6863 20 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Reply
+          </button>
         </div>
 
-      </div>
-
-      <!-- COMPOSE MODAL (already styled in CSS, now wired to the button) -->
-      <div class="compose-modal" id="composeModal">
-        <div class="compose-header">
-          <strong>New message</strong>
-          <button class="toolbar-action" id="composeClose" type="button">✕</button>
-        </div>
-        <div class="compose-body">
-          <input type="text" placeholder="To">
-          <input type="text" placeholder="Subject">
-          <textarea placeholder="Message"></textarea>
-        </div>
-        <div class="compose-actions">
-          <button class="toolbar-action" id="composeCancel" type="button">Discard</button>
-        </div>
       </div>
     </main>
   </div>
 
-  <script>
-    var threadItems = document.querySelectorAll('.thread-item');
-    var threadAvatar = document.querySelector('.thread-view-title .thread-avatar');
-    var threadName = document.querySelector('.thread-view-title h3');
-    var threadSubject = document.querySelector('.thread-view-title .thread-subject');
-    var threadMessages = document.getElementById('threadMessages');
-    var threadMeta = document.getElementById('threadMeta');
-
-    function renderThread(button) {
-      threadItems.forEach(function (item) { item.classList.remove('active'); });
-      button.classList.add('active');
-
-      var name = button.dataset.name || 'Contact Message';
-      var subject = button.dataset.subject || 'New message';
-      var email = button.dataset.email || 'Not provided';
-      var role = button.dataset.role || 'Not provided';
-      var message = button.dataset.message || 'No message';
-      var createdAt = button.dataset.createdAt || 'Now';
-      var initials = (name.match(/\b([A-Za-z])/g) || []).slice(0, 2).join('').toUpperCase() || 'CM';
-
-      if (threadAvatar) threadAvatar.textContent = initials;
-      if (threadName) threadName.textContent = name;
-      if (threadSubject) threadSubject.textContent = subject;
-
-      if (threadMessages) {
-        threadMessages.innerHTML = '<div class="message received">'
-          + '<span class="thread-avatar hue-1">' + initials + '</span>'
-          + '<div class="message-bubble">'
-          + '<p>' + message + '</p>'
-          + '<span class="message-time">' + createdAt + '</span>'
-          + '</div></div>';
-      }
-
-      if (threadMeta) {
-        threadMeta.innerHTML = '<div class="thread-meta-item">'
-          + '<span class="thread-meta-label">Email</span>'
-          + '<span class="thread-meta-value">' + email + '</span>'
-          + '</div>'
-          + '<div class="thread-meta-item">'
-          + '<span class="thread-meta-label">Company / Role</span>'
-          + '<span class="thread-meta-value">' + role + '</span>'
-          + '</div>'
-          + '<div class="thread-meta-item">'
-          + '<span class="thread-meta-label">Subject</span>'
-          + '<span class="thread-meta-value">' + subject + '</span>'
-          + '</div>';
-      }
-    }
-
-    threadItems.forEach(function (item) {
-      item.addEventListener('click', function () {
-        renderThread(item);
-      });
-    });
-
-    // Toolbar: search filters the existing thread list (no new data, just show/hide)
-    var searchInput = document.getElementById('threadSearch');
-    if (searchInput) {
-      searchInput.addEventListener('input', function () {
-        var q = searchInput.value.trim().toLowerCase();
-        threadItems.forEach(function (item) {
-          var haystack = ((item.dataset.name || '') + ' ' + (item.dataset.subject || '')).toLowerCase();
-          item.style.display = haystack.indexOf(q) === -1 ? 'none' : '';
-        });
-      });
-    }
-
-    // Toolbar: compose button opens/closes the modal (cosmetic only, no send logic)
-    var composeBtn = document.getElementById('composeBtn');
-    var composeModal = document.getElementById('composeModal');
-    var composeClose = document.getElementById('composeClose');
-    var composeCancel = document.getElementById('composeCancel');
-
-    function closeCompose() {
-      if (composeModal) composeModal.classList.remove('open');
-    }
-
-    if (composeBtn && composeModal) {
-      composeBtn.addEventListener('click', function () {
-        composeModal.classList.add('open');
-      });
-    }
-    if (composeClose) composeClose.addEventListener('click', closeCompose);
-    if (composeCancel) composeCancel.addEventListener('click', closeCompose);
-  </script>
+  <script src="{{ asset('js/admin/pages/message.js') }}?v={{ filemtime(public_path('js/admin/pages/message.js')) }}"></script>
 </body>
 </html>

@@ -30,6 +30,7 @@ class BookingController extends Controller
             'message' => 'nullable|string|max:2000',
             'selected_slot' => 'required|string',
             'timezone' => 'required|string|max:100',
+            'timezone_label' => 'nullable|string|max:100',
             'g-recaptcha-response' => $recaptchaRule,
         ], [
             'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before booking.',
@@ -69,8 +70,9 @@ class BookingController extends Controller
             'message' => $data['message'],
             'starts_at' => $startsAtUtc,
             'timezone' => $data['timezone'],
-            'meeting_link' => 'https://meet.google.com/' . strtolower(substr(md5($data['email'] . now()), 0, 10)),
-            'status' => 'confirmed',
+            'timezone_label' => $data['timezone_label'] ?? $data['timezone'],
+            'meeting_link' => 'https://meet.google.com/new',
+            'status' => 'pending',
         ]);
 
         // TODO: send emails, notifications, calendar event.
