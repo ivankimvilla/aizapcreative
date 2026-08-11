@@ -9,6 +9,8 @@
     --line-on-light: rgba(10, 10, 8, 0.1);
     --text-on-light: rgba(10, 10, 8, 0.58);
     --text-muted: rgba(10, 10, 8, 0.42);
+    --chart-blue: #2F6BFF;
+    --chart-blue-dot-ring: #FFFFFF;
 }
 
 * {
@@ -59,8 +61,6 @@ a {
     max-height: 100vh;
     overflow: visible;
 }
-
-/* ---------- SIDEBAR ---------- */
 
 .sidebar {
     background: var(--ink);
@@ -246,8 +246,8 @@ a {
     cursor: pointer;
     text-decoration: none;
     transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-    -webkit-appearance: none;
-    -moz-appearance: none;
+    --webkit-appearance: none;
+    --moz-appearance: none;
 }
 
 .signout svg {
@@ -261,8 +261,6 @@ a {
     background: rgba(255, 255, 255, 0.03);
     border-color: rgba(255, 255, 255, 0.04);
 }
-
-/* ---------- SEAM (signature divider, reused from auth pages) ---------- */
 
 .seam {
     position: relative;
@@ -283,18 +281,6 @@ a {
     stroke-width: 3;
     stroke-linecap: round;
     stroke-linejoin: round;
-}
-
-/* ---------- MAIN ---------- */
-
-.main {
-    padding: 28px 40px 40px;
-    min-width: 0;
-    height: 100vh;
-    max-height: 100vh;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
 }
 
 .topbar {
@@ -437,19 +423,29 @@ a {
 
 .notification-item {
     border-bottom: 1px solid var(--line-on-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    min-width: 0;
 }
 
 .notification-item:last-child {
     border-bottom: none;
 }
 
-.notification-item a {
+.notification-item-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-item-main a {
     display: flex;
     align-items: flex-start;
     gap: 12px;
     padding: 16px 18px;
     text-decoration: none;
     color: var(--ink);
+    min-width: 0;
 }
 
 .notification-icon {
@@ -474,12 +470,14 @@ a {
 
 .notification-content {
     flex: 1;
+    min-width: 0;
 }
 
 .notification-content strong {
     display: block;
     margin-bottom: 4px;
     font-size: 14px;
+    word-break: break-word;
 }
 
 .notification-content p {
@@ -487,12 +485,14 @@ a {
     color: var(--text-on-dark);
     font-size: 13px;
     line-height: 1.5;
+    word-break: break-word;
 }
 
 .notification-meta {
     font-size: 12px;
     color: var(--text-on-light);
     white-space: nowrap;
+    word-break: break-word;
 }
 
 .notification-subheader {
@@ -531,37 +531,6 @@ a {
     cursor: not-allowed;
 }
 
-.notification-item {
-    border-bottom: 1px solid var(--line-on-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: stretch;
-    min-width: 0;
-}
-
-.notification-item-main {
-    flex: 1;
-    min-width: 0;
-}
-
-.notification-item-main a {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    min-width: 0;
-}
-
-.notification-content {
-    flex: 1;
-    min-width: 0;
-}
-
-.notification-content strong,
-.notification-content p,
-.notification-meta {
-    word-break: break-word;
-}
-
 .notification-item-actions {
     display: flex;
     align-items: center;
@@ -593,8 +562,6 @@ a {
     text-decoration: none;
     font-weight: 700;
 }
-
-/* ---------- STAT CARDS ---------- */
 
 .stats {
     display: grid;
@@ -668,24 +635,12 @@ a {
     color: var(--text-on-light);
 }
 
-/* ---------- CONTENT GRID ---------- */
-
 .content-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr);
     gap: 20px;
     align-items: stretch;
     flex: 1;
-    min-height: 0;
-}
-
-.panel {
-    background: var(--white);
-    border: 1.5px solid var(--line-on-light);
-    border-radius: 10px;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
     min-height: 0;
 }
 
@@ -696,6 +651,21 @@ a {
     padding: 18px 22px;
     border-bottom: 1px solid var(--line-on-light);
     flex-shrink: 0;
+}
+
+.chart-panel {
+    background: var(--white);
+    border-color: var(--line-on-light);
+    color: var(--ink);
+}
+
+.chart-panel .panel-head {
+    border-bottom-color: var(--line-on-light);
+}
+
+.chart-panel .panel-head h2,
+.chart-panel .chart-summary .value {
+    color: var(--ink);
 }
 
 .panel-head h2 {
@@ -718,8 +688,6 @@ a {
     border-color: var(--yellow-deep);
 }
 
-/* Site visits chart */
-
 .range-pill {
     display: inline-flex;
     align-items: center;
@@ -729,21 +697,27 @@ a {
     font-weight: 700;
     padding: 6px 12px;
     border: 1.5px solid var(--line-on-light);
-    border-radius: 20px;
+    border-radius: 6px;
     color: var(--text-on-light);
+    background: var(--white);
+}
+
+.range-chevron {
+    color: var(--text-on-light);
+    font-size: 15px;
 }
 
 .legend-dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: var(--yellow-deep);
+    background: var(--chart-blue);
     display: inline-block;
     flex-shrink: 0;
 }
 
 .chart-panel-body {
-    padding: 22px 22px 20px;
+    padding: 20px 24px 18px;
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -774,9 +748,11 @@ a {
 
 .chart-svg-wrap {
     width: 100%;
-    flex: 1;
+    height: clamp(220px, 40vh, 360px);
+    flex: 1 1 auto;
     min-height: 0;
     display: flex;
+    overflow: hidden;
 }
 
 .chart-svg-wrap svg {
@@ -785,7 +761,46 @@ a {
     display: block;
 }
 
-/* Visitor breakdown */
+.chart-area-fill {
+    fill: url(#visitsGradient);
+}
+
+.chart-line {
+    fill: none;
+    stroke: var(--chart-blue);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.chart-dot {
+    fill: var(--chart-blue);
+    stroke: var(--chart-blue-dot-ring);
+    stroke-width: 2;
+    transition: r 120ms ease;
+}
+
+.chart-dot:hover {
+    r: 6;
+}
+
+.chart-grid-line {
+    stroke: var(--line-on-light);
+    stroke-width: 1;
+    stroke-dasharray: 4 5;
+}
+
+.chart-axis-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    fill: var(--text-muted);
+}
+
+.chart-x-label {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    fill: var(--text-on-light);
+}
 
 .breakdown-section {
     padding: 20px 22px;
@@ -875,8 +890,6 @@ a {
     flex-shrink: 0;
 }
 
-/* ---------- RECENT ACTIVITY ---------- */
-
 .activity-list {
     list-style: none;
     display: flex;
@@ -929,8 +942,6 @@ a {
     font-size: 13px;
     color: var(--text-on-light);
 }
-
-/* ---------- MOBILE NAV TOGGLE ---------- */
 
 .menu-toggle {
     display: none;

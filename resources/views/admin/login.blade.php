@@ -66,7 +66,7 @@
         <div class="field">
           <label for="password">Password</label>
           <div class="password-wrap">
-            <input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" required class="@error('password') field-input-error @enderror @error('credentials') field-input-error @enderror">
+            <input id="password" name="password" type="password" placeholder="Password" autocomplete="current-password" required class="@error('password') field-input-error @enderror">
             <button type="button" class="toggle-password" aria-label="Show password" aria-pressed="false">
               <svg class="icon-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/>
@@ -80,7 +80,6 @@
             </button>
           </div>
           @error('password') <div class="field-error">{{ $message }}</div> @enderror
-          @error('credentials') <div class="field-error">{{ $message }}</div> @enderror
         </div>
 
         <div class="row-between">

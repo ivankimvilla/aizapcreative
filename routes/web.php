@@ -95,8 +95,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
     Route::get('/admin/change-password', [AdminAuthController::class, 'showChangePassword'])->name('admin.change-password');
     Route::post('/admin/change-password', [AdminAuthController::class, 'changePassword'])->name('admin.change-password.post');
+    Route::post('/admin/change-email', [AdminAuthController::class, 'changeEmail'])->name('admin.change-email.post');
 
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/dashboard/traffic', [AdminDashboardController::class, 'traffic'])->name('admin.dashboard.traffic');
     Route::patch('/admin/notifications/{type}/{id}/read', [AdminNotificationController::class, 'markRead'])->name('admin.notifications.markRead');
     Route::post('/admin/notifications/mark-all-read', [AdminNotificationController::class, 'markAllRead'])->name('admin.notifications.markAllRead');
     Route::get('/admin/projects', [ProjectVideoController::class, 'index'])->name('admin.projects');

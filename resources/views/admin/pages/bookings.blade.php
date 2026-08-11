@@ -20,6 +20,13 @@
     </div>
 
     <main class="main">
+      @if (session('status'))
+        <div class="admin-booking-alert admin-booking-alert--success" role="status">{{ session('status') }}</div>
+      @endif
+      @if ($errors->any())
+        <div class="admin-booking-alert admin-booking-alert--error" role="alert">{{ $errors->first() }}</div>
+      @endif
+
       <div class="topbar">
         <div class="topbar-title">
           <p class="crumb">Studio / Bookings</p>

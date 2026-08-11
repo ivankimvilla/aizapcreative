@@ -1,12 +1,3 @@
-document.addEventListener('click', function () {
-    document.querySelectorAll('.booking-menu').forEach(function (menu) {
-        menu.hidden = true;
-    });
-    document.querySelectorAll('.booking-menu-trigger').forEach(function (trigger) {
-        trigger.setAttribute('aria-expanded', 'false');
-    });
-});
-
 var selectAllBookings = document.getElementById('selectAllBookings');
 var bookingBulkForm = document.getElementById('bulkDeleteBookingsForm');
 var deleteSelectedBookings = document.getElementById('deleteSelectedBookings');
@@ -15,6 +6,12 @@ var bookingNoteModal = document.getElementById('bookingNoteModal');
 var bookingNoteAuthor = document.getElementById('bookingNoteAuthor');
 var bookingNoteText = document.getElementById('bookingNoteText');
 var bookingNoteClose = document.getElementById('bookingNoteClose');
+
+document.querySelectorAll('.admin-booking-alert').forEach(function (alert) {
+    window.setTimeout(function () {
+        alert.classList.add('is-hidden');
+    }, 5000);
+});
 
 function getBookingSelections() {
     return Array.prototype.slice.call(document.querySelectorAll('.booking-select'));
@@ -69,6 +66,18 @@ if (bookingBulkForm) {
 updateBookingSelection();
 
 document.addEventListener('click', function (event) {
+    var menuClick = event.target.closest('.booking-menu');
+    var trigger = event.target.closest('.booking-menu-trigger');
+
+    if (!menuClick && !trigger) {
+        document.querySelectorAll('.booking-menu').forEach(function (menu) {
+            menu.hidden = true;
+        });
+        document.querySelectorAll('.booking-menu-trigger').forEach(function (menuTrigger) {
+            menuTrigger.setAttribute('aria-expanded', 'false');
+        });
+    }
+
     var noteButton = event.target.closest('.booking-note-view');
     if (noteButton) {
         var noteRow = noteButton.closest('tr');
@@ -80,7 +89,6 @@ document.addEventListener('click', function (event) {
         return;
     }
 
-    var trigger = event.target.closest('.booking-menu-trigger');
     if (!trigger) return;
 
     event.stopPropagation();
@@ -94,9 +102,35 @@ document.addEventListener('click', function (event) {
         item.setAttribute('aria-expanded', 'false');
     });
 
-    menu.hidden = isOpen;
-    trigger.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+    if (isOpen) {
+        menu.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+        return;
+    }
+
+    menu.hidden = false;
+    var triggerRect = trigger.getBoundingClientRect();
+    var menuRect = menu.getBoundingClientRect();
+    var left = Math.min(triggerRect.right - menuRect.width, window.innerWidth - menuRect.width - 8);
+    var top = triggerRect.bottom + 6;
+
+    if (top + menuRect.height > window.innerHeight - 8) {
+        top = triggerRect.top - menuRect.height - 6;
+    }
+
+    menu.style.left = Math.max(8, left) + 'px';
+    menu.style.top = Math.max(8, top) + 'px';
+    trigger.setAttribute('aria-expanded', 'true');
 });
+
+window.addEventListener('scroll', function () {
+    document.querySelectorAll('.booking-menu').forEach(function (menu) {
+        menu.hidden = true;
+    });
+    document.querySelectorAll('.booking-menu-trigger').forEach(function (trigger) {
+        trigger.setAttribute('aria-expanded', 'false');
+    });
+}, true);
 
 function closeBookingNote() {
     if (bookingNoteModal) bookingNoteModal.hidden = true;

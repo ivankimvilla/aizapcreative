@@ -22,7 +22,7 @@ it('shows the booking page and stores a booking from the modal form', function (
     ]);
 
     $response->assertRedirect('/book-a-call');
-    $response->assertSessionHas('status', 'Booking confirmed! We sent your confirmation email.');
+    $response->assertSessionHas('status', 'Your booking request was sent successfully.');
 
     $this->assertDatabaseHas('bookings', [
         'service' => 'AI Product Ads',

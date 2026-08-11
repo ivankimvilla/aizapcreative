@@ -11,3 +11,9 @@ document.querySelectorAll('.eye-btn').forEach(function (btn) {
         }
     });
 });
+
+document.querySelectorAll('.settings-alert').forEach(function (alert) {
+    window.setTimeout(function () {
+        alert.classList.add('is-hidden');
+    }, 5000);
+});

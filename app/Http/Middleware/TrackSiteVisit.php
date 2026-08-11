@@ -15,12 +15,19 @@ class TrackSiteVisit
 
         if ($this->shouldTrack($request)) {
             try {
-                SiteVisit::create([
-                    'url' => $request->getPathInfo() ?: '/',
-                    'ip_address' => $request->ip(),
-                    'user_agent' => $request->userAgent(),
-                    'referer' => $request->header('referer'),
-                ]);
+                $ipAddress = $request->ip();
+                $alreadyVisitedToday = SiteVisit::whereDate('created_at', now()->toDateString())
+                    ->where('ip_address', $ipAddress)
+                    ->exists();
+
+                if (! $alreadyVisitedToday) {
+                    SiteVisit::create([
+                        'url' => $request->getPathInfo() ?: '/',
+                        'ip_address' => $ipAddress,
+                        'user_agent' => $request->userAgent(),
+                        'referer' => $request->header('referer'),
+                    ]);
+                }
             } catch (\Throwable $e) {
                 Log::warning('Unable to record site visit', ['exception' => $e->getMessage()]);
             }

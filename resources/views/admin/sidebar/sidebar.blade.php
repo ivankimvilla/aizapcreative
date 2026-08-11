@@ -42,10 +42,15 @@
   </ul>
 
   <div class="sidebar-bottom">
+    @php
+      $sidebarAdminName = trim(auth()->user()->name ?? 'Admin');
+      $sidebarAdminParts = preg_split('/\s+/', $sidebarAdminName);
+      $sidebarAdminInitials = collect($sidebarAdminParts)->filter()->take(2)->map(fn ($part) => strtoupper(substr($part, 0, 1)))->implode('');
+    @endphp
     <div class="user-card">
-      <div class="avatar">IM</div>
+      <div class="avatar">{{ $sidebarAdminInitials ?: 'A' }}</div>
       <div class="user-meta">
-        <div class="name">Ivan Almadin</div>
+        <div class="name">{{ $sidebarAdminName }}</div>
         <div class="role">Studio Admin</div>
       </div>
     </div>

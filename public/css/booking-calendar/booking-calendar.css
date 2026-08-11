@@ -535,6 +535,12 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+.booking-toast--error {
+    background: #b3261e;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
 .booking-toast__icon {
     display: inline-flex;
     align-items: center;

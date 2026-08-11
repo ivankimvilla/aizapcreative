@@ -62,12 +62,12 @@ class AdminDashboardController extends Controller
 
         $notificationsCount = $unreadMessagesCount + $unreadBookingsCount;
 
-        $todayVisits = SiteVisit::whereDate('created_at', Carbon::today())->count();
-        $weekVisits = SiteVisit::whereBetween('created_at', [Carbon::today()->subDays(6)->startOfDay(), Carbon::today()->endOfDay()])->count();
-        $previousWeekVisits = SiteVisit::whereBetween('created_at', [Carbon::today()->subDays(13)->startOfDay(), Carbon::today()->subDays(7)->endOfDay()])->count();
+        $todayVisits = SiteVisit::whereDate('created_at', Carbon::today())->distinct('ip_address')->count('ip_address');
+        $weekVisits = SiteVisit::whereBetween('created_at', [Carbon::today()->subDays(6)->startOfDay(), Carbon::today()->endOfDay()])->distinct('ip_address')->count('ip_address');
+        $previousWeekVisits = SiteVisit::whereBetween('created_at', [Carbon::today()->subDays(13)->startOfDay(), Carbon::today()->subDays(7)->endOfDay()])->distinct('ip_address')->count('ip_address');
 
         $siteVisits = max(0, $weekVisits);
-        $totalVisits = max(0, SiteVisit::count());
+        $totalVisits = max(0, SiteVisit::query()->selectRaw('date(created_at) as visit_date, ip_address')->groupBy('visit_date', 'ip_address')->get()->count());
         $recentVisits = SiteVisit::latest()->take(6)->get();
 
         $visitsTrendPercent = $previousWeekVisits > 0
@@ -79,13 +79,13 @@ class AdminDashboardController extends Controller
             : $visitsTrendPercent.'% this week';
 
         $dailyTrafficCounts = SiteVisit::query()
-            ->selectRaw('date(created_at) as date, count(*) as count')
-            ->whereBetween('created_at', [Carbon::today()->subDays(6)->startOfDay(), Carbon::today()->endOfDay()])
+            ->selectRaw('date(created_at) as date, count(distinct ip_address) as count')
+            ->whereBetween('created_at', [Carbon::today()->subDays(30)->startOfDay(), Carbon::today()->endOfDay()])
             ->groupBy('date')
             ->orderBy('date')
             ->pluck('count', 'date');
 
-        $dailyTraffic = collect(range(6, 0, -1))->map(function ($days) use ($dailyTrafficCounts) {
+        $dailyTraffic = collect(range(30, 0, -1))->map(function ($days) use ($dailyTrafficCounts) {
             $date = Carbon::today()->subDays($days)->format('Y-m-d');
 
             return (object) [
@@ -117,5 +117,29 @@ class AdminDashboardController extends Controller
             'dailyTraffic',
             'topPages'
         ));
+    }
+
+    public function traffic()
+    {
+        $dailyTrafficCounts = SiteVisit::query()
+            ->selectRaw('date(created_at) as date, count(distinct ip_address) as count')
+            ->whereBetween('created_at', [Carbon::today()->subDays(30)->startOfDay(), Carbon::today()->endOfDay()])
+            ->groupBy('date')
+            ->orderBy('date')
+            ->pluck('count', 'date');
+
+        $points = collect(range(30, 0, -1))->map(function ($days) use ($dailyTrafficCounts) {
+            $date = Carbon::today()->subDays($days)->format('Y-m-d');
+
+            return [
+                'date' => $date,
+                'count' => (int) $dailyTrafficCounts->get($date, 0),
+            ];
+        });
+
+        return response()->json([
+            'chartMax' => max(1250, ceil(($points->max('count') ?: 1) / 250) * 250),
+            'points' => $points->values(),
+        ]);
     }
 }

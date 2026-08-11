@@ -77,7 +77,7 @@ class BookingController extends Controller
 
         // TODO: send emails, notifications, calendar event.
 
-        return redirect('/book-a-call')->with('status', 'Booking confirmed! We sent your confirmation email.');
+        return redirect('/book-a-call')->with('status', 'Your booking request was sent successfully.');
     }
 
     public function availability(Request $request)

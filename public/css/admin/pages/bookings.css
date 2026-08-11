@@ -15,6 +15,39 @@ body {
     gap: 16px;
 }
 
+.admin-booking-alert {
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    z-index: 1100;
+    width: min(360px, calc(100vw - 48px));
+    margin: 0;
+    padding: 10px 14px;
+    border: 0;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(10, 10, 8, 0.18);
+    font: 700 12px 'Manrope', sans-serif;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.admin-booking-alert.is-hidden {
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+}
+
+.admin-booking-alert--success {
+    background: #00a000;
+    color: #ffffff;
+}
+
+.admin-booking-alert--error {
+    background: #d00000;
+    color: #ffffff;
+}
+
 .topbar-title {
     display: flex;
     align-items: center;
@@ -324,8 +357,11 @@ body {
 }
 
 .table-empty {
-    text-align: center;
-    padding: 60px 4px;
+    width: 100%;
+    height: 180px;
+    padding: 0 4px;
+    text-align: center !important;
+    vertical-align: middle !important;
     color: var(--text-muted);
 }
 
@@ -437,10 +473,10 @@ body {
 }
 
 .booking-menu {
-    position: absolute;
-    z-index: 5;
-    top: 44px;
-    right: 8px;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
     min-width: 132px;
     padding: 5px;
     border: 1px solid var(--line-on-light);

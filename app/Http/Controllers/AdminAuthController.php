@@ -23,12 +23,20 @@ class AdminAuthController extends Controller
             'password' => 'required|string',
         ]);
 
-        if (Auth::attempt(['email' => $data['email'], 'password' => $data['password']])) {
-            $request->session()->regenerate();
-            return redirect()->intended(route('admin.dashboard'));
+        $user = User::where('email', $data['email'])->first();
+
+        if (! $user) {
+            return back()->withErrors(['email' => 'Email address not found.'])->withInput();
         }
 
-        return back()->withErrors(['credentials' => 'Invalid credentials'])->withInput();
+        if (! Hash::check($data['password'], $user->password)) {
+            return back()->withErrors(['password' => 'Invalid password.'])->withInput();
+        }
+
+        Auth::login($user, $request->boolean('remember'));
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('admin.dashboard'));
     }
 
     public function logout(Request $request)
@@ -60,7 +68,31 @@ class AdminAuthController extends Controller
         $user->setRememberToken(Str::random(60));
         $user->save();
 
-        return back()->with('status', 'Password changed successfully.');
+        return back()->with('status', 'Password updated successfully.');
+    }
+
+    public function changeEmail(Request $request)
+    {
+        $data = $request->validate([
+            'current_email' => 'required|email',
+            'current_password' => 'required|string',
+            'email' => 'required|email|unique:users,email,'.$request->user()->id,
+        ]);
+
+        $user = $request->user();
+        if (strcasecmp($data['current_email'], $user->email) !== 0) {
+            return back()->withErrors(['current_email' => 'Current email does not match your admin account.']);
+        }
+
+        if (! Hash::check($data['current_password'], $user->password)) {
+            return back()->withErrors(['email_current_password' => 'Current password is incorrect.']);
+        }
+
+        $user->email = $data['email'];
+        $user->email_verified_at = null;
+        $user->save();
+
+        return back()->with('status', 'Email updated successfully.');
     }
 
     // Password reset: show request form

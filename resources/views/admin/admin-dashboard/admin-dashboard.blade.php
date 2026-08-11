@@ -16,14 +16,12 @@
 
   @include('admin.sidebar.sidebar')
 
-  <!-- SEAM: signature divider reused from the auth pages -->
   <div class="seam" aria-hidden="true">
     <svg viewBox="0 0 10 800" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M5 0 L2 60 L8 130 L1 210 L9 280 L2 350 L8 420 L2 490 L8 560 L1 630 L9 700 L3 760 L5 800" />
     </svg>
   </div>
 
-  <!-- MAIN -->
   <main class="main">
     <div class="topbar">
       <div class="topbar-title">
@@ -31,7 +29,13 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
         </button>
         <p class="crumb">Aizap Studio / Overview</p>
-        <h1>Good morning, Ivan</h1>
+        @php
+          $hour = now()->hour;
+          $greeting = $hour < 12 ? 'Good morning' : ($hour < 18 ? 'Good afternoon' : 'Good evening');
+          $adminName = trim(auth()->user()->name ?? 'Admin');
+          $adminFirstName = explode(' ', $adminName)[0] ?: 'Admin';
+        @endphp
+        <h1>{{ $greeting }}, {{ $adminFirstName }}</h1>
       </div>
       <div class="topbar-actions">
         <button class="icon-btn" id="notificationButton" aria-label="Notifications" aria-expanded="false">
@@ -77,7 +81,6 @@
       </div>
     </div>
 
-    <!-- STAT CARDS -->
     <div class="stats">
       <div class="stat-card">
         <div class="stat-top">
@@ -135,184 +138,109 @@
       </div>
     </div>
 
-    <!-- CONTENT GRID -->
     <div class="content-grid">
       <div class="panel chart-panel">
         <div class="panel-head">
-          <h2>Site visits</h2>
-          <span class="range-pill"><span class="legend-dot"></span>Last 7 days</span>
+          <h2>Visitors Over Time</h2>
         </div>
         <div class="chart-panel-body">
-          <div class="chart-summary">
-            <span class="value">{{ number_format($totalVisits ?? 0) }}</span>
-            <span class="stat-trend">{{ $todayVisits ?? 0 }} today</span>
-          </div>
-          <p class="chart-sub">Total visitors across all channels, Mon–Sun</p>
+          @php
+            $chartMax = max(1250, ceil(($dailyTraffic->max('count') ?: 1) / 250) * 250);
+            $chartW = 720;
+            $chartH = 280;
+            $padL = 40;
+            $padR = 20;
+            $padT = 20;
+            $padB = 40;
+            $plotW = $chartW - $padL - $padR;
+            $plotH = $chartH - $padT - $padB;
+            $count = max(1, $dailyTraffic->count() - 1);
+            $points = [];
+            foreach ($dailyTraffic as $index => $day) {
+                $x = $padL + ($count > 0 ? ($index / $count) * $plotW : 0);
+                $y = $padT + $plotH - (($day->count / $chartMax) * $plotH);
+                $points[] = ['x' => $x, 'y' => $y, 'count' => $day->count, 'date' => $day->date];
+            }
+
+            function smoothPath($pts) {
+                if (count($pts) < 2) {
+                    return count($pts) === 1 ? "M{$pts[0]['x']},{$pts[0]['y']}" : '';
+                }
+                $d = "M{$pts[0]['x']},{$pts[0]['y']} ";
+                $n = count($pts);
+                for ($i = 0; $i < $n - 1; $i++) {
+                    $p0 = $pts[$i - 1] ?? $pts[$i];
+                    $p1 = $pts[$i];
+                    $p2 = $pts[$i + 1];
+                    $p3 = $pts[$i + 2] ?? $p2;
+                    $cp1x = $p1['x'] + ($p2['x'] - $p0['x']) / 6;
+                    $cp1y = $p1['y'] + ($p2['y'] - $p0['y']) / 6;
+                    $cp2x = $p2['x'] - ($p3['x'] - $p1['x']) / 6;
+                    $cp2y = $p2['y'] - ($p3['y'] - $p1['y']) / 6;
+                    $d .= "C{$cp1x},{$cp1y} {$cp2x},{$cp2y} {$p2['x']},{$p2['y']} ";
+                }
+                return trim($d);
+            }
+
+            $linePath = smoothPath($points);
+            $areaPath = $linePath;
+            if (count($points)) {
+                $last = end($points);
+                $first = $points[0];
+                $areaPath .= " L{$last['x']}," . ($padT + $plotH) . " L{$first['x']}," . ($padT + $plotH) . ' Z';
+            }
+          @endphp
 
           <div class="chart-svg-wrap">
-            <svg viewBox="0 0 720 280" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 {{ $chartW }} {{ $chartH }}" preserveAspectRatio="none" data-traffic-endpoint="{{ route('admin.dashboard.traffic') }}" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="visitsGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="var(--yellow-deep)" stop-opacity="0.35"/>
-                  <stop offset="100%" stop-color="var(--yellow-deep)" stop-opacity="0"/>
+                  <stop offset="0%" stop-color="var(--chart-blue)" stop-opacity="0.28"/>
+                  <stop offset="100%" stop-color="var(--chart-blue)" stop-opacity="0"/>
                 </linearGradient>
               </defs>
 
-              <!-- gridlines -->
-              <g stroke="var(--line-on-light)" stroke-width="1">
-                <line x1="32" y1="20" x2="688" y2="20"/>
-                <line x1="32" y1="87" x2="688" y2="87"/>
-                <line x1="32" y1="153" x2="688" y2="153"/>
-                <line x1="32" y1="220" x2="688" y2="220"/>
-              </g>
-              <g font-family="'Space Mono', monospace" font-size="10" fill="var(--text-muted)">
-                <text x="26" y="23" text-anchor="end">650</text>
-                <text x="26" y="90" text-anchor="end">430</text>
-                <text x="26" y="156" text-anchor="end">215</text>
-                <text x="26" y="223" text-anchor="end">0</text>
+              <g class="chart-grid-line">
+                <line x1="{{ $padL }}" y1="{{ $padT }}" x2="{{ $chartW - $padR }}" y2="{{ $padT }}"/>
+                <line x1="{{ $padL }}" y1="{{ $padT + $plotH * .33 }}" x2="{{ $chartW - $padR }}" y2="{{ $padT + $plotH * .33 }}"/>
+                <line x1="{{ $padL }}" y1="{{ $padT + $plotH * .66 }}" x2="{{ $chartW - $padR }}" y2="{{ $padT + $plotH * .66 }}"/>
+                <line x1="{{ $padL }}" y1="{{ $padT + $plotH }}" x2="{{ $chartW - $padR }}" y2="{{ $padT + $plotH }}"/>
               </g>
 
-              <!-- area fill -->
-              <path fill="url(#visitsGradient)" d="M40,121.5
-                C93.3,121.5 93.3,93.8 146.7,93.8
-                C200,93.8 200,103.1 253.3,103.1
-                C306.7,103.1 306.7,78.5 360,78.5
-                C413.3,78.5 413.3,53.8 466.7,53.8
-                C520,53.8 520,32.3 573.3,32.3
-                C626.7,32.3 626.7,37.9 680,37.9
-                L680,220 L40,220 Z"/>
-
-              <!-- line -->
-              <path fill="none" stroke="var(--yellow-deep)" stroke-width="2.5" stroke-linecap="round" d="M40,121.5
-                C93.3,121.5 93.3,93.8 146.7,93.8
-                C200,93.8 200,103.1 253.3,103.1
-                C306.7,103.1 306.7,78.5 360,78.5
-                C413.3,78.5 413.3,53.8 466.7,53.8
-                C520,53.8 520,32.3 573.3,32.3
-                C626.7,32.3 626.7,37.9 680,37.9"/>
-
-              <!-- points -->
-              <g>
-                <circle cx="40" cy="121.5" r="3.5" fill="var(--white)" stroke="var(--yellow-deep)" stroke-width="2"/>
-                <circle cx="146.7" cy="93.8" r="3.5" fill="var(--white)" stroke="var(--yellow-deep)" stroke-width="2"/>
-                <circle cx="253.3" cy="103.1" r="3.5" fill="var(--white)" stroke="var(--yellow-deep)" stroke-width="2"/>
-                <circle cx="360" cy="78.5" r="3.5" fill="var(--white)" stroke="var(--yellow-deep)" stroke-width="2"/>
-                <circle cx="466.7" cy="53.8" r="3.5" fill="var(--white)" stroke="var(--yellow-deep)" stroke-width="2"/>
-                <circle cx="573.3" cy="32.3" r="3.5" fill="var(--white)" stroke="var(--yellow-deep)" stroke-width="2"/>
+              <g id="chartAxisLabels" class="chart-axis-label">
+                <text x="{{ $padL - 8 }}" y="{{ $padT + 4 }}" text-anchor="end">{{ number_format($chartMax) }}</text>
+                <text x="{{ $padL - 8 }}" y="{{ $padT + $plotH * .33 + 4 }}" text-anchor="end">{{ number_format(round($chartMax * .66)) }}</text>
+                <text x="{{ $padL - 8 }}" y="{{ $padT + $plotH * .66 + 4 }}" text-anchor="end">{{ number_format(round($chartMax * .33)) }}</text>
+                <text x="{{ $padL - 8 }}" y="{{ $padT + $plotH + 4 }}" text-anchor="end">0</text>
               </g>
 
-              <!-- highlighted last point -->
-              <line x1="680" y1="37.9" x2="680" y2="220" stroke="var(--line-on-light)" stroke-width="1" stroke-dasharray="3 3"/>
-              <circle cx="680" cy="37.9" r="5.5" fill="var(--ink)" stroke="var(--yellow)" stroke-width="2"/>
-              <rect x="646" y="8" width="68" height="22" rx="6" fill="var(--ink)"/>
-              <text x="680" y="23" text-anchor="middle" font-family="'Space Mono', monospace" font-size="11" font-weight="700" fill="var(--yellow)">592 today</text>
+              <path id="chartArea" class="chart-area-fill" d="{{ $areaPath }}"/>
+              <path id="chartLine" class="chart-line" d="{{ $linePath }}"/>
 
-              <!-- x-axis labels -->
-              <g font-family="'Manrope', sans-serif" font-size="11" fill="var(--text-muted)">
-                <text x="40" y="245" text-anchor="middle">Mon</text>
-                <text x="146.7" y="245" text-anchor="middle">Tue</text>
-                <text x="253.3" y="245" text-anchor="middle">Wed</text>
-                <text x="360" y="245" text-anchor="middle">Thu</text>
-                <text x="466.7" y="245" text-anchor="middle">Fri</text>
-                <text x="573.3" y="245" text-anchor="middle">Sat</text>
-                <text x="680" y="245" text-anchor="middle">Sun</text>
+              <g id="chartDots">
+                @foreach ($points as $p)
+                  <circle class="chart-dot" cx="{{ $p['x'] }}" cy="{{ $p['y'] }}" r="3.5"/>
+                @endforeach
+              </g>
+
+              <g id="chartXLabels" class="chart-x-label">
+                @foreach ($points as $i => $p)
+                  @if ($i % max(1, intdiv(count($points), 8)) === 0)
+                    <text x="{{ $p['x'] }}" y="{{ $chartH - 12 }}" text-anchor="middle">{{ \Carbon\Carbon::parse($p['date'])->format('M d') }}</text>
+                  @endif
+                @endforeach
               </g>
             </svg>
           </div>
         </div>
       </div>
 
-      <div class="panel">
-        <div class="panel-head">
-          <h2>Visitor breakdown</h2>
-          <a href="#">Details</a>
-        </div>
-        <div class="breakdown-section">
-          <div class="breakdown-title">Top sources</div>
-          <div class="source-row">
-            <span class="source-name">Direct</span>
-            <div class="source-bar-track"><div class="source-bar-fill" style="width:38%"></div></div>
-            <span class="source-pct">38%</span>
-          </div>
-          <div class="source-row">
-            <span class="source-name">Google</span>
-            <div class="source-bar-track"><div class="source-bar-fill" style="width:31%"></div></div>
-            <span class="source-pct">31%</span>
-          </div>
-          <div class="source-row">
-            <span class="source-name">Instagram</span>
-            <div class="source-bar-track"><div class="source-bar-fill" style="width:19%"></div></div>
-            <span class="source-pct">19%</span>
-          </div>
-          <div class="source-row">
-            <span class="source-name">Referral</span>
-            <div class="source-bar-track"><div class="source-bar-fill" style="width:12%"></div></div>
-            <span class="source-pct">12%</span>
-          </div>
-        </div>
-
-        <div class="breakdown-section">
-          <div class="breakdown-title">Daily traffic</div>
-          @if ($dailyTraffic->isNotEmpty())
-            <ul class="activity-list">
-              @foreach ($dailyTraffic as $day)
-                <li class="activity-item">
-                  <div>
-                    <div class="activity-path">{{ \Carbon\Carbon::parse($day->date)->format('M d') }}</div>
-                    <div class="activity-meta">{{ $day->count }} visits</div>
-                  </div>
-                  <span class="activity-pill">{{ $day->count }}x</span>
-                </li>
-              @endforeach
-            </ul>
-          @else
-            <p class="activity-empty">No daily traffic yet.</p>
-          @endif
-        </div>
-
-        <div class="breakdown-section">
-          <div class="breakdown-title">Top pages</div>
-          @if ($topPages->isNotEmpty())
-            <ul class="activity-list">
-              @foreach ($topPages as $page)
-                <li class="activity-item">
-                  <div>
-                    <div class="activity-path">{{ $page->url }}</div>
-                    <div class="activity-meta">Most visited page</div>
-                  </div>
-                  <span class="activity-pill">{{ $page->count }}x</span>
-                </li>
-              @endforeach
-            </ul>
-          @else
-            <p class="activity-empty">No page data yet.</p>
-          @endif
-        </div>
-
-        <div class="breakdown-section">
-          <div class="breakdown-title">Visitor activity</div>
-          @if ($recentVisits->isNotEmpty())
-            <ul class="activity-list">
-              @foreach ($recentVisits as $visit)
-                <li class="activity-item">
-                  <div>
-                    <div class="activity-path">{{ $visit->url }}</div>
-                    <div class="activity-meta">{{ $visit->created_at->diffForHumans() }}</div>
-                  </div>
-                  <span class="activity-pill">{{ $visit->ip_address ?? 'unknown' }}</span>
-                </li>
-              @endforeach
-            </ul>
-          @else
-            <p class="activity-empty">No visitor activity recorded yet.</p>
-          @endif
-        </div>
-      </div>
     </div>
   </main>
 
 </div>
 
+<script src="{{ asset('js/graph.js') }}"></script>
 <script>
   var toggle = document.getElementById('menuToggle');
   var sidebar = document.getElementById('sidebar');

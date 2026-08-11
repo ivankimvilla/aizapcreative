@@ -18,8 +18,18 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
                 </span>
                 <div class="booking-toast__body">
-                    <div class="booking-toast__title">Booking confirmed</div>
+                    <div class="booking-toast__title">Booking request sent</div>
                     <div class="booking-toast__text">{{ session('status') }}</div>
+                </div>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="booking-toast booking-toast--error" role="alert">
+                <span class="booking-toast__icon" aria-hidden="true">!</span>
+                <div class="booking-toast__body">
+                    <div class="booking-toast__title">Booking could not be submitted</div>
+                    <div class="booking-toast__text">{{ $errors->first() }}</div>
                 </div>
             </div>
         @endif
