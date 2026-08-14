@@ -347,11 +347,35 @@
         var emailInput = document.getElementById('cf-email');
         var isSubmitting = false;
 
-        function submitFormData() {
+        function resetSubmitButton(button) {
+            if (!button) return;
+            button.disabled = false;
+            button.textContent = button.dataset.originalText || 'Send Message';
+        }
+
+        function submitFormData(submitButton) {
             clearFormAlerts();
-            var submitButton = form.querySelector('button[type="submit"]'); if (submitButton) submitButton.disabled = true;
+            if (submitButton) {
+                submitButton.disabled = true;
+                // NOTE (FIX): removed the duplicate
+                //   submitButton.dataset.originalText = submitButton.textContent;
+                //   submitButton.textContent = 'Sending...';
+                // that used to live here. The submit handler below already
+                // captures the real original text ("Send Message") and sets
+                // "Sending..." BEFORE calling submitFormData(). Doing it again
+                // here re-captured "Sending..." as the "original" text, so
+                // resetSubmitButton() on success restored the button to
+                // "Sending..." instead of "Send Message" — the bug in the
+                // screenshot (green success banner, button stuck loading).
+            }
+
             var email = emailInput && emailInput.value ? emailInput.value.trim() : '';
-            if (!email) { form.insertBefore(createAlert('error', 'Missing email', 'Please enter your email address.'), form.firstChild); if (submitButton) submitButton.disabled = false; isSubmitting = false; return; }
+            if (!email) {
+                form.insertBefore(createAlert('error', 'Missing email', 'Please enter your email address.'), form.firstChild);
+                resetSubmitButton(submitButton);
+                isSubmitting = false;
+                return;
+            }
 
             var fd = new FormData(form);
             var action = form.getAttribute('action') || window.location.href;
@@ -406,7 +430,7 @@
                         contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
                     form.reset();
-                    if (submitButton) submitButton.disabled = false;
+                    resetSubmitButton(submitButton);
                     if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && grecaptcha.enterprise.reset) {
                         grecaptcha.enterprise.reset();
                     }
@@ -415,7 +439,9 @@
                 .catch(function (error) {
                     var messages = extractErrorMessages(error, null);
                     var errAlert = createAlert('error', "Couldn't send message", null, messages);
-                    form.insertBefore(errAlert, form.firstChild); if (submitButton) submitButton.disabled = false; isSubmitting = false;
+                    form.insertBefore(errAlert, form.firstChild);
+                    resetSubmitButton(submitButton);
+                    isSubmitting = false;
                 });
         }
 
@@ -424,19 +450,30 @@
             if (isSubmitting) return;
             isSubmitting = true;
             clearFormAlerts();
-            var submitButton = form.querySelector('button[type="submit"]'); if (submitButton) submitButton.disabled = true;
+            var submitButton = form.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.dataset.originalText = submitButton.textContent;
+                submitButton.textContent = 'Sending...';
+            }
+
             var email = emailInput && emailInput.value ? emailInput.value.trim() : '';
-            if (!email) { form.insertBefore(createAlert('error', 'Missing email', 'Please enter your email address.'), form.firstChild); if (submitButton) submitButton.disabled = false; isSubmitting = false; return; }
+            if (!email) {
+                form.insertBefore(createAlert('error', 'Missing email', 'Please enter your email address.'), form.firstChild);
+                resetSubmitButton(submitButton);
+                isSubmitting = false;
+                return;
+            }
 
             executeRecaptcha('contact', form).then(function (token) {
                 var input = getRecaptchaInput(form);
                 if (input) {
                     input.value = token || '';
                 }
-                submitFormData();
+                submitFormData(submitButton);
             }).catch(function (error) {
                 form.insertBefore(createAlert('error', 'reCAPTCHA failed', error && error.message ? error.message : 'Unable to verify reCAPTCHA.'), form.firstChild);
-                if (submitButton) submitButton.disabled = false;
+                resetSubmitButton(submitButton);
                 isSubmitting = false;
             });
         });

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RecaptchaEnterprise;
+use App\Mail\NewQuoteRequest;
 use App\Models\ContactMessage;
 use App\Models\Quote;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class QuoteController extends Controller
 {
@@ -42,10 +45,31 @@ class QuoteController extends Controller
             'phone' => $validated['phone'] ?? null,
             'company' => $validated['company'] ?? null,
             'service' => $validated['service'],
+            'price' => $request->input('price', null),
             'message' => $request->input('message', ''),
         ];
 
-        Quote::create($data);
+        $quote = Quote::create($data);
+
+        Log::info('DEBUG_QUOTE_BEFORE_MAIL', ['quote_id' => $quote->id, 'email' => $quote->email]);
+
+        try {
+            Mail::to(env('MAIL_TO_ADDRESS', config('mail.from.address')))->send(new NewQuoteRequest([
+                'name' => $quote->name,
+                'email' => $quote->email,
+                'phone' => $quote->phone,
+                'company' => $quote->company,
+                'service' => $quote->service,
+                'message' => $quote->message,
+            ]));
+            Log::info('DEBUG_QUOTE_AFTER_MAIL', ['quote_id' => $quote->id]);
+        } catch (\Throwable $e) {
+            Log::warning('Quote request email failed to send.', [
+                'quote_id' => $quote->id,
+                'email' => $quote->email,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         $packageDetails = [
             'AI Commercial Ads' => [

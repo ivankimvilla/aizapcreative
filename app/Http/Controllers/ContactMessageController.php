@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\RecaptchaEnterprise;
+use App\Mail\ContactReply;
+use App\Mail\NewContactMessage;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\ContactReply;
 
 class ContactMessageController extends Controller
 {
@@ -38,6 +40,7 @@ class ContactMessageController extends Controller
             'id' => ['required', 'integer', 'exists:contact_messages,id'],
             'subject' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string', 'max:10000'],
+            'is_quote_request' => ['sometimes', 'boolean'],
         ]);
 
         $message = ContactMessage::find($validated['id']);
@@ -46,7 +49,12 @@ class ContactMessageController extends Controller
         }
 
         try {
-            Mail::to($message->email)->send(new ContactReply($validated['subject'], $validated['body'], $message->name));
+            Mail::to($message->email)->send(new ContactReply(
+                $validated['subject'],
+                $validated['body'],
+                $message->name,
+                (bool) ($validated['is_quote_request'] ?? false)
+            ));
         } catch (\Throwable $e) {
             return response()->json(['error' => 'Failed to send email.'], 500);
         }
@@ -111,7 +119,22 @@ class ContactMessageController extends Controller
             'message' => $validated['message'],
         ];
 
-        ContactMessage::create($data);
+        $message = ContactMessage::create($data);
+
+        try {
+            Mail::to(env('MAIL_TO_ADDRESS', config('mail.from.address')))->send(new NewContactMessage([
+                'name' => $message->name,
+                'email' => $message->email,
+                'phone' => $message->phone,
+                'subject' => $message->subject,
+                'message' => $message->message,
+            ]));
+        } catch (\Throwable $e) {
+            Log::warning('Contact message email failed to send.', [
+                'email' => $message->email,
+                'error' => $e->getMessage(),
+            ]);
+        }
 
         if ($request->expectsJson()) {
             return response()->json([

@@ -12,10 +12,19 @@ window.addEventListener('resize', sizeInboxPanel);
 sizeInboxPanel();
 
 var VIEWED_KEY = 'aizap_viewed_messages';
+var REPLIED_KEY = 'aizap_replied_messages';
 
 function getViewedIds() {
     try {
         return JSON.parse(localStorage.getItem(VIEWED_KEY)) || [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function getRepliedIds() {
+    try {
+        return JSON.parse(localStorage.getItem(REPLIED_KEY)) || [];
     } catch (e) {
         return [];
     }
@@ -31,7 +40,27 @@ function markAsViewed(id) {
     }
 }
 
+function markAsReplied(id) {
+    var replied = getRepliedIds();
+    if (replied.indexOf(id) === -1) {
+        replied.push(id);
+        try {
+            localStorage.setItem(REPLIED_KEY, JSON.stringify(replied));
+        } catch (e) { }
+    }
+
+    var wrap = document.querySelector('.message-row-wrap[data-msg-id="' + id + '"]');
+    if (wrap) {
+        wrap.classList.add('replied');
+        var badge = wrap.querySelector('.new-badge');
+        if (badge) {
+            badge.textContent = 'Replied';
+        }
+    }
+}
+
 var viewedIds = getViewedIds();
+var repliedIds = getRepliedIds();
 
 var selectAllMessages = document.getElementById('selectAllMessages');
 var deleteSelectedMessages = document.getElementById('deleteSelectedMessages');
@@ -145,6 +174,14 @@ function applyViewedState() {
         if (viewedIds.indexOf(wrap.dataset.msgId) !== -1 || wrap.dataset.isRead === '1') {
             wrap.classList.add('viewed');
         }
+
+        if (repliedIds.indexOf(wrap.dataset.msgId) !== -1) {
+            wrap.classList.add('replied');
+            var badge = wrap.querySelector('.new-badge');
+            if (badge) {
+                badge.textContent = 'Replied';
+            }
+        }
     });
 }
 
@@ -195,6 +232,12 @@ if (messageList) {
                 dateWrap.style.paddingLeft = '0';
                 dateWrap.style.borderLeft = 'none';
             }
+        }
+
+        var replyButton = document.getElementById('replyBtn');
+        if (replyButton) {
+            replyButton.dataset.messageId = wrap.dataset.msgId;
+            replyButton.dataset.subject = wrap.dataset.subject || '';
         }
 
         document.getElementById('inbox').classList.add('viewing');
@@ -249,13 +292,12 @@ if (replyBtn) {
         if (!email || email === 'Not provided') return;
 
         var fullName = document.getElementById('fullViewName').textContent.trim();
-        var senderAccount = 'aizapcreative@gmail.com';
-        var selectedSubject = document.getElementById('fullViewRole') ? document.getElementById('fullViewRole').textContent.trim() : '';
+        var selectedSubject = replyBtn.dataset.subject || '';
+        if (!selectedSubject) {
+            selectedSubject = document.getElementById('fullViewRole') ? document.getElementById('fullViewRole').textContent.trim() : '';
+        }
         var isQuoteRequest = quoteSubjects.indexOf(selectedSubject) !== -1;
         var subject = isQuoteRequest ? 'Aizap Creatives quote request' : 'Aizap Creatives';
-
-        var logoUrl = 'https://aizapcreative.com/logo.png';
-        var logoHtml = '<img src="' + logoUrl + '" alt="Aizap Creatives" style="max-width:240px;height:auto;margin-bottom:12px;">';
 
         var brandFooter = [
             'Warm regards,',
@@ -263,8 +305,9 @@ if (replyBtn) {
             'https://aizapcreative.com'
         ].join('\n');
 
-        var greeting = 'Hi ' + (fullName || 'there') + ',\n\n';
         var quoteBody = [
+            'Hi ' + (fullName || 'there') + ',',
+            '',
             'Thank you for your quote request with Aizap Creatives.',
             'We appreciate the opportunity to review your project requirements and scope.',
             '',
@@ -272,6 +315,8 @@ if (replyBtn) {
         ].join('\n');
 
         var normalBody = [
+            'Hi ' + (fullName || 'there') + ',',
+            '',
             'Thank you for reaching out to Aizap Creatives.',
             'We appreciate the opportunity to learn more about your goals and requirements.',
             '',
@@ -279,13 +324,42 @@ if (replyBtn) {
         ].join('\n');
 
         var mainBody = isQuoteRequest ? quoteBody : normalBody;
-        var bodyText = greeting + mainBody + '\n\n' + brandFooter;
-        var body = logoHtml + '\n\n' + bodyText;
+        var messageBody = mainBody + '\n\n' + brandFooter;
+        var messageId = replyBtn.dataset.messageId || window.__currentMessageId || null;
 
-        var url = 'https://mail.google.com/mail/?view=cm&fs=1&authuser=' + encodeURIComponent(senderAccount)
-            + '&to=' + encodeURIComponent(email)
-            + '&su=' + encodeURIComponent(subject)
-            + '&body=' + encodeURIComponent(body);
-        window.open(url, '_blank');
+        if (!messageId) {
+            alert('Unable to determine message id for reply.');
+            return;
+        }
+
+        var csrfTokenMeta = document.querySelector('meta[name="csrf-token"]');
+        var csrf = csrfTokenMeta ? csrfTokenMeta.content : '';
+
+        fetch('/admin/messages/reply', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': csrf,
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: messageId,
+                subject: subject,
+                body: messageBody,
+                is_quote_request: isQuoteRequest
+            })
+        }).then(function (resp) {
+            if (!resp.ok) throw new Error('Send failed');
+            return resp.json();
+        }).then(function (result) {
+            if (result.sent) {
+                markAsReplied(messageId);
+                showDeleteToast('Reply sent successfully.', 'success');
+            } else {
+                throw new Error('Send failed');
+            }
+        }).catch(function () {
+            showDeleteToast('Reply failed. Please try again.', 'error');
+        });
     });
 }

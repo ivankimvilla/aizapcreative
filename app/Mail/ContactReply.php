@@ -13,15 +13,17 @@ class ContactReply extends Mailable
     public $subjectLine;
     public $bodyText;
     public $recipientName;
+    public $isQuoteRequest;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(string $subjectLine, string $bodyText, ?string $recipientName = null)
+    public function __construct(string $subjectLine, string $bodyText, ?string $recipientName = null, bool $isQuoteRequest = false)
     {
         $this->subjectLine = $subjectLine;
         $this->bodyText = $bodyText;
         $this->recipientName = $recipientName;
+        $this->isQuoteRequest = $isQuoteRequest;
     }
 
     /**
@@ -34,6 +36,7 @@ class ContactReply extends Mailable
                     ->with([
                         'bodyText' => $this->bodyText,
                         'recipientName' => $this->recipientName,
+                        'isQuoteRequest' => $this->isQuoteRequest,
                     ]);
     }
 }

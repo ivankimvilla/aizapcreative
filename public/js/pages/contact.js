@@ -47,10 +47,10 @@
                 return;
             }
 
-            if (retryCount < 5) {
+            if (retryCount < 2) {
                 window.setTimeout(function () {
                     executeRecaptcha(action, retryCount + 1).then(resolve).catch(reject);
-                }, 200);
+                }, 120);
                 return;
             }
 
@@ -210,6 +210,12 @@
         clearAlerts(form);
 
         var submitButton = form.querySelector('.contact-submit');
+        isSubmitting = true;
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.dataset.originalText = submitButton.textContent;
+            submitButton.textContent = 'Sending...';
+        }
 
         executeRecaptcha('contact').then(function (token) {
             var input = document.getElementById('g-recaptcha-response');
@@ -220,13 +226,13 @@
             if (!token) {
                 showRecaptchaError(form);
                 resetRecaptcha();
-                if (submitButton) submitButton.disabled = false;
                 isSubmitting = false;
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = submitButton.dataset.originalText || 'Send Message';
+                }
                 return;
             }
-
-            isSubmitting = true;
-            if (submitButton) submitButton.disabled = true;
 
             var fd = new FormData(form);
             var action = form.getAttribute('action') || window.location.href;
@@ -252,7 +258,10 @@
                     form.reset();
                     resetRecaptcha();
                     isSubmitting = false;
-                    if (submitButton) submitButton.disabled = false;
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.textContent = submitButton.dataset.originalText || 'Send Message';
+                    }
                 })
                 .catch(function (error) {
                     var messages = [];
@@ -274,8 +283,19 @@
 
                     resetRecaptcha();
                     isSubmitting = false;
-                    if (submitButton) submitButton.disabled = false;
+                    if (submitButton) {
+                        submitButton.disabled = false;
+                        submitButton.textContent = submitButton.dataset.originalText || 'Send Message';
+                    }
                 });
+        }).catch(function (error) {
+            showGeneralError(form, [error && error.message ? error.message : 'Unable to verify reCAPTCHA.']);
+            resetRecaptcha();
+            isSubmitting = false;
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = submitButton.dataset.originalText || 'Send Message';
+            }
         });
     });
 })();

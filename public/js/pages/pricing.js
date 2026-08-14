@@ -1,93 +1,174 @@
-function getRecaptchaInput() {
-    return document.querySelector('input[name="g-recaptcha-response"]');
-}
-
-function getRecaptchaSiteKey() {
-    var input = getRecaptchaInput();
-    return input ? input.dataset.sitekey : '';
-}
-
-function executeRecaptcha(action, retryCount = 0) {
-    return new Promise(function (resolve, reject) {
-        var siteKey = getRecaptchaSiteKey();
-        if (!siteKey) {
-            return reject(new Error('reCAPTCHA site key is missing.'));
+(function () {
+    function createSuccessToast(message) {
+        if (typeof window.showToast === 'function') {
+            window.showToast(message, 'success');
+            return;
         }
 
-        function execute() {
-            if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && typeof grecaptcha.enterprise.execute === 'function') {
-                grecaptcha.enterprise.execute(siteKey, { action: action }).then(resolve).catch(function (error) {
-                    reject(error || new Error('reCAPTCHA execution failed.'));
-                });
+        var toast = document.createElement('div');
+        toast.className = 'toast toast--success';
+        toast.setAttribute('role', 'status');
+        toast.textContent = message;
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(8px)';
+        toast.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+
+        var container = document.getElementById('toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toast-container';
+            container.style.position = 'fixed';
+            container.style.right = '20px';
+            container.style.bottom = '20px';
+            container.style.zIndex = '9999';
+            container.style.display = 'flex';
+            container.style.flexDirection = 'column';
+            container.style.gap = '12px';
+            document.body.appendChild(container);
+        }
+
+        container.appendChild(toast);
+
+        requestAnimationFrame(function () {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateY(0)';
+        });
+
+        setTimeout(function () {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(8px)';
+            setTimeout(function () {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 220);
+        }, 4200);
+    }
+
+    function createHeaderStatus(titleText, messageText) {
+        var headerStatus = document.createElement('div');
+        headerStatus.className = 'site-header__status';
+        headerStatus.setAttribute('role', 'status');
+
+        var icon = document.createElement('span');
+        icon.className = 'site-header__status-icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        headerStatus.appendChild(icon);
+
+        var body = document.createElement('div');
+        var title = document.createElement('div');
+        title.className = 'site-header__status-title';
+        title.textContent = titleText;
+
+        var text = document.createElement('p');
+        text.textContent = messageText;
+
+        body.appendChild(title);
+        body.appendChild(text);
+        headerStatus.appendChild(body);
+
+        return headerStatus;
+    }
+
+    function showQuoteSuccessState(message) {
+        var header = document.querySelector('.site-header');
+        if (header) {
+            var existingStatus = header.querySelector('.site-header__status');
+            if (existingStatus) {
+                existingStatus.remove();
+            }
+
+            var headerStatus = createHeaderStatus('Request sent', message);
+            header.appendChild(headerStatus);
+
+            window.setTimeout(function () {
+                headerStatus.style.opacity = '0';
+                headerStatus.style.transform = 'translateX(-50%) translateY(-4px)';
+            }, 4200);
+
+            window.setTimeout(function () {
+                if (headerStatus && headerStatus.parentNode) {
+                    headerStatus.parentNode.removeChild(headerStatus);
+                }
+            }, 4450);
+            return;
+        }
+
+        createSuccessToast(message);
+    }
+
+    function getRecaptchaInput() {
+        return document.querySelector('input[name="g-recaptcha-response"]');
+    }
+
+    function getRecaptchaSiteKey() {
+        var input = getRecaptchaInput();
+        return input ? input.dataset.sitekey : '';
+    }
+
+    function executeRecaptcha(action, retryCount) {
+        retryCount = retryCount || 0;
+
+        return new Promise(function (resolve, reject) {
+            var siteKey = getRecaptchaSiteKey();
+            if (!siteKey) {
+                return reject(new Error('reCAPTCHA site key is missing.'));
+            }
+
+            function execute() {
+                if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && typeof grecaptcha.enterprise.execute === 'function') {
+                    grecaptcha.enterprise.execute(siteKey, { action: action }).then(resolve).catch(function (error) {
+                        reject(error || new Error('reCAPTCHA execution failed.'));
+                    });
+                    return;
+                }
+
+                if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.execute === 'function') {
+                    grecaptcha.execute(siteKey, { action: action }).then(resolve).catch(function (error) {
+                        reject(error || new Error('reCAPTCHA execution failed.'));
+                    });
+                    return;
+                }
+
+                reject(new Error('reCAPTCHA is not loaded.'));
+            }
+
+            if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && typeof grecaptcha.enterprise.ready === 'function') {
+                try {
+                    grecaptcha.enterprise.ready(execute);
+                } catch (e) {
+                    reject(e);
+                }
                 return;
             }
 
-            if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.execute === 'function') {
-                grecaptcha.execute(siteKey, { action: action }).then(resolve).catch(function (error) {
-                    reject(error || new Error('reCAPTCHA execution failed.'));
-                });
+            if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.ready === 'function') {
+                try {
+                    grecaptcha.ready(execute);
+                } catch (e) {
+                    reject(e);
+                }
+                return;
+            }
+
+            if (retryCount < 2) {
+                window.setTimeout(function () {
+                    executeRecaptcha(action, retryCount + 1).then(resolve).catch(reject);
+                }, 120);
                 return;
             }
 
             reject(new Error('reCAPTCHA is not loaded.'));
-        }
+        });
+    }
 
-        if (typeof grecaptcha !== 'undefined' && grecaptcha.enterprise && typeof grecaptcha.enterprise.ready === 'function') {
-            try {
-                grecaptcha.enterprise.ready(execute);
-            } catch (e) {
-                reject(e);
-            }
-            return;
-        }
-
-        if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.ready === 'function') {
-            try {
-                grecaptcha.ready(execute);
-            } catch (e) {
-                reject(e);
-            }
-            return;
-        }
-
-        if (retryCount < 5) {
-            window.setTimeout(function () {
-                executeRecaptcha(action, retryCount + 1).then(resolve).catch(reject);
-            }, 200);
-            return;
-        }
-
-        reject(new Error('reCAPTCHA is not loaded.'));
-    });
-}
-
-function createSuccessToast(message) {
-    var alert = document.createElement('div');
-    alert.className = 'form-alert form-alert--success form-alert--toast';
-    alert.setAttribute('role', 'status');
-    alert.innerHTML = '<span class="form-alert--success__icon" aria-hidden="true">' +
-        '<svg viewBox="0 0 24 24" fill="none"><polyline points="4 12 10 18 20 6" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline></svg>' +
-        '</span>' +
-        '<div class="form-alert--success__body">' +
-        '<div class="form-alert--success__title">Quote request submitted</div>' +
-        '<div class="form-alert--success__text">' + message + '</div>' +
-        '</div>';
-
-    document.body.appendChild(alert);
-    window.setTimeout(function () {
-        if (alert && alert.parentNode) {
-            alert.parentNode.removeChild(alert);
-        }
-    }, 5200);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-    var serviceSelect = document.getElementById('quote_service');
+    var quoteSection = document.querySelector('.quote-section');
+    var closeBtn = quoteSection ? quoteSection.querySelector('.quote-section__close') : null;
     var quotePackageName = document.getElementById('quotePackageName');
     var quotePackageDescription = document.getElementById('quotePackageDescription');
     var quotePackageFeatures = document.getElementById('quotePackageFeatures');
-    var quoteSection = document.querySelector('.quote-section');
-    var closeBtn = quoteSection ? quoteSection.querySelector('.quote-section__close') : null;
+    var serviceSelect = document.getElementById('quote_service');
 
     var serviceDetails = {
         'AI Commercial Ads': {
@@ -99,8 +180,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Cinematic quality',
                 'Fast turnaround',
                 'Multiple formats',
-                'Commercial use',
-            ],
+                'Commercial use'
+            ]
         },
         'Product Advertising': {
             packageName: 'Product Advertising',
@@ -111,8 +192,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Multiple aspect ratios',
                 'High-quality visuals',
                 'Engaging storytelling',
-                'Commercial use',
-            ],
+                'Commercial use'
+            ]
         },
         'Storytelling & Short Films': {
             packageName: 'Storytelling & Short Films',
@@ -123,8 +204,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Character consistency',
                 'Creative direction',
                 'Background score',
-                'Multiple revisions',
-            ],
+                'Multiple revisions'
+            ]
         },
         'Custom Projects': {
             packageName: 'Custom Projects',
@@ -135,16 +216,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Explainer videos',
                 'Social media content',
                 'Creative concepts',
-                'And more',
-            ],
-        },
+                'And more'
+            ]
+        }
     };
 
     function updateSelectionDisplay(service) {
         var details = serviceDetails[service] || {
             packageName: 'None selected',
             description: 'Choose a package to see details and pricing.',
-            features: [],
+            features: []
         };
 
         if (quotePackageName) {
@@ -201,7 +282,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Keep the "Selected package" display in sync with the Project Type dropdown
     if (serviceSelect) {
         serviceSelect.addEventListener('change', function () {
             updateSelectionDisplay(serviceSelect.value);
@@ -227,6 +307,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var quoteForm = document.getElementById('quoteForm');
     if (quoteForm) {
         var quoteSubmitting = false;
+
         quoteForm.addEventListener('submit', function (event) {
             if (quoteSubmitting) {
                 event.preventDefault();
@@ -235,9 +316,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             event.preventDefault();
             quoteSubmitting = true;
+
             var submitButton = quoteForm.querySelector('button[type="submit"]');
             if (submitButton) {
                 submitButton.disabled = true;
+                submitButton.dataset.originalText = submitButton.textContent;
+                submitButton.textContent = 'Sending...';
             }
 
             var recaptchaInput = getRecaptchaInput();
@@ -248,6 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 quoteForm.insertBefore(errorMessage, quoteForm.firstChild);
                 if (submitButton) {
                     submitButton.disabled = false;
+                    submitButton.textContent = submitButton.dataset.originalText || 'Send Request';
                 }
                 quoteSubmitting = false;
                 return;
@@ -258,8 +343,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 var fd = new FormData(quoteForm);
                 var action = quoteForm.getAttribute('action') || window.location.href;
-                var headers = { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
+                var headers = { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' };
                 var csrfToken = document.querySelector('meta[name="csrf-token"]');
+
                 if (csrfToken && csrfToken.getAttribute('content')) {
                     headers['X-CSRF-TOKEN'] = csrfToken.getAttribute('content');
                 }
@@ -281,12 +367,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         });
                     })
                     .then(function (data) {
-                        createSuccessToast(data.message || 'Thank you for your request. We will be in touch soon.');
+                        var successMessage = data.message || 'Thank you for your request. We will be in touch soon.';
                         closeQuoteSection();
                         quoteForm.reset();
+                        setTimeout(function () {
+                            showQuoteSuccessState(successMessage);
+                        }, 200);
                         quoteSubmitting = false;
                         if (submitButton) {
                             submitButton.disabled = false;
+                            submitButton.textContent = submitButton.dataset.originalText || 'Send Request';
                         }
                     })
                     .catch(function (error) {
@@ -303,6 +393,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         quoteForm.insertBefore(errorMessage, quoteForm.firstChild);
                         if (submitButton) {
                             submitButton.disabled = false;
+                            submitButton.textContent = submitButton.dataset.originalText || 'Send Request';
                         }
                         quoteSubmitting = false;
                     });
@@ -313,6 +404,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 quoteForm.insertBefore(errorMessage, quoteForm.firstChild);
                 if (submitButton) {
                     submitButton.disabled = false;
+                    submitButton.textContent = submitButton.dataset.originalText || 'Send Request';
                 }
                 quoteSubmitting = false;
             });
@@ -324,4 +416,4 @@ document.addEventListener('DOMContentLoaded', function () {
             closeQuoteSection();
         }
     });
-});
+})();

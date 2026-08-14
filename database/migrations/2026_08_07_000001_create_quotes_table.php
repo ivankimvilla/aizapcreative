@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('company')->nullable();
             $table->string('service');
-            $table->string('price');
+            $table->string('price')->nullable();
             $table->text('message')->nullable();
             $table->timestamps();
         });

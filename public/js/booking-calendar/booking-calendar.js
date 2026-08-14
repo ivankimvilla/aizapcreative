@@ -632,12 +632,15 @@ if (bookingForm) {
         var submitButton = bookingForm.querySelector('button[type="submit"]');
         if (submitButton) {
             submitButton.disabled = true;
+            submitButton.dataset.originalText = submitButton.textContent;
+            submitButton.textContent = 'Sending...';
         }
         var recaptchaInput = getRecaptchaInput();
         if (!recaptchaInput) {
             showBookingError("reCAPTCHA is not configured.");
             if (submitButton) {
                 submitButton.disabled = false;
+                submitButton.textContent = submitButton.dataset.originalText || 'Book Call';
             }
             bookingSubmitting = false;
             return;
@@ -649,6 +652,7 @@ if (bookingForm) {
             showBookingError(error && error.message ? error.message : "Unable to verify reCAPTCHA.");
             if (submitButton) {
                 submitButton.disabled = false;
+                submitButton.textContent = submitButton.dataset.originalText || 'Book Call';
             }
             bookingSubmitting = false;
         });

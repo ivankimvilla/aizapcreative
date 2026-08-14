@@ -123,6 +123,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/boards', [BookingAdminController::class, 'index'])->name('admin.boards');
     Route::delete('/admin/boards/bulk-delete', [BookingAdminController::class, 'bulkDestroy'])->name('admin.boards.bulk-destroy');
     Route::patch('/admin/boards/{booking}/complete', [BookingAdminController::class, 'complete'])->name('admin.boards.complete');
+    Route::patch('/admin/boards/{booking}/confirm', [BookingAdminController::class, 'complete'])->name('admin.boards.confirm');
     Route::patch('/admin/boards/{booking}/cancel', [BookingAdminController::class, 'cancel'])->name('admin.boards.cancel');
     Route::delete('/admin/boards/{booking}', [BookingAdminController::class, 'destroy'])->name('admin.boards.destroy');
 });
