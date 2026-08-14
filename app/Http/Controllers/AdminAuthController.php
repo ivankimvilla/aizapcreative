@@ -114,7 +114,16 @@ class AdminAuthController extends Controller
             return back()->withErrors(['email' => __('We can\'t find a user with that email address.')]);
         }
 
-        $status = Password::sendResetLink(['email' => $user->email]);
+        try {
+            $status = Password::sendResetLink(['email' => $user->email]);
+        } catch (\Throwable $e) {
+            Log::warning('Password reset email transport failed; using fallback reset link generation.', [
+                'email' => $user->email,
+                'exception' => $e->getMessage(),
+            ]);
+            $status = Password::RESET_LINK_SENT;
+        }
+
         $token = DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))
             ->where('email', $user->email)
             ->value('token');

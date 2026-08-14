@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Database\Factories\BookingFactory;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'service',
         'name',
@@ -25,4 +28,9 @@ class Booking extends Model
         'starts_at' => 'datetime',
         'is_read' => 'boolean',
     ];
+
+    protected static function newFactory(): BookingFactory
+    {
+        return BookingFactory::new();
+    }
 }

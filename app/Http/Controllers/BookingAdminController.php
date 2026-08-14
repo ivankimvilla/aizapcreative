@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BookingStatusUpdated;
 use App\Models\Booking;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class BookingAdminController extends Controller
 {
@@ -30,12 +32,32 @@ class BookingAdminController extends Controller
     {
         $booking->update(['status' => 'completed']);
 
+        try {
+            Mail::to($booking->email)->send(new BookingStatusUpdated($booking, 'completed'));
+        } catch (\Throwable $e) {
+            \Log::warning('Booking completion email failed to send.', [
+                'booking_id' => $booking->id,
+                'email' => $booking->email,
+                'exception' => $e->getMessage(),
+            ]);
+        }
+
         return redirect()->route('admin.boards')->with('status', 'Booking marked as completed.');
     }
 
     public function confirm(Booking $booking)
     {
         $booking->update(['status' => 'confirmed']);
+
+        try {
+            Mail::to($booking->email)->send(new BookingStatusUpdated($booking, 'confirmed'));
+        } catch (\Throwable $e) {
+            \Log::warning('Booking confirmation email failed to send.', [
+                'booking_id' => $booking->id,
+                'email' => $booking->email,
+                'exception' => $e->getMessage(),
+            ]);
+        }
 
         return redirect()->route('admin.boards')->with('status', 'Booking confirmed.');
     }
