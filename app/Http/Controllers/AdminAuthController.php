@@ -152,7 +152,7 @@ class AdminAuthController extends Controller
             ? back()->with('status', __($status))
             : back()->with('status', __('Password reset link generated'));
 
-        if (app()->environment(['local', 'testing']) && $resetLink) {
+        if (app()->environment('testing') && $resetLink) {
             $response->with('reset_link', $resetLink);
         }
 
@@ -184,8 +184,10 @@ class AdminAuthController extends Controller
             }
         );
 
-        return $status === Password::PASSWORD_RESET
-            ? redirect()->route('admin.login')->with('status', __($status))
-            : back()->withErrors(['email' => [__($status)]]);
+        if ($status === Password::PASSWORD_RESET) {
+            return back()->with('status', 'Your password has been reset successfully. You may now sign in.');
+        }
+
+        return back()->withErrors(['email' => [__($status)]]);
     }
 }

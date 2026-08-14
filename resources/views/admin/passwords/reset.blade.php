@@ -66,13 +66,23 @@
 
                 <div class="field">
                     <label for="password">New password</label>
-                    <input id="password" name="password" type="password" placeholder="At least 8 characters" required>
+                    <div class="input-wrap">
+                        <input id="password" name="password" type="password" placeholder="At least 8 characters" required>
+                        <button class="eye-btn" type="button" data-target="password" aria-label="Show password">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
                     @error('password') <div class="field-error">{{ $message }}</div> @enderror
                 </div>
 
                 <div class="field">
                     <label for="password_confirmation">Confirm password</label>
-                    <input id="password_confirmation" name="password_confirmation" type="password" required>
+                    <div class="input-wrap">
+                        <input id="password_confirmation" name="password_confirmation" type="password" required>
+                        <button class="eye-btn" type="button" data-target="password_confirmation" aria-label="Show password confirmation">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        </button>
+                    </div>
                     @error('password_confirmation') <div class="field-error">{{ $message }}</div> @enderror
                 </div>
 
@@ -83,5 +93,6 @@
         </div>
     </div>
 
+    <script src="{{ asset('js/admin/change-password.js') }}"></script>
     </body>
     </html>
