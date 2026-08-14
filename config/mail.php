@@ -49,7 +49,7 @@ return [
              * Configure MAIL_TIMEOUT in your environment (Railway) — default is 5 seconds.
              */
             'timeout' => env('MAIL_TIMEOUT', 5),
-            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'http://localhost'), PHP_URL_HOST)),
+            'local_domain' => env('MAIL_EHLO_DOMAIN', parse_url((string) env('APP_URL', 'https://aizapcreative-production.up.railway.app'), PHP_URL_HOST)),
         ],
 
         'ses' => [
