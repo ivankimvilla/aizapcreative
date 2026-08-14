@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 
-class BookingStatusUpdated extends Mailable
+class BookingStatusUpdated extends Mailable implements ShouldQueue
 {
     use Queueable;
 

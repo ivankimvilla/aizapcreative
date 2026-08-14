@@ -33,7 +33,7 @@ class BookingAdminController extends Controller
         $booking->update(['status' => 'completed']);
 
         try {
-            Mail::to($booking->email)->send(new BookingStatusUpdated($booking, 'completed'));
+            Mail::to($booking->email)->queue(new BookingStatusUpdated($booking, 'completed'));
         } catch (\Throwable $e) {
             \Log::warning('Booking completion email failed to send.', [
                 'booking_id' => $booking->id,
@@ -50,7 +50,7 @@ class BookingAdminController extends Controller
         $booking->update(['status' => 'confirmed']);
 
         try {
-            Mail::to($booking->email)->send(new BookingStatusUpdated($booking, 'confirmed'));
+            Mail::to($booking->email)->queue(new BookingStatusUpdated($booking, 'confirmed'));
         } catch (\Throwable $e) {
             \Log::warning('Booking confirmation email failed to send.', [
                 'booking_id' => $booking->id,

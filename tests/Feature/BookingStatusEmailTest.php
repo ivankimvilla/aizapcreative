@@ -19,7 +19,7 @@ it('sends a confirmation email when a booking is confirmed', function () {
     $this->actingAs($admin)
         ->patch(route('admin.boards.confirm', $booking));
 
-    Mail::assertSent(\App\Mail\BookingStatusUpdated::class, function ($mail) use ($booking) {
+    Mail::assertQueued(\App\Mail\BookingStatusUpdated::class, function ($mail) use ($booking) {
         return $mail->hasTo($booking->email)
             && $mail->status === 'confirmed';
     });
@@ -37,7 +37,7 @@ it('sends a completed email when a booking is marked completed', function () {
     $this->actingAs($admin)
         ->patch(route('admin.boards.complete', $booking));
 
-    Mail::assertSent(\App\Mail\BookingStatusUpdated::class, function ($mail) use ($booking) {
+    Mail::assertQueued(\App\Mail\BookingStatusUpdated::class, function ($mail) use ($booking) {
         return $mail->hasTo($booking->email)
             && $mail->status === 'completed';
     });
