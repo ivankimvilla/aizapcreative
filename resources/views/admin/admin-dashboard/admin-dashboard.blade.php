@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/admin/dashboard/dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('css/admin/dashboard/notifications.css') }}">
 </head>
 <body>
 
@@ -37,48 +38,7 @@
         @endphp
         <h1>{{ $greeting }}, {{ $adminFirstName }}</h1>
       </div>
-      <div class="topbar-actions">
-        <button class="icon-btn" id="notificationButton" aria-label="Notifications" aria-expanded="false">
-          <span class="notification-badge">{{ $notificationsCount > 0 ? $notificationsCount : '' }}</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
-        </button>
-        <div class="notification-dropdown" id="notificationDropdown" aria-hidden="true">
-          <div class="notification-header">
-            <span>Notifications</span>
-            <div class="notification-actions">
-              <button type="button" class="notification-action" id="markAllReadButton" data-url="{{ route('admin.notifications.markAllRead') }}" {{ $notificationsCount === 0 ? 'disabled' : '' }}>Mark all read</button>
-            </div>
-          </div>
-          <div class="notification-subheader">
-            <span class="notification-header-badge">{{ $notificationsCount }} new</span>
-          </div>
-          <ul class="notification-list">
-            @forelse($notifications as $notification)
-              <li class="notification-item">
-                <div class="notification-item-main">
-                  <a href="{{ $notification['url'] }}">
-                    <span class="notification-icon notification-icon--{{ $notification['icon'] }}"></span>
-                    <div class="notification-content">
-                      <strong>{{ $notification['title'] }}</strong>
-                      <p>{{ $notification['description'] }}</p>
-                    </div>
-                    <span class="notification-meta">{{ $notification['meta'] }}</span>
-                  </a>
-                </div>
-                <div class="notification-item-actions">
-                  <button type="button" class="notification-item-action" data-type="{{ $notification['type_slug'] }}" data-id="{{ $notification['model_id'] }}">Mark read</button>
-                </div>
-              </li>
-            @empty
-              <li class="notification-empty">No new notifications.</li>
-            @endforelse
-          </ul>
-          <div class="notification-footer">
-            <a href="{{ route('admin.messages') }}">View messages</a>
-            <a href="{{ route('admin.boards') }}">View bookings</a>
-          </div>
-        </div>
-      </div>
+      <div class="topbar-actions"></div>
     </div>
 
     <div class="stats">

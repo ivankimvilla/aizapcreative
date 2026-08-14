@@ -39,25 +39,45 @@ it('shows the booking page and stores a booking from the modal form', function (
 
 it('returns booked slots for a date and disables them on availability lookup', function () {
     $targetDate = Carbon::now()->addDays(2)->startOfDay();
-    $slotTime = $targetDate->copy()->setTime(15, 0);
+    $selectedSlot = $targetDate->copy()->setTime(15, 0)->format('Y-m-d g:i A');
 
-    Booking::create([
+    $this->post('/book-a-call', [
         'service' => 'AI Commercial Ads',
         'name' => 'Existing Client',
         'email' => 'existing@example.com',
         'phone' => '+15555550999',
         'company' => 'Existing Co',
         'message' => 'Already booked slot.',
-        'starts_at' => $slotTime->copy()->setTimezone('UTC'),
+        'selected_slot' => $selectedSlot,
         'timezone' => 'UTC',
-        'meeting_link' => 'https://meet.google.com/existing',
-        'status' => 'confirmed',
     ]);
 
     $response = $this->get('/book-a-call/availability?date=' . $targetDate->format('Y-m-d') . '&timezone=UTC');
 
     $response->assertStatus(200);
     $response->assertJsonFragment(['booked_slots' => ['3:00 PM']]);
+});
+
+it('does not count completed bookings as unavailable slots', function () {
+    $targetDate = Carbon::now()->addDays(4)->startOfDay();
+    $selectedSlot = $targetDate->copy()->setTime(9, 0)->format('Y-m-d g:i A');
+
+    Booking::factory()->create([
+        'service' => 'AI Commercial Ads',
+        'name' => 'Completed Client',
+        'email' => 'completed@example.com',
+        'phone' => '+15555550111',
+        'company' => 'Completed Co',
+        'message' => 'Already completed slot.',
+        'starts_at' => $targetDate->copy()->setTime(9, 0),
+        'timezone' => 'UTC',
+        'status' => 'completed',
+    ]);
+
+    $response = $this->get('/book-a-call/availability?date=' . $targetDate->format('Y-m-d') . '&timezone=UTC');
+
+    $response->assertStatus(200);
+    $response->assertJson(['booked_slots' => [], 'fully_booked' => false]);
 });
 
 it('does not mark a future date fully booked when there are no bookings', function () {

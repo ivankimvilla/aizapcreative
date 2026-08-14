@@ -45,9 +45,6 @@
           <span class="topbar-stat topbar-stat-all">
             <strong>{{ $stats['all'] ?? 0 }}</strong> All bookings
           </span>
-          <span class="topbar-stat topbar-stat-confirmed">
-            <strong>{{ $stats['confirmed'] ?? 0 }}</strong> Confirmed
-          </span>
           <span class="topbar-stat topbar-stat-pending">
             <strong>{{ $stats['pending'] ?? 0 }}</strong> Pending
           </span>

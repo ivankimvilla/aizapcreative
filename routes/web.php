@@ -116,12 +116,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/admin/projects', [ProjectVideoController::class, 'destroy'])->name('admin.projects.destroy');
     Route::get('/admin/messages', [ContactMessageController::class, 'index'])->name('admin.messages');
     Route::delete('/admin/messages', [ContactMessageController::class, 'destroy'])->name('admin.messages.destroy');
+    Route::post('/admin/messages/reply', [ContactMessageController::class, 'reply'])->name('admin.messages.reply');
     Route::redirect('/admin/clients', '/admin/messages');
     // Bookings view removed — keep briefs route unavailable
     Route::redirect('/admin/briefs', '/admin/projects');
     Route::get('/admin/boards', [BookingAdminController::class, 'index'])->name('admin.boards');
     Route::delete('/admin/boards/bulk-delete', [BookingAdminController::class, 'bulkDestroy'])->name('admin.boards.bulk-destroy');
-    Route::patch('/admin/boards/{booking}/confirm', [BookingAdminController::class, 'confirm'])->name('admin.boards.confirm');
     Route::patch('/admin/boards/{booking}/complete', [BookingAdminController::class, 'complete'])->name('admin.boards.complete');
     Route::patch('/admin/boards/{booking}/cancel', [BookingAdminController::class, 'cancel'])->name('admin.boards.cancel');
     Route::delete('/admin/boards/{booking}', [BookingAdminController::class, 'destroy'])->name('admin.boards.destroy');

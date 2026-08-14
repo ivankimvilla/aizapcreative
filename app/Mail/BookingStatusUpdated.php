@@ -6,41 +6,35 @@ use App\Models\Booking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
+use Illuminate\Queue\SerializesModels;
 
 class BookingStatusUpdated extends Mailable implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
+
+    public Booking $booking;
 
     public string $status;
 
-    public function __construct(public Booking $booking, string $status)
+    public function __construct(Booking $booking, string $status)
     {
+        $this->booking = $booking;
         $this->status = $status;
     }
 
-    public function envelope(): Envelope
+    public function build(): self
     {
-        return new Envelope(
-            subject: 'Your booking status has been updated',
-        );
-    }
-
-    public function content(): Content
-    {
-        $statusText = match ($this->status) {
-            'confirmed' => 'confirmed',
-            'completed' => 'completed',
-            default => 'updated',
+        $subject = match ($this->status) {
+            'confirmed' => 'Your booking has been confirmed',
+            'completed' => 'Your booking has been completed',
+            default => 'Booking status updated',
         };
 
-        return new Content(
-            view: 'emails.booking-status',
-            with: [
+        return $this->subject($subject)
+            ->to($this->booking->email)
+            ->markdown('emails.booking-status-updated', [
                 'booking' => $this->booking,
-                'status' => $statusText,
-            ],
-        );
+                'status' => $this->status,
+            ]);
     }
 }

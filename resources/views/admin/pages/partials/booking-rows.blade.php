@@ -35,14 +35,7 @@
           <span aria-hidden="true">&#8942;</span>
         </button>
         <div class="booking-menu" hidden>
-          @if($booking->status === 'pending')
-            <form method="POST" action="{{ route('admin.boards.confirm', $booking) }}">
-              @csrf
-              @method('PATCH')
-              <button type="submit" class="booking-menu-item booking-menu-item-confirm">Confirm</button>
-            </form>
-          @endif
-          @if($booking->status === 'confirmed')
+          @if(in_array($booking->status, ['pending', 'cancelled'], true))
             <form method="POST" action="{{ route('admin.boards.complete', $booking) }}">
               @csrf
               @method('PATCH')

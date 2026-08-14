@@ -63,16 +63,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    button.addEventListener('click', function () {
-        var expanded = button.getAttribute('aria-expanded') === 'true';
-        button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-        dropdown.classList.toggle('show');
+    function setDropdownOpen(isOpen) {
+        button.setAttribute('aria-expanded', String(isOpen));
+        dropdown.setAttribute('aria-hidden', String(!isOpen));
+        dropdown.classList.toggle('show', isOpen);
+    }
+
+    button.addEventListener('click', function (event) {
+        event.stopPropagation();
+        var isOpen = button.getAttribute('aria-expanded') === 'true';
+        setDropdownOpen(!isOpen);
     });
 
     document.addEventListener('click', function (event) {
         if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.classList.remove('show');
-            button.setAttribute('aria-expanded', 'false');
+            setDropdownOpen(false);
         }
     });
 

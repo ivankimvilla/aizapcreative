@@ -123,23 +123,14 @@
     flex: 1;
     min-height: 0;
     overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .message-list-wrap::-webkit-scrollbar {
-    width: 8px;
-}
-
-.message-list-wrap::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.message-list-wrap::-webkit-scrollbar-thumb {
-    background: var(--line-on-light);
-    border-radius: 8px;
-}
-
-.message-list-wrap::-webkit-scrollbar-thumb:hover {
-    background: var(--text-muted);
+    width: 0;
+    height: 0;
+    display: none;
 }
 
 .message-list {
@@ -266,7 +257,15 @@
     flex: 1;
     min-height: 0;
     overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     padding: 20px 28px 40px;
+}
+
+.message-full-view::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
 }
 
 .inbox-panel.viewing .message-full-view {

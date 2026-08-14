@@ -2,125 +2,44 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Traits\RecaptchaEnterprise;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
-    use RecaptchaEnterprise;
-
     public function index()
     {
         return view('booking-calendar.booking-calendar');
     }
 
-    public function store(Request $request)
-    {
-        $recaptchaRule = app()->environment(['local', 'testing']) ? ['nullable'] : ['required'];
-
-        $data = $request->validate([
-            'service' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|string|max:50',
-            'company' => 'nullable|string|max:255',
-            'message' => 'nullable|string|max:2000',
-            'selected_slot' => 'required|string',
-            'timezone' => 'required|string|max:100',
-            'timezone_label' => 'nullable|string|max:100',
-            'g-recaptcha-response' => $recaptchaRule,
-        ], [
-            'g-recaptcha-response.required' => 'Please complete the reCAPTCHA before booking.',
-        ]);
-
-        if (! $this->verifyRecaptcha($request, 'booking')) {
-            return $this->recaptchaFailed($request);
-        }
-
-        $timezone = in_array($data['timezone'], timezone_identifiers_list())
-            ? new \DateTimeZone($data['timezone'])
-            : new \DateTimeZone(config('app.timezone'));
-
-        $startsAt = Carbon::createFromFormat('Y-m-d g:i A', $data['selected_slot'], $timezone);
-        if (! $startsAt) {
-            return back()->withErrors(['selected_slot' => 'Invalid time slot selected.'])->withInput();
-        }
-
-        if ($startsAt->isPast()) {
-            return back()->withErrors(['selected_slot' => 'Selected slot must be in the future.'])->withInput();
-        }
-
-        $startsAtUtc = $startsAt->copy()->setTimezone('UTC');
-        $booked = Booking::where('starts_at', $startsAtUtc)
-            ->where('timezone', $data['timezone'])
-            ->exists();
-        if ($booked) {
-            return back()->withErrors(['selected_slot' => 'This time slot is no longer available. Please choose another slot.'])->withInput();
-        }
-
-        $booking = Booking::create([
-            'service' => $data['service'],
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'company' => $data['company'],
-            'message' => $data['message'],
-            'starts_at' => $startsAtUtc,
-            'timezone' => $data['timezone'],
-            'timezone_label' => $data['timezone_label'] ?? $data['timezone'],
-            'meeting_link' => 'https://meet.google.com/new',
-            'status' => 'pending',
-        ]);
-
-        // TODO: send emails, notifications, calendar event.
-
-        return redirect('/book-a-call')->with('status', 'Your booking request was sent successfully.');
-    }
-
     public function availability(Request $request)
     {
-        $data = $request->validate([
-            'date' => 'required|date_format:Y-m-d',
-            'timezone' => 'nullable|string|max:100',
+        $validated = $request->validate([
+            'date' => ['required', 'date_format:Y-m-d'],
+            'timezone' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $timezone = in_array($request->input('timezone'), timezone_identifiers_list())
-            ? new \DateTimeZone($request->input('timezone'))
-            : new \DateTimeZone(config('app.timezone'));
+        $date = Carbon::createFromFormat('Y-m-d', $validated['date']);
 
-        $dayStart = Carbon::createFromFormat('Y-m-d', $data['date'], $timezone)->startOfDay();
-        $dayEnd = $dayStart->copy()->endOfDay();
-
-        $utcStart = $dayStart->copy()->setTimezone('UTC');
-        $utcEnd = $dayEnd->copy()->setTimezone('UTC');
-
-        $bookedSlots = Booking::whereBetween('starts_at', [$utcStart, $utcEnd])
-            ->where('timezone', $timezone->getName())
+        $bookings = Booking::whereDate('starts_at', $date->toDateString())
+            ->whereIn('status', ['pending'])
             ->get()
-            ->map(function (Booking $booking) use ($timezone) {
-                return $booking->starts_at->copy()->setTimezone($timezone)->format('g:i A');
+            ->map(function (Booking $booking) {
+                return $booking->starts_at->format('g:i A');
             })
-            ->unique()
-            ->values();
+            ->values()
+            ->all();
 
-        $allSlots = $this->getDailyTimeSlots($timezone, $dayStart->toDateString());
-        $now = Carbon::now($timezone);
-        $fullyBooked = collect($allSlots)->every(function ($slot) use ($bookedSlots, $timezone, $now) {
-            $slotDate = Carbon::createFromFormat('Y-m-d g:i A', $slot['date'] . ' ' . $slot['label'], $timezone);
-            $isBooked = $bookedSlots->contains($slot['label']);
-            $isPast = $slotDate->isPast();
+        $availableSlots = [
+            '12:30 PM','1:00 PM','1:30 PM','2:00 PM','2:30 PM','3:00 PM','3:30 PM','4:00 PM','4:30 PM',
+            '5:00 PM','5:30 PM','6:00 PM','6:30 PM','7:00 PM','7:30 PM','8:00 PM','8:30 PM','9:00 PM',
+            '9:30 PM','10:00 PM','10:30 PM',
+        ];
 
-            return $isBooked || $isPast;
-        });
-
-        $dateInPast = Carbon::createFromFormat('Y-m-d', $data['date'], $timezone)->endOfDay()->isPast();
-
-        if ($dateInPast) {
-            $fullyBooked = false;
-        }
+        $bookedSlots = array_values(array_unique($bookings));
+        $fullyBooked = ! empty($bookedSlots) && count($bookedSlots) === count($availableSlots)
+            && empty(array_diff($availableSlots, $bookedSlots));
 
         return response()->json([
             'booked_slots' => $bookedSlots,
@@ -128,22 +47,42 @@ class BookingController extends Controller
         ]);
     }
 
-    private function getDailyTimeSlots(\DateTimeZone $timezone, string $date): array
+    public function store(Request $request)
     {
-        $start = Carbon::createFromFormat('Y-m-d g:i A', $date . ' 12:30 PM', $timezone);
-        $end = Carbon::createFromFormat('Y-m-d g:i A', $date . ' 10:30 PM', $timezone);
+        $validated = $request->validate([
+            'service' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255'],
+            'phone' => ['required', 'string', 'max:50'],
+            'company' => ['nullable', 'string', 'max:255'],
+            'message' => ['nullable', 'string', 'max:2000'],
+            'selected_slot' => ['required', 'string'],
+            'timezone' => ['nullable', 'string', 'max:255'],
+            'timezone_label' => ['nullable', 'string', 'max:255'],
+        ]);
 
-        $slots = [];
-        $current = $start->copy();
+        $selectedSlot = Carbon::createFromFormat('Y-m-d g:i A', $validated['selected_slot']);
 
-        while ($current->lte($end)) {
-            $slots[] = [
-                'date' => $date,
-                'label' => $current->format('g:i A'),
-            ];
-            $current->addMinutes(30);
+        if (! $selectedSlot || $selectedSlot->format('Y-m-d g:i A') !== $validated['selected_slot']) {
+            return back()->withErrors(['selected_slot' => 'Please choose a valid time slot.']);
         }
 
-        return $slots;
+        $timezone = $validated['timezone'] ?? config('app.timezone');
+
+        Booking::create([
+            'service' => $validated['service'],
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'company' => $validated['company'] ?? null,
+            'message' => $validated['message'] ?? null,
+            'starts_at' => $selectedSlot,
+            'timezone' => $timezone,
+            'timezone_label' => $validated['timezone_label'] ?? $timezone,
+            'status' => 'pending',
+            'is_read' => false,
+        ]);
+
+        return redirect()->route('book-a-call')->with('status', 'Your booking request was sent successfully.');
     }
 }

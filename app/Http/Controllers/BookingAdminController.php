@@ -45,23 +45,6 @@ class BookingAdminController extends Controller
         return redirect()->route('admin.boards')->with('status', 'Booking marked as completed.');
     }
 
-    public function confirm(Booking $booking)
-    {
-        $booking->update(['status' => 'confirmed']);
-
-        try {
-            Mail::to($booking->email)->queue(new BookingStatusUpdated($booking, 'confirmed'));
-        } catch (\Throwable $e) {
-            \Log::warning('Booking confirmation email failed to send.', [
-                'booking_id' => $booking->id,
-                'email' => $booking->email,
-                'exception' => $e->getMessage(),
-            ]);
-        }
-
-        return redirect()->route('admin.boards')->with('status', 'Booking confirmed.');
-    }
-
     public function destroy(Booking $booking)
     {
         $booking->delete();
@@ -75,7 +58,6 @@ class BookingAdminController extends Controller
 
         $stats = [
             'all' => $bookings->count(),
-            'confirmed' => $bookings->where('status', 'confirmed')->count(),
             'pending' => $bookings->where('status', 'pending')->count(),
             'completed' => $bookings->where('status', 'completed')->count(),
             'cancelled' => $bookings->where('status', 'cancelled')->count(),

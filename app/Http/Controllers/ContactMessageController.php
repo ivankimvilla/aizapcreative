@@ -6,6 +6,8 @@ use App\Http\Controllers\Traits\RecaptchaEnterprise;
 use App\Models\ContactMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContactReply;
 
 class ContactMessageController extends Controller
 {
@@ -28,6 +30,28 @@ class ContactMessageController extends Controller
         }
 
         return view('admin.pages.messages', compact('messages'));
+    }
+
+    public function reply(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => ['required', 'integer', 'exists:contact_messages,id'],
+            'subject' => ['required', 'string', 'max:255'],
+            'body' => ['required', 'string', 'max:10000'],
+        ]);
+
+        $message = ContactMessage::find($validated['id']);
+        if (! $message) {
+            return response()->json(['error' => 'Message not found.'], 404);
+        }
+
+        try {
+            Mail::to($message->email)->send(new ContactReply($validated['subject'], $validated['body'], $message->name));
+        } catch (\Throwable $e) {
+            return response()->json(['error' => 'Failed to send email.'], 500);
+        }
+
+        return response()->json(['sent' => true]);
     }
 
     public function destroy(Request $request)

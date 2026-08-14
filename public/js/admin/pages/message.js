@@ -248,10 +248,44 @@ if (replyBtn) {
         var email = document.getElementById('fullViewEmail').textContent.trim();
         if (!email || email === 'Not provided') return;
 
-        var subject = 'Aizap Creatives';
+        var fullName = document.getElementById('fullViewName').textContent.trim();
         var senderAccount = 'aizapcreative@gmail.com';
+        var selectedSubject = document.getElementById('fullViewRole') ? document.getElementById('fullViewRole').textContent.trim() : '';
+        var isQuoteRequest = quoteSubjects.indexOf(selectedSubject) !== -1;
+        var subject = isQuoteRequest ? 'Aizap Creatives quote request' : 'Aizap Creatives';
 
-        var url = 'https://mail.google.com/mail/?view=cm&fs=1&authuser=' + encodeURIComponent(senderAccount) + '&to=' + encodeURIComponent(email) + '&su=' + encodeURIComponent(subject);
+        var logoUrl = 'https://aizapcreative.com/logo.png';
+        var logoHtml = '<img src="' + logoUrl + '" alt="Aizap Creatives" style="max-width:240px;height:auto;margin-bottom:12px;">';
+
+        var brandFooter = [
+            'Warm regards,',
+            'Aizap Creatives',
+            'https://aizapcreative.com'
+        ].join('\n');
+
+        var greeting = 'Hi ' + (fullName || 'there') + ',\n\n';
+        var quoteBody = [
+            'Thank you for your quote request with Aizap Creatives.',
+            'We appreciate the opportunity to review your project requirements and scope.',
+            '',
+            'We will assess your request and get back to you with the next steps shortly.'
+        ].join('\n');
+
+        var normalBody = [
+            'Thank you for reaching out to Aizap Creatives.',
+            'We appreciate the opportunity to learn more about your goals and requirements.',
+            '',
+            'We will review your message and get back to you shortly with the next steps.'
+        ].join('\n');
+
+        var mainBody = isQuoteRequest ? quoteBody : normalBody;
+        var bodyText = greeting + mainBody + '\n\n' + brandFooter;
+        var body = logoHtml + '\n\n' + bodyText;
+
+        var url = 'https://mail.google.com/mail/?view=cm&fs=1&authuser=' + encodeURIComponent(senderAccount)
+            + '&to=' + encodeURIComponent(email)
+            + '&su=' + encodeURIComponent(subject)
+            + '&body=' + encodeURIComponent(body);
         window.open(url, '_blank');
     });
 }

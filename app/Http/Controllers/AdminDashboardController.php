@@ -49,7 +49,10 @@ class AdminDashboardController extends Controller
                     'model_id' => $booking->id,
                     'title' => $booking->company ?: $booking->name,
                     'description' => Str::limit($booking->message ?: $booking->service, 72),
-                    'meta' => optional($booking->starts_at)->format('M j, H:i') ?: 'Scheduled soon',
+                    'meta' => optional($booking->starts_at)
+                        ->copy()
+                        ->setTimezone($booking->timezone ?: config('app.timezone'))
+                        ->format('M j, g:i A') ?: 'Scheduled soon',
                     'url' => route('admin.boards'),
                     'icon' => 'booking',
                     'is_read' => $booking->is_read,
