@@ -56,7 +56,7 @@
                 <div class="form-status">{{ session('status') }}</div>
             @endif
 
-            @if(session('reset_link'))
+            @if(app()->environment(['local', 'testing']) && session('reset_link'))
                 <div class="form-status" style="margin-top: 12px;">
                     <p style="margin-bottom: 8px;">Use this reset link for now:</p>
                     <a href="{{ session('reset_link') }}" style="word-break: break-all;">{{ session('reset_link') }}</a>

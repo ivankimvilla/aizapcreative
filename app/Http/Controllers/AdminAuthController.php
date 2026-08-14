@@ -117,11 +117,14 @@ class AdminAuthController extends Controller
         try {
             $status = Password::sendResetLink(['email' => $user->email]);
         } catch (\Throwable $e) {
-            Log::warning('Password reset email transport failed; using fallback reset link generation.', [
+            Log::error('Password reset email transport failed.', [
                 'email' => $user->email,
                 'exception' => $e->getMessage(),
             ]);
-            $status = Password::RESET_LINK_SENT;
+
+            return back()->withErrors([
+                'email' => 'The reset email could not be sent. Please check the Gmail SMTP setup and app password.',
+            ]);
         }
 
         $token = DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))
@@ -145,9 +148,15 @@ class AdminAuthController extends Controller
             'link' => $resetLink,
         ]);
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with('status', __($status))->with('reset_link', $resetLink)
-            : back()->with('status', __('Password reset link generated'))->with('reset_link', $resetLink);
+        $response = $status === Password::RESET_LINK_SENT
+            ? back()->with('status', __($status))
+            : back()->with('status', __('Password reset link generated'));
+
+        if (app()->environment(['local', 'testing']) && $resetLink) {
+            $response->with('reset_link', $resetLink);
+        }
+
+        return $response;
     }
 
     public function showResetForm(Request $request, $token = null)

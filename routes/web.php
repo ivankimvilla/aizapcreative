@@ -87,9 +87,16 @@ Route::post('/admin/login', [AdminAuthController::class, 'login'])->name('admin.
 Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login')->middleware('guest');
 
 Route::get('/admin/password/reset', [AdminAuthController::class, 'showLinkRequestForm'])->name('admin.password.request')->middleware('guest');
+Route::get('/password/reset', [AdminAuthController::class, 'showLinkRequestForm'])->name('password.request')->middleware('guest');
+
 Route::post('/admin/password/email', [AdminAuthController::class, 'sendResetLinkEmail'])->name('admin.password.email')->middleware('guest');
+Route::post('/password/email', [AdminAuthController::class, 'sendResetLinkEmail'])->name('password.email')->middleware('guest');
+
 Route::get('/admin/password/reset/{token}', [AdminAuthController::class, 'showResetForm'])->name('admin.password.reset')->middleware('guest');
+Route::get('/password/reset/{token}', [AdminAuthController::class, 'showResetForm'])->name('password.reset')->middleware('guest');
+
 Route::post('/admin/password/reset', [AdminAuthController::class, 'reset'])->name('admin.password.update')->middleware('guest');
+Route::post('/password/reset', [AdminAuthController::class, 'reset'])->name('password.update')->middleware('guest');
 
 Route::middleware('auth')->group(function () {
     Route::post('/admin/logout', [AdminAuthController::class, 'logout'])->name('admin.logout');
