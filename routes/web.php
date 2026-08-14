@@ -10,6 +10,9 @@ use App\Http\Controllers\ProjectVideoController;
 use App\Models\Feedback;
 use App\Models\ProjectVideo;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
 
 $servicePage = function (string $category, string $view) {
     return function () use ($category, $view) {
@@ -130,3 +133,26 @@ Route::post('/quote', [\App\Http\Controllers\QuoteController::class, 'store'])->
 // Contact routes
 
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store')->middleware('throttle:10,1');
+
+/*
+ * Mail test route (secured by MAIL_TEST_KEY query param).
+ * Usage: /_mail-test?key=your_test_key
+ * Set MAIL_TEST_KEY in Railway env to a secret value before using.
+ */
+Route::get('/_mail-test', function (Request $request) {
+    $key = env('MAIL_TEST_KEY');
+    if (! $key || $request->query('key') !== $key) {
+        return response('Unauthorized', 401);
+    }
+
+    try {
+        Mail::raw('This is a test email from Aizap Creatives.', function ($m) {
+            $m->to(env('MAIL_FROM_ADDRESS'))->subject('Test email');
+        });
+        Log::info('Test email queued/sent successfully.');
+        return response('OK - test email sent (check logs).', 200);
+    } catch (\Throwable $e) {
+        Log::error('Mail test failed: '.$e->getMessage(), ['exception' => $e]);
+        return response('ERROR - check logs for details.', 500);
+    }
+});
