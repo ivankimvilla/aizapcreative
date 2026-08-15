@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Manrope:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset('css/admin/pages/projects.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/video-cards.css') }}">
 
 </head>
 <body>
@@ -76,14 +77,19 @@
         @endif
 
         @forelse ($videos ?? [] as $video)
-          <div class="video-card" data-id="{{ $video->id }}">
-            <div class="video-thumb hue-{{ ($loop->iteration % 4) + 1 }} {{ $video->video_url ? 'has-video' : '' }}">
+          <article class="project-card video-card admin-video-card" data-id="{{ $video->id }}">
+            <div class="project-thumb video-thumb hue-{{ ($loop->iteration % 4) + 1 }} {{ $video->video_url ? 'has-video' : '' }}">
               <label class="video-select">
                 <input type="checkbox" class="video-checkbox">
                 <span></span>
               </label>
               @if ($video->video_url)
-                <video controls playsinline preload="metadata" poster="{{ $video->cover_url ?? 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'338\'%3E%3Cdefs%3E%3CradialGradient id=\'g\'%3E%3Cstop offset=\'0%25\' stop-color=\'%23141414\'/%3E%3Cstop offset=\'100%25\' stop-color=\'%23000000\'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'url(%23g)\'/%3E%3C/svg%3E' }}" src="{{ $video->video_url }}"></video>
+                <video
+                  playsinline
+                  preload="metadata"
+                  @if ($video->cover_url) poster="{{ $video->cover_url }}" @endif
+                  src="{{ $video->video_url }}">
+                </video>
               @else
                 <button class="play-btn" aria-label="Play video">
                   <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg>
@@ -91,14 +97,15 @@
               @endif
               <span class="duration"></span>
             </div>
-            <div class="video-info">
-              <div class="video-title-row"><h3>{{ $video->title }}</h3></div>
-              <p class="video-meta">{{ $video->getCategoryLabelAttribute() }}</p>
+            <div class="project-card__content video-info">
+              <h3>
+                {{ $video->title }} {{ $video->getCategoryLabelAttribute() }}
+              </h3>
               <span class="status-pill {{ $video->is_featured ? 'approved' : 'review' }}">
                 {{ $video->is_featured ? 'Featured' : 'Not featured' }}
               </span>
             </div>
-          </div>
+          </article>
         @empty
           <div class="feedback-form-wrap" style="grid-column: 1 / -1;">
             <p style="margin: 0; color: #6b7280;">No videos yet. Use the form above to add your first project.</p>
@@ -131,17 +138,6 @@
               <span class="upload-text" id="uploadText">Drop a video here, or <b>browse</b></span>
               <span class="upload-hint">MP4, MOV, WEBM · up to 2GB</span>
               <input type="file" id="videoFile" name="video_file" accept="video/*" hidden>
-            </label>
-          </label>
-
-          <!-- Cover image -->
-          <label class="field">
-            <span class="field-label">Cover image (thumbnail)</span>
-            <label class="upload-drop" id="coverDrop" for="coverImage">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/></svg>
-              <span class="upload-text">Upload a cover image (JPG/PNG)</span>
-              <span class="upload-hint">Recommended 1280×720 · up to 5MB</span>
-              <input type="file" id="coverImage" name="cover_image" accept="image/*" hidden required>
             </label>
           </label>
 

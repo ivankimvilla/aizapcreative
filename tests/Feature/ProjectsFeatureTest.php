@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\ProjectVideo;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 
@@ -33,6 +34,28 @@ it('stores featured projects and shows them on the homepage', function () {
     $homepage->assertStatus(200);
     $homepage->assertSee('Summer Campaign Teaser');
     $homepage->assertSee('Nova Retail');
+});
+
+it('allows uploading a project video without a cover image', function () {
+    $this->actingAs(User::factory()->create());
+
+    $response = $this->post('/admin/projects', [
+        'title' => 'No Cover Video',
+        'client' => 'Blue Canvas',
+        'category' => 'explainer-videos',
+        'feature_category' => 'explainer-videos',
+        'cover_image' => null,
+    ]);
+
+    $response->assertRedirect(route('admin.projects'));
+
+    $this->assertDatabaseHas('project_videos', [
+        'title' => 'No Cover Video',
+        'client' => 'Blue Canvas',
+        'category' => 'explainer-videos',
+        'feature_category' => 'explainer-videos',
+        'cover_path' => null,
+    ]);
 });
 
 it('shows videos on the matching service page based on the selected category', function () {

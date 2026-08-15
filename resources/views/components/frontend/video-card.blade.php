@@ -11,7 +11,6 @@
                 <video
                     playsinline
                     preload="metadata"
-                    poster="{{ $imageUrl ?: asset('home-bg.png') }}"
                     src="{{ $videoUrl }}"
                 ></video>
             </div>

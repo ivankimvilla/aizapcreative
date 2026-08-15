@@ -45,7 +45,7 @@
                         <article class="project-card">
                             @if ($project->video_url)
                                 <div class="project-thumb">
-                                    <video playsinline preload="metadata" poster="{{ $project->cover_url ?? 'data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'600\' height=\'338\'%3E%3Cdefs%3E%3CradialGradient id=\'g\'%3E%3Cstop offset=\'0%25\' stop-color=\'%23141414\'/%3E%3Cstop offset=\'100%25\' stop-color=\'%23000000\'/%3E%3C/radialGradient%3E%3C/defs%3E%3Crect width=\'100%25\' height=\'100%25\' fill=\'url(%23g)\'/%3E%3C/svg%3E' }}" src="{{ $project->video_url }}"></video>
+                                    <video playsinline preload="metadata" @if ($project->cover_url) poster="{{ $project->cover_url }}" @endif src="{{ $project->video_url }}"></video>
                                 </div>
                             @else
                                 <div class="project-thumb" style="background-image: url('{{ asset('home-bg.png') }}');">

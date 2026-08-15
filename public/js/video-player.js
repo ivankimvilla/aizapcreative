@@ -204,8 +204,59 @@
         document.addEventListener('keydown', onKeydown);
     }
 
+    function setupLoadMore(grid) {
+        if (!grid || grid.dataset.loadMoreBound === '1') return;
+
+        var cards = Array.prototype.slice.call(grid.querySelectorAll('.project-card'));
+        if (cards.length <= 8) return;
+
+        grid.dataset.loadMoreBound = '1';
+
+        var visibleCount = 8;
+        cards.forEach(function (card, index) {
+            card.hidden = index >= visibleCount;
+        });
+
+        var toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'video-grid__toggle';
+        toggle.textContent = 'Load More';
+        toggle.setAttribute('aria-expanded', 'false');
+
+        toggle.addEventListener('click', function () {
+            var expanded = toggle.getAttribute('aria-expanded') === 'true';
+
+            if (expanded) {
+                visibleCount = 8;
+                cards.forEach(function (card, index) {
+                    card.hidden = index >= visibleCount;
+                });
+                toggle.textContent = 'Show Less';
+                toggle.setAttribute('aria-expanded', 'false');
+                return;
+            }
+
+            visibleCount = Math.min(cards.length, visibleCount + 8);
+            cards.forEach(function (card, index) {
+                card.hidden = index >= visibleCount;
+            });
+
+            if (visibleCount >= cards.length) {
+                toggle.textContent = 'Show Less';
+                toggle.setAttribute('aria-expanded', 'true');
+            } else {
+                toggle.textContent = 'Load More';
+                toggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        grid.parentNode.appendChild(toggle);
+    }
+
     function init(scope) {
-        (scope || document).querySelectorAll('.project-thumb').forEach(setupThumb);
+        var root = scope || document;
+        root.querySelectorAll('.project-thumb').forEach(setupThumb);
+        root.querySelectorAll('.video-grid').forEach(setupLoadMore);
     }
 
     if (document.readyState === 'loading') {

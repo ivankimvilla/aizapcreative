@@ -24,7 +24,7 @@ class ProjectVideoController extends Controller
             'feature_category' => ['nullable', 'string', 'max:255'],
             'is_featured' => ['nullable', 'boolean'],
             'video_file' => ['nullable', 'file', 'mimes:mp4,mov,webm', 'max:2048000'],
-            'cover_image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:5120'],
+            'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:5120'],
         ]);
 
         $videoPath = null;
