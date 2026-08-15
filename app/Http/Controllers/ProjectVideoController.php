@@ -18,7 +18,7 @@ class ProjectVideoController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'],
             'client' => ['nullable', 'string', 'max:255'],
             'category' => ['nullable', 'string', 'max:255'],
             'feature_category' => ['nullable', 'string', 'max:255'],
@@ -26,6 +26,15 @@ class ProjectVideoController extends Controller
             'video_file' => ['nullable', 'file', 'mimes:mp4,mov,webm', 'max:2048000'],
             'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:5120'],
         ]);
+
+        $title = trim((string) ($data['title'] ?? ''));
+        if ($title === '') {
+            if ($request->hasFile('video_file')) {
+                $title = pathinfo($request->file('video_file')->getClientOriginalName(), PATHINFO_FILENAME);
+            } else {
+                $title = 'Untitled video';
+            }
+        }
 
         $videoPath = null;
         if ($request->hasFile('video_file')) {
@@ -41,7 +50,7 @@ class ProjectVideoController extends Controller
         $isFeatured = !empty($data['is_featured']) || !empty($featureCategory);
 
         ProjectVideo::create([
-            'title' => $data['title'],
+            'title' => $title,
             'client' => $data['client'] ?? null,
             'category' => $data['category'],
             'feature_category' => $featureCategory,

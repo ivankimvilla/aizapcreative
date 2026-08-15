@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="{{ asset('css/video-cards.css') }}">
 @endonce
 
-@if (!empty($title))
+@if (!empty($title) || !empty($subtitle))
     <article class="project-card video-card {{ $extraClass }}">
         @if (!empty($videoUrl))
             <div class="project-thumb video-card__thumb has-video">
@@ -20,12 +20,9 @@
             </div>
         @endif
         <div class="project-card__content">
-            <h3>
-                {{ $title }}
-                @if (!empty($subtitle))
-                    <span class="project-category">{{ $subtitle }}</span>
-                @endif
-            </h3>
+            @if (!empty($subtitle))
+                <span class="project-category">{{ $subtitle }}</span>
+            @endif
         </div>
     </article>
 @else

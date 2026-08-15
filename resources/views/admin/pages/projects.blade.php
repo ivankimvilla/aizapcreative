@@ -98,9 +98,6 @@
               <span class="duration"></span>
             </div>
             <div class="project-card__content video-info">
-              <h3>
-                {{ $video->title }} {{ $video->getCategoryLabelAttribute() }}
-              </h3>
               <span class="status-pill {{ $video->is_featured ? 'approved' : 'review' }}">
                 {{ $video->is_featured ? 'Featured' : 'Not featured' }}
               </span>
@@ -139,12 +136,6 @@
               <span class="upload-hint">MP4, MOV, WEBM · up to 2GB</span>
               <input type="file" id="videoFile" name="video_file" accept="video/*" hidden>
             </label>
-          </label>
-
-          <!-- Title -->
-          <label class="field">
-            <span class="field-label">Title</span>
-            <input type="text" name="title" class="text-input" placeholder="e.g. Summer Campaign — Teaser" required>
           </label>
 
           <div class="field-row">

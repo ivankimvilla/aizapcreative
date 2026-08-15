@@ -53,12 +53,9 @@
                                 </div>
                             @endif
                             <div class="project-card__content">
-                                <h3>
-                                    {{ $project->title }}
-                                    <span class="project-category">
-                                        {{ $project->client && strcasecmp($project->client, $project->title) !== 0 ? $project->client . ' • ' : '' }}{{ $project->getCategoryLabelAttribute() }}
-                                    </span>
-                                </h3>
+                                <span class="project-category">
+                                    {{ $project->client && strcasecmp($project->client, $project->title) !== 0 ? $project->client . ' • ' : '' }}{{ $project->getCategoryLabelAttribute() }}
+                                </span>
                             </div>
                         </article>
                     @empty
