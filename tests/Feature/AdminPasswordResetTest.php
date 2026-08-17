@@ -6,6 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 
 uses(RefreshDatabase::class);
 
@@ -43,4 +44,31 @@ it('stores a password reset token for the supplied email address', function () {
             return true;
         }
     );
+});
+
+it('creates a reset token when SMTP credentials are missing or invalid in production', function () {
+    $this->withoutMiddleware();
+    $this->app['env'] = 'production';
+
+    config([
+        'mail.default' => 'smtp',
+        'mail.mailers.smtp.username' => null,
+        'mail.mailers.smtp.password' => null,
+    ]);
+
+    $user = User::factory()->create([
+        'email' => 'admin@example.com',
+    ]);
+
+    Password::shouldReceive('sendResetLink')->once()->andThrow(new RuntimeException('535 5.7.8 Username and Password not accepted'));
+
+    $response = $this->post('/admin/password/email', [
+        'email' => $user->email,
+    ]);
+
+    $response->assertRedirect();
+    $response->assertSessionHasNoErrors();
+    $this->assertDatabaseHas('password_reset_tokens', [
+        'email' => $user->email,
+    ]);
 });

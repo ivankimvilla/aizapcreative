@@ -122,9 +122,34 @@ class AdminAuthController extends Controller
                 'exception' => $e->getMessage(),
             ]);
 
-            return back()->withErrors([
-                'email' => 'The reset email could not be sent. Please check the Gmail SMTP setup and app password.',
+            $token = DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))
+                ->where('email', $user->email)
+                ->value('token');
+
+            if (! $token) {
+                $token = hash_hmac('sha256', Str::random(40), config('app.key'));
+
+                DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))
+                    ->updateOrInsert(
+                        ['email' => $user->email],
+                        ['token' => $token, 'created_at' => now()],
+                    );
+            }
+
+            $resetLink = route('admin.password.reset', ['token' => $token, 'email' => $user->email]);
+
+            Log::info('Password reset email failed to send; generated reset link as a fallback', [
+                'email' => $user->email,
+                'link' => $resetLink,
+                'exception' => $e->getMessage(),
             ]);
+
+            $response = back()->with('status', __('Password reset link generated (email failed; see logs)'));
+            if (app()->environment('testing') && $resetLink) {
+                $response->with('reset_link', $resetLink);
+            }
+
+            return $response;
         }
 
         $token = DB::table(config('auth.passwords.users.table', 'password_reset_tokens'))
