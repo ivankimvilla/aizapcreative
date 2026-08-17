@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\NewBookingRequest;
 use App\Models\Booking;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
@@ -72,7 +69,7 @@ class BookingController extends Controller
 
         $timezone = $validated['timezone'] ?? config('app.timezone');
 
-        $booking = Booking::create([
+        Booking::create([
             'service' => $validated['service'],
             'name' => $validated['name'],
             'email' => $validated['email'],
@@ -85,16 +82,6 @@ class BookingController extends Controller
             'status' => 'pending',
             'is_read' => false,
         ]);
-
-        try {
-            Mail::to(env('MAIL_TO_ADDRESS', config('mail.from.address')))->send(new NewBookingRequest($booking));
-        } catch (\Throwable $e) {
-            Log::warning('Booking request email failed to send.', [
-                'booking_id' => $booking->id,
-                'email' => $booking->email,
-                'error' => $e->getMessage(),
-            ]);
-        }
 
         return redirect()->route('book-a-call')->with('status', 'Your booking request was sent successfully.');
     }
