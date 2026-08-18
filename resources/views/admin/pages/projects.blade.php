@@ -69,7 +69,7 @@
       </form>
 
       <!-- VIDEO GRID -->
-      <div class="video-grid" id="videoGrid">
+      <div class="projects-grid" id="videoGrid">
         @if (session('status'))
           <div class="feedback-form-wrap" style="grid-column: 1 / -1; margin-bottom: 1rem;">
             <p style="margin: 0; color: #0f766e;">{{ session('status') }}</p>

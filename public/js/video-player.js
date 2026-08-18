@@ -250,7 +250,10 @@
             }
         });
 
-        grid.parentNode.appendChild(toggle);
+        var wrap = document.createElement('div');
+        wrap.className = 'video-grid__toggle-wrap';
+        wrap.appendChild(toggle);
+        grid.parentNode.appendChild(wrap);
     }
 
     function init(scope) {

@@ -28,26 +28,55 @@
 }
 
 .video-grid__toggle {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin: 18px auto 0;
-    padding: 12px 20px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    display: block;
+    margin: 22px auto 0;
+    padding: 12px 28px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.04);
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.06), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.12);
     color: #fff;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+    transition: background 160ms ease, transform 160ms ease, box-shadow 160ms ease;
+    width: max-content;
+    text-align: center;
 }
 
 .video-grid__toggle:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateY(-1px);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.52);
+}
+
+.video-grid__toggle:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.08), 0 12px 36px rgba(0, 0, 0, 0.52);
+}
+
+.video-grid__toggle::after {
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-left: 10px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 160ms ease;
+}
+
+.video-grid__toggle[aria-expanded="true"]::after {
+    transform: rotate(-135deg);
+}
+
+.video-grid__toggle-wrap {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 .videos-empty-state .project-card {

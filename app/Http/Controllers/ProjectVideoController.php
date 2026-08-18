@@ -46,10 +46,14 @@ class ProjectVideoController extends Controller
             $coverPath = $request->file('cover_image')->store('project-covers', 'public');
         }
 
-        $featureCategory = $data['feature_category'] ?? $data['category'] ?? null;
-        $isFeatured = !empty($data['is_featured']) || !empty($featureCategory);
+        $featureCategory = $data['feature_category'] ?? null;
+        $isFeatured = !empty($data['is_featured']);
 
-        ProjectVideo::create([
+        if ($isFeatured && empty($featureCategory)) {
+            $featureCategory = $data['category'] ?? null;
+        }
+
+        $projectVideo = ProjectVideo::create([
             'title' => $title,
             'client' => $data['client'] ?? null,
             'category' => $data['category'],
@@ -58,6 +62,19 @@ class ProjectVideoController extends Controller
             'video_path' => $videoPath,
             'cover_path' => $coverPath,
         ]);
+
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'id' => $projectVideo->id,
+                'title' => $projectVideo->title,
+                'client' => $projectVideo->client,
+                'category' => $projectVideo->category,
+                'feature_category' => $projectVideo->feature_category,
+                'is_featured' => (bool) $projectVideo->is_featured,
+                'video_url' => $projectVideo->video_url,
+                'cover_url' => $projectVideo->cover_url,
+            ]);
+        }
 
         return redirect()->route('admin.projects')->with('status', 'Video added successfully.');
     }

@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 $servicePage = function (string $category, string $view) {
     return function () use ($category, $view) {
         $videos = ProjectVideo::query()
+            ->where('is_featured', true)
             ->where(function ($query) use ($category) {
                 $query->where('feature_category', $category)
                     ->orWhere('category', $category);
@@ -29,7 +30,7 @@ $servicePage = function (string $category, string $view) {
 };
 
 Route::get('/', function () {
-    $featuredProjects = ProjectVideo::where('is_featured', true)->latest()->take(5)->get();
+    $featuredProjects = ProjectVideo::where('is_featured', true)->latest()->get();
     $feedbackItems = Feedback::latest()->get();
     $feedbackCount = Feedback::count();
     $feedbackAverage = Feedback::avg('rating');

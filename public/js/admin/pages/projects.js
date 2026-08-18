@@ -238,11 +238,104 @@ if (coverDrop && coverImage) {
     });
 }
 
+function buildVideoCard(video) {
+    var article = document.createElement('article');
+    article.className = 'project-card video-card admin-video-card';
+    article.dataset.id = video.id;
+
+    var poster = video.cover_url ? ' poster="' + video.cover_url + '"' : '';
+    var videoMarkup = video.video_url ? (
+        '<video playsinline preload="metadata"' + poster + ' src="' + video.video_url + '"></video>'
+    ) : (
+        '<button class="play-btn" aria-label="Play video"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7Z"/></svg></button>'
+    );
+
+    article.innerHTML = '<div class="project-thumb video-thumb hue-' + (((video.id || 1) % 4) + 1) + ' ' + (video.video_url ? 'has-video' : '') + '">' +
+        '<label class="video-select"><input type="checkbox" class="video-checkbox"><span></span></label>' +
+        videoMarkup +
+        '<span class="duration"></span>' +
+        '</div>' +
+        '<div class="project-card__content video-info"><span class="status-pill ' + (video.is_featured ? 'approved' : 'review') + '">' +
+        (video.is_featured ? 'Featured' : 'Not featured') +
+        '</span></div>';
+
+    return article;
+}
+
 if (form && categorySelect) {
     form.addEventListener('submit', function (e) {
         if (!categorySelect.value) {
             e.preventDefault();
             categorySelect.focus();
+            return;
         }
+
+        var submitButton = form.querySelector('button[type="submit"]');
+        var tokenInput = form.querySelector('input[name="_token"]');
+        var grid = document.getElementById('videoGrid');
+
+        if (!tokenInput) {
+            return;
+        }
+
+        e.preventDefault();
+        if (submitButton) submitButton.disabled = true;
+
+        fetch(form.action, {
+            method: 'POST',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'X-CSRF-TOKEN': tokenInput.value,
+            },
+            body: new FormData(form)
+        }).then(function (response) {
+            if (!response.ok) {
+                throw new Error('Upload failed');
+            }
+            return response.json();
+        }).then(function (video) {
+            if (!video || !video.id) {
+                throw new Error('Missing video payload');
+            }
+
+            if (grid) {
+                var firstEmptyState = grid.querySelector('.feedback-form-wrap');
+                if (firstEmptyState) {
+                    firstEmptyState.remove();
+                }
+                grid.prepend(buildVideoCard(video));
+            }
+
+            closeModal();
+            form.reset();
+            if (videoFile && uploadText) {
+                uploadText.innerHTML = 'Drop a video here, or <b>browse</b>';
+                uploadDrop.classList.remove('has-file');
+            }
+            if (categorySelect) categorySelect.value = '';
+            categoryCards.forEach(function (card) {
+                card.classList.remove('active');
+                var radio = card.querySelector('input[type="radio"]');
+                if (radio) radio.checked = false;
+            });
+            // show transient success message in the grid (matches server flash style)
+            if (grid) {
+                var statusWrap = document.createElement('div');
+                statusWrap.className = 'feedback-form-wrap';
+                statusWrap.style.gridColumn = '1 / -1';
+                statusWrap.style.marginBottom = '1rem';
+                var p = document.createElement('p');
+                p.style.margin = '0';
+                p.style.color = '#0f766e';
+                p.textContent = 'Video added successfully.';
+                statusWrap.appendChild(p);
+                grid.insertBefore(statusWrap, grid.firstChild);
+                setTimeout(function () { try { statusWrap.remove(); } catch (e) { } }, 4000);
+            }
+        }).catch(function () {
+            window.location.reload();
+        }).finally(function () {
+            if (submitButton) submitButton.disabled = false;
+        });
     });
 }

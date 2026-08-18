@@ -29,7 +29,7 @@
         </section>
 
         <section class="video-grid-section">
-            <div class="video-grid">
+            <div class="projects-grid">
                 @forelse ($videos ?? [] as $video)
                     <x-frontend.video-card
                         :title="$video->title"

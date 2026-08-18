@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/home-page/home-page.css') }}">
     <link rel="stylesheet" href="{{ asset('css/pages/process.css') }}">
     <link rel="stylesheet" href="{{ asset('css/home-page/contact-section.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/video-cards.css') }}">
 </head>
 <body class="home-page-page">
     @include('header.header')
@@ -40,7 +41,7 @@
                     </div>
                     <a href="/portfolio" class="btn btn-secondary">View All Projects</a>
                 </div>
-                <div class="projects-grid">
+                <div class="projects-grid video-grid">
                     @forelse ($featuredProjects as $project)
                         <article class="project-card">
                             @if ($project->video_url)
@@ -54,7 +55,7 @@
                             @endif
                             <div class="project-card__content">
                                 <span class="project-category">
-                                    {{ $project->client && strcasecmp($project->client, $project->title) !== 0 ? $project->client . ' • ' : '' }}{{ $project->getCategoryLabelAttribute() }}
+                                    {{ $project->client && ($project->client && strcasecmp($project->client, $project->title) !== 0) ? $project->client . ' • ' : '' }}{{ $project->getCategoryLabelAttribute() }}
                                 </span>
                             </div>
                         </article>
