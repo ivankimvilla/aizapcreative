@@ -281,6 +281,45 @@ if (form && categorySelect) {
         e.preventDefault();
         if (submitButton) submitButton.disabled = true;
 
+        function removeExistingAlerts(container) {
+            if (!container) return;
+            var existing = container.querySelectorAll('.form-alert');
+            existing.forEach(function (el) { el.remove(); });
+        }
+
+        function showFormAlert(container, type, title, messages) {
+            if (!container) return;
+            removeExistingAlerts(container);
+            var wrap = document.createElement('div');
+            wrap.className = 'form-alert form-alert--' + (type === 'success' ? 'success' : 'error');
+            wrap.setAttribute('role', 'alert');
+
+            var icon = document.createElement('div');
+            icon.className = type === 'success' ? 'form-alert--success__icon' : 'form-alert__icon';
+            icon.setAttribute('aria-hidden', 'true');
+            icon.innerHTML = type === 'success'
+                ? '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+                : '<div>!</div>';
+            wrap.appendChild(icon);
+
+            var body = document.createElement('div');
+            var titleEl = document.createElement('div');
+            titleEl.className = type === 'success' ? 'form-alert--success__title' : 'form-alert__title';
+            titleEl.textContent = title;
+            body.appendChild(titleEl);
+
+            if (messages && messages.length) {
+                var ul = document.createElement('ul');
+                messages.forEach(function (m) { var li = document.createElement('li'); li.textContent = m; ul.appendChild(li); });
+                body.appendChild(ul);
+            }
+
+            wrap.appendChild(body);
+
+            container.insertBefore(wrap, container.firstChild);
+            return wrap;
+        }
+
         fetch(form.action, {
             method: 'POST',
             headers: {
@@ -290,7 +329,11 @@ if (form && categorySelect) {
             body: new FormData(form)
         }).then(function (response) {
             if (!response.ok) {
-                throw new Error('Upload failed');
+                return response.json().then(function (data) {
+                    return Promise.reject({ status: response.status, data: data });
+                }).catch(function () {
+                    return Promise.reject({ status: response.status });
+                });
             }
             return response.json();
         }).then(function (video) {
@@ -318,22 +361,81 @@ if (form && categorySelect) {
                 var radio = card.querySelector('input[type="radio"]');
                 if (radio) radio.checked = false;
             });
-            // show transient success message in the grid (matches server flash style)
-            if (grid) {
-                var statusWrap = document.createElement('div');
-                statusWrap.className = 'feedback-form-wrap';
-                statusWrap.style.gridColumn = '1 / -1';
-                statusWrap.style.marginBottom = '1rem';
-                var p = document.createElement('p');
-                p.style.margin = '0';
-                p.style.color = '#0f766e';
-                p.textContent = 'Video added successfully.';
-                statusWrap.appendChild(p);
-                grid.insertBefore(statusWrap, grid.firstChild);
-                setTimeout(function () { try { statusWrap.remove(); } catch (e) { } }, 4000);
+            // show floating toast (no layout movement)
+            (function showFloatingToast(message, duration) {
+                duration = duration || 4000;
+                var container = document.getElementById('globalToasts');
+                if (!container) {
+                    container = document.createElement('div');
+                    container.id = 'globalToasts';
+                    container.style.position = 'fixed';
+                    container.style.top = '20px';
+                    container.style.right = '20px';
+                    container.style.display = 'flex';
+                    container.style.flexDirection = 'column';
+                    container.style.gap = '10px';
+                    container.style.zIndex = '9999';
+                    document.body.appendChild(container);
+                }
+
+                var toast = document.createElement('div');
+                toast.className = 'form-alert form-alert--success form-alert--toast';
+                toast.setAttribute('role', 'status');
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateY(-6px)';
+                toast.style.transition = 'opacity 180ms ease, transform 180ms ease';
+
+                var icon = document.createElement('div');
+                icon.className = 'form-alert--success__icon';
+                icon.setAttribute('aria-hidden', 'true');
+                icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M8 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+                var body = document.createElement('div');
+                body.className = 'form-alert--success__body';
+                var titleEl = document.createElement('div');
+                titleEl.className = 'form-alert--success__title';
+                titleEl.textContent = 'Success';
+                var text = document.createElement('p');
+                text.className = 'form-alert--success__text';
+                text.style.margin = '0';
+                text.textContent = message || 'Video added successfully.';
+
+                body.appendChild(titleEl);
+                body.appendChild(text);
+
+                toast.appendChild(icon);
+                toast.appendChild(body);
+
+                container.appendChild(toast);
+
+                // animate in
+                requestAnimationFrame(function () {
+                    toast.style.opacity = '1';
+                    toast.style.transform = 'translateY(0)';
+                });
+
+                setTimeout(function () {
+                    toast.style.opacity = '0';
+                    toast.style.transform = 'translateY(-6px)';
+                    setTimeout(function () { try { toast.remove(); } catch (e) { } }, 200);
+                }, duration);
+            })('Video added successfully.', 4000);
+        }).catch(function (err) {
+            var container = form;
+            var msgs = [];
+            if (err && err.data) {
+                if (err.data.errors) {
+                    Object.keys(err.data.errors).forEach(function (k) { msgs = msgs.concat(err.data.errors[k]); });
+                } else if (err.data.message) {
+                    msgs.push(err.data.message);
+                }
+            } else if (err && err.message) {
+                msgs.push(err.message);
+            } else {
+                msgs.push('Upload failed. Please try again.');
             }
-        }).catch(function () {
-            window.location.reload();
+
+            showFormAlert(container, 'error', "Couldn't add video", msgs);
         }).finally(function () {
             if (submitButton) submitButton.disabled = false;
         });
