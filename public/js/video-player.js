@@ -266,9 +266,17 @@
         if (!grid || grid.dataset.loadMoreBound === '1') return;
 
         var cards = Array.prototype.slice.call(grid.querySelectorAll('.project-card'));
-        if (cards.length <= 8) return;
+        if (cards.length === 0) return;
 
         grid.dataset.loadMoreBound = '1';
+
+        var wrap = document.createElement('div');
+        wrap.className = 'video-grid__toggle-wrap';
+        grid.parentNode.appendChild(wrap);
+
+        if (cards.length <= 8) {
+            return;
+        }
 
         var visibleCount = 8;
         cards.forEach(function (card, index) {
@@ -331,17 +339,17 @@
             syncToggleState();
         });
 
-        var wrap = document.createElement('div');
-        wrap.className = 'video-grid__toggle-wrap';
         wrap.appendChild(toggle);
-        grid.parentNode.appendChild(wrap);
     }
 
     function init(scope) {
         var root = scope || document;
+        if (!root || !root.querySelectorAll) return;
         root.querySelectorAll('.project-thumb').forEach(setupThumb);
         root.querySelectorAll('.video-grid').forEach(setupLoadMore);
     }
+
+    window.initVideoPlayer = init;
 
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function () {

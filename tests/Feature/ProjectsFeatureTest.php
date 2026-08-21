@@ -4,6 +4,7 @@ use App\Models\ProjectVideo;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 uses(RefreshDatabase::class);
 
@@ -59,6 +60,22 @@ it('allows uploading a project video without a cover image', function () {
         'feature_category' => 'explainer-videos',
         'cover_path' => null,
     ]);
+});
+
+it('uses the configured storage disk for project media URLs so deployment-safe storage can be used', function () {
+    config(['filesystems.default' => 'public']);
+
+    $video = ProjectVideo::make([
+        'title' => 'Cloud Video',
+        'client' => 'Cloud Studio',
+        'category' => 'explainer-videos',
+        'feature_category' => 'explainer-videos',
+        'video_path' => 'project-videos/demo.mp4',
+        'cover_path' => 'project-covers/demo.jpg',
+    ]);
+
+    expect($video->video_url)->toBe(Storage::disk('public')->url('project-videos/demo.mp4'));
+    expect($video->cover_url)->toBe(Storage::disk('public')->url('project-covers/demo.jpg'));
 });
 
 it('returns JSON for ajax video uploads so the admin grid can update immediately', function () {

@@ -36,14 +36,16 @@ class ProjectVideoController extends Controller
             }
         }
 
+        $disk = ProjectVideo::storageDiskName();
+
         $videoPath = null;
         if ($request->hasFile('video_file')) {
-            $videoPath = $request->file('video_file')->store('project-videos', 'public');
+            $videoPath = $request->file('video_file')->store('project-videos', $disk);
         }
 
         $coverPath = null;
         if ($request->hasFile('cover_image')) {
-            $coverPath = $request->file('cover_image')->store('project-covers', 'public');
+            $coverPath = $request->file('cover_image')->store('project-covers', $disk);
         }
 
         $featureCategory = $data['feature_category'] ?? null;
@@ -88,12 +90,14 @@ class ProjectVideoController extends Controller
 
         $videos = ProjectVideo::whereIn('id', $data['ids'])->get();
 
+        $disk = ProjectVideo::storageDiskName();
+
         foreach ($videos as $video) {
-            if ($video->video_path && Storage::disk('public')->exists($video->video_path)) {
-                Storage::disk('public')->delete($video->video_path);
+            if ($video->video_path && Storage::disk($disk)->exists($video->video_path)) {
+                Storage::disk($disk)->delete($video->video_path);
             }
-            if ($video->cover_path && Storage::disk('public')->exists($video->cover_path)) {
-                Storage::disk('public')->delete($video->cover_path);
+            if ($video->cover_path && Storage::disk($disk)->exists($video->cover_path)) {
+                Storage::disk($disk)->delete($video->cover_path);
             }
             $video->delete();
         }

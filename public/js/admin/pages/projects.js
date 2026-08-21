@@ -118,7 +118,6 @@ if (overlay) {
     });
 }
 
-/* Keep the select and the visual category cards in sync */
 if (categoryCards.length > 0 && categorySelect) {
     categoryCards.forEach(function (card) {
         var radio = card.querySelector('input[type="radio"]');
@@ -153,7 +152,23 @@ if (categoryCards.length > 0 && categorySelect) {
 
 if (uploadDrop && videoFile && uploadText) {
     uploadDrop.addEventListener('click', function (e) {
-        // label already triggers the input via `for`; guard against double-trigger on nested clicks
+        if (e.target === videoFile) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof videoFile.click === 'function') {
+            videoFile.click();
+        }
+    });
+
+    uploadDrop.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (typeof videoFile.click === 'function') {
+                videoFile.click();
+            }
+        }
     });
 
     videoFile.addEventListener('change', function () {
@@ -193,7 +208,12 @@ if (coverDrop && coverImage) {
     var coverText = coverDrop.querySelector('.upload-text');
 
     coverDrop.addEventListener('click', function (e) {
-        // label triggers input via for
+        if (e.target === coverImage) {
+            return;
+        }
+        e.preventDefault();
+        e.stopPropagation();
+        coverImage.click();
     });
 
     coverImage.addEventListener('change', function () {
@@ -337,7 +357,11 @@ if (form && categorySelect) {
                 if (firstEmptyState) {
                     firstEmptyState.remove();
                 }
-                grid.prepend(buildVideoCard(video));
+                var newCard = buildVideoCard(video);
+                grid.prepend(newCard);
+                if (window.initVideoPlayer) {
+                    window.initVideoPlayer(grid);
+                }
             }
 
             closeModal();
@@ -352,7 +376,6 @@ if (form && categorySelect) {
                 var radio = card.querySelector('input[type="radio"]');
                 if (radio) radio.checked = false;
             });
-            // show floating toast (no layout movement)
             (function showFloatingToast(message, duration) {
                 duration = duration || 4000;
                 var container = document.getElementById('globalToasts');
@@ -399,7 +422,6 @@ if (form && categorySelect) {
 
                 container.appendChild(toast);
 
-                // animate in
                 requestAnimationFrame(function () {
                     toast.style.opacity = '1';
                     toast.style.transform = 'translateY(0)';

@@ -97,6 +97,56 @@
     @endforelse
     </div>
   </div>
+
+  <div class="new-video-overlay" id="newVideoOverlay" aria-hidden="true">
+    <div class="new-video-modal" role="dialog" aria-modal="true">
+      <div class="new-video-modal__header">
+        <div></div>
+        <button type="button" class="new-video-close" id="newVideoClose" aria-label="Close">×</button>
+      </div>
+
+      <form id="newVideoForm" action="{{ route('admin.projects.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+
+        <div class="new-video-field">
+          <label for="videoFile">Upload video</label>
+          <label class="upload-drop" id="uploadDrop" for="videoFile" tabindex="0" role="button" aria-label="Upload video">
+            <input id="videoFile" name="video_file" type="file" accept="video/mp4,video/mov,video/webm" class="visually-hidden-file-input">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0-4 4m4-4 4 4M4 16.5v1A2.5 2.5 0 0 0 6.5 20h11A2.5 2.5 0 0 0 20 17.5v-1"/></svg>
+            <span id="uploadText">Drop a video here, or <b>browse</b></span>
+          </label>
+        </div>
+
+        <div class="field-row">
+          <div class="new-video-field">
+            <label for="categorySelect">Category</label>
+            <select id="categorySelect" name="category">
+              <option value="" disabled selected>Select category</option>
+              <option value="ai-commercial-ads">AI Commercial Ads</option>
+              <option value="ai-product-ads">AI Product Ads</option>
+              <option value="ai-storytelling-drama">AI Storytelling / Drama</option>
+              <option value="ai-movie-trailers">AI Movie Trailers</option>
+              <option value="ugc-style-ai-videos">UGC-style AI Videos</option>
+              <option value="explainer-videos">Explainer Videos</option>
+            </select>
+          </div>
+
+          <div class="new-video-field">
+            <label>&nbsp;</label>
+            <label class="toggle-row">
+              <input type="checkbox" name="is_featured" value="1">
+              <span>Featured project</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="new-video-modal__actions">
+          <button type="button" class="btn-ghost" id="newVideoCancel">Cancel</button>
+          <button type="submit" class="btn-primary">Save video</button>
+        </div>
+      </form>
+    </div>
+  </div>
 @endsection
 
 @section('scripts')

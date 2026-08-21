@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectVideo extends Model
 {
@@ -33,13 +34,23 @@ class ProjectVideo extends Model
         };
     }
 
+    public static function storageDiskName(): string
+    {
+        return env('PROJECT_VIDEO_DISK', env('FILESYSTEM_DISK', 'public'));
+    }
+
+    protected function storageDisk(): string
+    {
+        return self::storageDiskName();
+    }
+
     public function getVideoUrlAttribute(): ?string
     {
         if (empty($this->video_path)) {
             return null;
         }
 
-        return asset('storage/' . ltrim($this->video_path, '/'));
+        return Storage::disk($this->storageDisk())->url($this->video_path);
     }
 
     public function getCoverUrlAttribute(): ?string
@@ -48,6 +59,6 @@ class ProjectVideo extends Model
             return null;
         }
 
-        return asset('storage/' . ltrim($this->cover_path, '/'));
+        return Storage::disk($this->storageDisk())->url($this->cover_path);
     }
 }
