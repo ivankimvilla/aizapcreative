@@ -15,6 +15,15 @@ body {
     gap: 16px;
 }
 
+.topbar-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
 .admin-booking-alert {
     position: fixed;
     top: 18px;
@@ -51,15 +60,32 @@ body {
 .topbar-title {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 16px;
     white-space: nowrap;
+    margin-left: auto;
+}
+
+.booking-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px 24px;
+    background: var(--paper);
+    border: 1px solid var(--line-on-light);
+    border-radius: 12px;
+    margin-bottom: 16px;
 }
 
 .topbar-stats {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-right: 12px;
 }
 
 .topbar-stat {
@@ -151,14 +177,16 @@ body {
     overflow-y: auto;
     overflow-x: auto;
     max-height: calc(100vh - 120px);
+    -webkit-overflow-scrolling: touch;
 }
 
 .booking-bulk-actions {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     gap: 12px;
     padding: 0;
-    margin-top: 0;
+    margin: 0 0 0 auto;
     white-space: nowrap;
 }
 
@@ -182,14 +210,20 @@ body {
 }
 
 .booking-bulk-delete {
-    height: 30px;
-    padding: 0 12px;
+    height: 32px;
+    padding: 0 14px;
     border: 1px solid rgba(179, 43, 43, 0.3);
     border-radius: 8px;
     background: rgba(179, 43, 43, 0.08);
     color: #B32B2B;
     cursor: pointer;
     font: 700 12px 'Manrope', sans-serif;
+    transition: background 0.12s, border-color 0.12s;
+}
+
+.booking-bulk-delete:not(:disabled):hover {
+    background: rgba(179, 43, 43, 0.16);
+    border-color: rgba(179, 43, 43, 0.5);
 }
 
 .booking-bulk-delete:disabled {
@@ -524,17 +558,130 @@ body {
     flex-direction: column;
 }
 
+@media (max-width: 1024px) {
+    .booking-table-wrap {
+        max-height: none;
+    }
+
+    .booking-table {
+        min-width: 860px;
+    }
+}
+
+@media (max-width: 900px) {
+    .topbar {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .topbar-title {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .admin-booking-alert {
+        top: 14px;
+        right: 16px;
+        width: min(320px, calc(100vw - 32px));
+    }
+}
+
 @media (max-width: 700px) {
     .topbar {
         flex-wrap: wrap;
     }
 
+    .booking-toolbar {
+        flex-wrap: wrap;
+        padding: 12px 16px;
+    }
+
     .topbar-stats {
         width: 100%;
-        justify-content: flex-start;
+        justify-content: flex-end;
+        margin-right: 12px;
     }
 
     .booking-table {
         font-size: 11.5px;
+    }
+
+    .booking-table-wrap {
+        padding: 20px 0 12px;
+    }
+
+    .booking-bulk-actions {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .booking-note-dialog {
+        width: calc(100vw - 32px);
+        padding: 18px;
+    }
+}
+
+@media (max-width: 560px) {
+    .topbar-stat {
+        font-size: 11px;
+        padding: 5px 10px 5px 9px;
+    }
+
+    .topbar-stat strong {
+        font-size: 12px;
+    }
+
+    .booking-table {
+        min-width: 720px;
+        font-size: 11px;
+    }
+
+    .booking-table th,
+    .booking-table td {
+        padding: 10px 10px;
+    }
+
+    .btn-ghost {
+        height: 28px;
+        font-size: 11px;
+        padding: 0 9px;
+    }
+
+    .booking-confirm-inline {
+        height: 26px;
+        font-size: 11px;
+        padding: 0 8px;
+    }
+
+    .booking-menu-trigger {
+        width: 28px;
+        height: 28px;
+    }
+
+    .admin-booking-alert {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+    }
+}
+
+@media (max-width: 420px) {
+    .topbar-stats {
+        gap: 6px;
+    }
+
+    .topbar-stat {
+        padding: 4px 8px 4px 7px;
+    }
+
+    .booking-note-dialog {
+        padding: 16px;
+    }
+
+    .booking-note-close {
+        width: 28px;
+        height: 28px;
+        font-size: 19px;
     }
 }

@@ -10,11 +10,13 @@
 
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html {
     background: #000;
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -22,11 +24,13 @@ body {
     background: #000;
     color: var(--text);
     font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
 }
 
 .pricing-page {
     min-height: 100vh;
     background: #000;
+    overflow-x: hidden;
 }
 
 .pricing-shell {
@@ -60,10 +64,10 @@ body {
 .pricing-hero__title {
     margin: 0 0 16px;
     color: #fff;
-    font-size: clamp(42px, 5.6vw, 84px);
+    font-size: clamp(34px, 5.6vw, 84px);
     font-weight: 900;
-    line-height: 0.96;
-    letter-spacing: -0.05em;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
     text-transform: uppercase;
 }
 
@@ -355,62 +359,6 @@ body {
     color: #000;
 }
 
-@media (max-width: 1180px) {
-    .pricing-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .pricing-benefits {
-        flex-wrap: wrap;
-    }
-
-    .benefit-card {
-        flex: 1 1 50%;
-        border-bottom: 1px solid var(--border);
-    }
-
-    .pricing-benefits__actions {
-        flex: 1 1 100%;
-    }
-}
-
-@media (max-width: 840px) {
-    .pricing-shell {
-        padding: 20px 18px 52px;
-    }
-
-    .pricing-hero {
-        padding-top: 0;
-    }
-
-    .pricing-hero__visual {
-        margin-top: 0;
-        height: auto;
-        margin-right: 0;
-        border-radius: 20px;
-    }
-
-    .pricing-hero__copy {
-        padding-top: 20px;
-    }
-
-    .pricing-hero,
-    .pricing-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .pricing-benefits {
-        flex-direction: column;
-    }
-
-    .benefit-card {
-        flex: 1 1 auto;
-        border-right: none;
-    }
-}
-
-/* ===================== Request a Quote (floating modal) ===================== */
-
 .quote-section {
     display: flex;
     align-items: center;
@@ -436,20 +384,22 @@ body.quote-modal-open {
     width: 100%;
     max-width: 980px;
     max-height: 90vh;
+    max-height: 90dvh;
     border: 1px solid var(--border);
     border-radius: 20px;
     background: var(--panel);
     box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
 }
 
-/* Scrolling lives here, separate from .quote-section__inner, so the
-rounded-corner overflow clip never slices through the close button */
 .quote-section__body {
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
+    align-content: start;
     gap: 40px;
     max-height: 90vh;
+    max-height: 90dvh;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     padding: 40px;
     border-radius: 20px;
 }
@@ -482,10 +432,6 @@ rounded-corner overflow clip never slices through the close button */
 
 .quote-section__intro {
     align-self: start;
-    /* Locks the intro column to a fixed height so switching between
-    services (shorter/longer names, descriptions, feature lists)
-    never resizes or shifts the modal. Recalculated now that the
-    "Request a Quote" heading has been removed. */
     min-height: 390px;
 }
 
@@ -643,8 +589,6 @@ rounded-corner overflow clip never slices through the close button */
     padding-right: 34px;
 }
 
-/* Native <option> list renders on a white popup in most browsers,
-so it needs its own dark text color regardless of the closed select's --text color */
 .quote-form__field select option {
     color: #111111;
     background: #ffffff;
@@ -781,7 +725,85 @@ so it needs its own dark text color regardless of the closed select's --text col
     border: 1px solid rgba(239, 68, 68, 0.35);
 }
 
-@media (max-width: 980px) {
+@media (max-width: 1280px) {
+    .pricing-shell {
+        padding: 0 32px 56px;
+    }
+}
+
+@media (max-width: 1180px) {
+    .pricing-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pricing-benefits {
+        flex-wrap: wrap;
+    }
+
+    .benefit-card {
+        flex: 1 1 50%;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .pricing-benefits__actions {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .pricing-hero {
+        min-height: 0;
+        gap: 26px;
+    }
+
+    .pricing-hero__visual {
+        min-height: 380px;
+    }
+}
+
+@media (max-width: 900px) {
+    .pricing-shell {
+        padding: 20px 24px 52px;
+    }
+
+    .pricing-hero {
+        grid-template-columns: 1fr;
+        gap: 0;
+        padding-top: 0;
+    }
+
+    .pricing-hero__copy {
+        padding-top: 0;
+        max-width: none;
+    }
+
+    .pricing-hero__title {
+        margin-bottom: 14px;
+    }
+
+    .pricing-hero__text {
+        max-width: none;
+        margin-bottom: 0;
+    }
+
+    .pricing-hero__cta {
+        margin-top: 22px;
+    }
+
+    .pricing-hero__visual {
+        margin-top: 22px;
+        height: auto;
+        min-height: 300px;
+        margin-right: 0;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pricing-card {
+        min-height: 0;
+    }
+
     .quote-section__body {
         grid-template-columns: 1fr;
         gap: 28px;
@@ -791,29 +813,188 @@ so it needs its own dark text color regardless of the closed select's --text col
     .quote-section__intro {
         min-height: 0;
     }
+
+    .quote-section__package-heading,
+    .quote-section__package-features,
+    .quote-section__package-description {
+        min-height: 0;
+    }
+
+    .quote-section__package-features,
+    .quote-section__points {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 16px;
+        row-gap: 0;
+    }
 }
 
 @media (max-width: 640px) {
+    .pricing-shell {
+        padding: 18px 18px 44px;
+    }
+
+    .pricing-hero__visual {
+        margin-top: 18px;
+        min-height: 260px;
+    }
+
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .pricing-card {
+        padding: 22px 18px;
+    }
+
+    .pricing-benefits {
+        flex-direction: column;
+    }
+
+    .benefit-card {
+        flex: 1 1 auto;
+        border-right: none;
+    }
+
+    .pricing-benefits__actions {
+        padding: 14px 16px 18px;
+    }
+
+    .quote-section {
+        padding: 0;
+    }
+
+    .quote-section__inner {
+        position: fixed;
+        inset: 0;
+        width: auto;
+        max-width: none;
+        height: auto;
+        max-height: none;
+        border-radius: 0;
+        border: none;
+    }
+
+    .quote-section__body {
+        height: 100%;
+        max-height: none;
+        border-radius: 0;
+        padding: 20px 16px;
+        gap: 16px;
+    }
+
+    .quote-section__close {
+        top: 10px;
+        right: 10px;
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
+
+    .quote-section__package-features li,
+    .quote-section__points li {
+        margin-bottom: 6px;
+    }
+
+    .quote-form {
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .quote-form__row {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .quote-form__field {
+        gap: 5px;
+    }
+
+    .quote-form__field textarea {
+        min-height: 80px;
+    }
+
+    .form-alert--toast {
+        top: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pricing-shell {
+        padding: 16px 14px 40px;
+    }
+
+    .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.24em;
+    }
+
+    .pricing-hero__visual {
+        margin-top: 16px;
+        min-height: 220px;
+        border-radius: 16px;
+    }
+
+    .pricing-hero__cta {
+        width: 100%;
+        margin-top: 18px;
+    }
+
+    .pricing-card {
+        padding: 20px 16px;
+    }
+
+    .pricing-card h3 {
+        font-size: 19px;
+    }
+
+    .benefit-card {
+        padding: 18px 16px;
+        gap: 12px;
+    }
+
+    .quote-section__body {
+        height: 100%;
+        max-height: none;
+        padding: 18px 14px;
+        gap: 14px;
+    }
+
+    .quote-form {
+        padding: 16px;
+        gap: 10px;
+    }
+
+    .quote-form__field textarea {
+        min-height: 76px;
+    }
+
+    .quote-section__package-name {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 380px) {
+
+    .quote-section__package-features,
+    .quote-section__points,
     .quote-form__row {
         grid-template-columns: 1fr;
     }
 
-    .quote-form {
-        padding: 20px;
+    .pricing-hero__title {
+        font-size: clamp(28px, 9vw, 40px);
     }
 
-    .quote-section {
-        padding: 12px;
+    .pricing-card__icon {
+        width: 40px;
+        height: 40px;
+        margin-bottom: 18px;
     }
 
-    .quote-section__body {
-        padding: 24px 18px;
-    }
-
-    .quote-section__close {
-        top: -28px;
-        right: -28px;
-        width: 34px;
-        height: 34px;
+    .pricing-benefits__button {
+        font-size: 11px;
+        padding: 0 14px;
     }
 }

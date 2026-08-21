@@ -101,8 +101,6 @@ body {
     }
 }
 
-/* ---- Hero (side-by-side, matches homepage hero-section) ---- */
-
 .service-hero-split {
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
@@ -193,8 +191,6 @@ body {
     }
 }
 
-/* ---- Category nav (icon strip, matches homepage services-strip) ---- */
-
 .service-category-nav {
     margin-top: 34px;
 }
@@ -281,6 +277,10 @@ body {
 }
 
 @media (max-width: 1024px) {
+    .service-shell {
+        margin-top: 28px;
+    }
+
     .service-category-grid {
         justify-content: flex-start;
         gap: 16px 0;
@@ -294,6 +294,10 @@ body {
 }
 
 @media (max-width: 640px) {
+    .service-shell {
+        margin-top: 20px;
+    }
+
     .service-category-grid {
         gap: 14px 0;
         padding: 12px 18px;
@@ -325,8 +329,6 @@ body {
     }
 }
 
-/* ---- Video grid layout ---- */
-
 .video-grid-section {
     margin-top: 52px;
 }
@@ -337,8 +339,6 @@ body {
     gap: 22px;
     justify-content: center;
 }
-
-/* ---- Responsive ---- */
 
 @media (max-width: 1180px) {
     .video-grid {

@@ -1,12 +1,3 @@
-
-var toggle = document.getElementById('menuToggle');
-var sidebar = document.getElementById('sidebar');
-if (toggle && sidebar) {
-    toggle.addEventListener('click', function () {
-        sidebar.classList.toggle('open');
-    });
-}
-
 var deleteSelectedForm = document.getElementById('deleteSelectedForm');
 var checkboxes = document.querySelectorAll('.video-checkbox');
 var selectAll = document.getElementById('selectAll');

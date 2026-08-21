@@ -1,8 +1,6 @@
 (function () {
     var PLAY_ICON_SVG = '<svg viewBox="0 0 24 24"><path d="M5 3v18l15-9z"/></svg>';
 
-    // Registry of every video we know about (thumbnails + modal videos).
-    // Used to enforce "only one video plays at a time" across the whole page.
     var activeVideos = [];
 
     function registerVideo(video) {
@@ -12,6 +10,64 @@
         video.addEventListener('play', function () {
             pauseOtherVideos(video);
         });
+    }
+
+    function clickShowLessButton() {
+        var toggles = Array.prototype.slice.call(document.querySelectorAll('.video-grid__toggle'));
+        for (var i = 0; i < toggles.length; i++) {
+            var t = toggles[i];
+            var expanded = t.getAttribute('aria-expanded') === 'true' || t.dataset.expanded === 'true';
+            if (expanded) {
+                t.dataset.silent = '1';
+                t.click();
+                setTimeout(function (el) { delete el.dataset.silent; }, 200, t);
+                return true;
+            }
+        }
+
+        var buttons = Array.prototype.slice.call(document.querySelectorAll('button'));
+        for (var j = 0; j < buttons.length; j++) {
+            var b = buttons[j];
+            var txt = (b.textContent || '').trim().toLowerCase();
+            if (txt.indexOf('show less') !== -1) {
+                b.dataset.silent = '1';
+                b.click();
+                setTimeout(function (el) { delete el.dataset.silent; }, 200, b);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function clickShowLessForGrid(grid) {
+        if (!grid) return clickShowLessButton();
+
+        var toggleId = grid.dataset.loadMoreToggleId;
+        if (toggleId) {
+            var boundToggle = document.querySelector('.video-grid__toggle[data-for-grid="' + toggleId + '"]');
+            if (boundToggle) {
+                var expanded = boundToggle.getAttribute('aria-expanded') === 'true' || boundToggle.dataset.expanded === 'true';
+                if (expanded) { boundToggle.dataset.silent = '1'; boundToggle.click(); setTimeout(function (el) { delete el.dataset.silent; }, 200, boundToggle); return true; }
+            }
+        }
+
+        var parent = grid.parentNode;
+        if (parent) {
+            var parentToggle = parent.querySelector('.video-grid__toggle');
+            if (parentToggle) {
+                var exp = parentToggle.getAttribute('aria-expanded') === 'true' || parentToggle.dataset.expanded === 'true';
+                if (exp) { parentToggle.dataset.silent = '1'; parentToggle.click(); setTimeout(function (el) { delete el.dataset.silent; }, 200, parentToggle); return true; }
+            }
+
+            var btn = Array.prototype.slice.call(parent.querySelectorAll('button')).find(function (b) {
+                var t = (b.textContent || '').trim().toLowerCase();
+                return t.indexOf('show less') !== -1;
+            });
+            if (btn) { btn.dataset.silent = '1'; btn.click(); setTimeout(function (el) { delete el.dataset.silent; }, 200, btn); return true; }
+        }
+
+        return clickShowLessButton();
     }
 
     function unregisterVideo(video) {
@@ -62,17 +118,12 @@
 
         registerVideo(video);
 
-        // Clicking the play button now expands the video into the
-        // modal (instead of playing it inline in the thumbnail).
         btn.addEventListener('click', function (e) {
             e.preventDefault();
             video.pause();
             openVideoModal(video);
         });
 
-        // If the thumbnail video itself is clicked directly (and it
-        // doesn't already have native controls), also expand it rather
-        // than toggling inline playback.
         video.addEventListener('click', function () {
             if (video.hasAttribute('controls')) {
                 return;
@@ -167,6 +218,13 @@
 
         registerVideo(video);
 
+        video.addEventListener('ended', function () {
+            setTimeout(function () {
+                var grid = sourceVideo && sourceVideo.closest ? sourceVideo.closest('.video-grid, .projects-grid') : null;
+                clickShowLessForGrid(grid);
+            }, 50);
+        });
+
         modal.appendChild(closeBtn);
         modal.appendChild(video);
         backdrop.appendChild(modal);
@@ -222,17 +280,47 @@
         toggle.className = 'video-grid__toggle';
         toggle.textContent = 'Load More';
         toggle.setAttribute('aria-expanded', 'false');
+        toggle.dataset.expanded = 'false';
+
+        var toggleId = 'videoGridToggle_' + Math.random().toString(36).slice(2, 9);
+        grid.dataset.loadMoreToggleId = toggleId;
+        toggle.dataset.forGrid = toggleId;
+
+        function syncToggleState() {
+            var expanded = visibleCount >= cards.length;
+            toggle.textContent = expanded ? 'Show Less' : 'Load More';
+            toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+            toggle.dataset.expanded = expanded ? 'true' : 'false';
+        }
 
         toggle.addEventListener('click', function () {
             var expanded = toggle.getAttribute('aria-expanded') === 'true';
 
             if (expanded) {
+                var htmlEl = document.documentElement;
+                var prevAnchor = htmlEl.style.overflowAnchor;
+                var prevBehavior = htmlEl.style.scrollBehavior;
+                htmlEl.style.overflowAnchor = 'none';
+                htmlEl.style.scrollBehavior = 'auto';
+
+                var top = grid.getBoundingClientRect().top + window.pageYOffset - 20;
+
                 visibleCount = 8;
                 cards.forEach(function (card, index) {
                     card.hidden = index >= visibleCount;
                 });
-                toggle.textContent = 'Show Less';
-                toggle.setAttribute('aria-expanded', 'false');
+                syncToggleState();
+
+                if (!toggle.dataset.silent) {
+                    window.scrollTo(0, top);
+                } else {
+                    delete toggle.dataset.silent;
+                }
+
+                requestAnimationFrame(function () {
+                    htmlEl.style.overflowAnchor = prevAnchor;
+                    htmlEl.style.scrollBehavior = prevBehavior;
+                });
                 return;
             }
 
@@ -240,14 +328,7 @@
             cards.forEach(function (card, index) {
                 card.hidden = index >= visibleCount;
             });
-
-            if (visibleCount >= cards.length) {
-                toggle.textContent = 'Show Less';
-                toggle.setAttribute('aria-expanded', 'true');
-            } else {
-                toggle.textContent = 'Load More';
-                toggle.setAttribute('aria-expanded', 'false');
-            }
+            syncToggleState();
         });
 
         var wrap = document.createElement('div');

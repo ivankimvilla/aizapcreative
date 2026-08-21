@@ -80,10 +80,6 @@ html {
     min-width: 0;
 }
 
-/* ---------- NAV LINKS ----------
-   Pattern: border-bottom is ALWAYS 2px, transparent by default.
-   Only the color/opacity changes on hover/active — width never
-   changes, so nothing shifts. Same idea as .nav a in the sidebar. */
 .site-header__nav-link {
     position: relative;
     display: inline-flex;
@@ -133,7 +129,6 @@ html {
     transform: none;
 }
 
-/* ---------- SERVICES DROPDOWN BUTTON ---------- */
 .site-header__nav-item--services {
     position: relative;
 }
@@ -314,7 +309,6 @@ html {
     color: #050505;
 }
 
-/* ---------- STATUS TOAST ---------- */
 .site-header__status {
     position: absolute;
     left: 50%;
@@ -365,7 +359,6 @@ html {
     color: #d2f8e1;
 }
 
-/* ---------- MOBILE TOGGLE ---------- */
 .site-header__toggle {
     display: none;
     flex-direction: column;
@@ -397,10 +390,6 @@ html {
     background: #fff;
 }
 
-/* Intentional animation (hamburger -> X). This is the ONLY
-   transform allowed in the header, and it's on the inner <span>
-   icon bars, not on the button itself — so the button's own box
-   never moves or resizes. */
 .site-header__toggle--open span:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
@@ -420,6 +409,10 @@ html {
     transform: none;
 }
 
+.site-header__cta--mobile {
+    display: none;
+}
+
 body {
     padding-top: 64px;
 }
@@ -429,12 +422,8 @@ body {
         display: flex;
     }
 
-    .site-header__cta {
+    .site-header__cta--desktop {
         display: none;
-    }
-
-    .site-header__services-footer .site-header__cta {
-        display: inline-flex;
     }
 
     .site-header__nav {
@@ -449,8 +438,9 @@ body {
         align-items: stretch;
         justify-content: flex-start;
         gap: 0;
-        max-height: calc(100vh - 64px);
+        max-height: calc(100dvh - 64px);
         overflow-y: auto;
+        padding-bottom: 24px;
         background: rgba(0, 0, 0, 0.92);
         backdrop-filter: blur(14px);
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
@@ -475,15 +465,30 @@ body {
         border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
+    .site-header__cta--mobile {
+        display: inline-flex;
+        width: calc(100% - 48px);
+        margin: 16px 24px 8px;
+        padding: 12px 18px 12px 12px;
+        justify-content: center;
+    }
+
     .site-header__services-dropdown {
-        position: static;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
         transform: none;
         min-width: auto;
+        max-width: 100%;
         width: 100%;
-        box-shadow: none;
+        background: #0b0b0b;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
         padding: 18px 20px;
         border: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 0;
+        z-index: 1150;
     }
 
     .site-header__services-footer {
@@ -508,7 +513,7 @@ body {
 
     .site-header__nav {
         top: 56px;
-        max-height: calc(100vh - 56px);
+        max-height: calc(100dvh - 56px);
     }
 
     .site-header__brand {

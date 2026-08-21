@@ -1,5 +1,7 @@
-<link rel="stylesheet" href="{{ asset('css/admin/dashboard/dashboard.css') }}">
 <aside class="sidebar" id="sidebar">
+  <button type="button" class="sidebar-close" id="sidebarClose" aria-label="Close menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+  </button>
   <div class="wordmark">
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path d="M13.2 1L4 13.4H10.6L9.4 23L20 9.6H13.4L13.2 1Z" fill="#FFD400"/>

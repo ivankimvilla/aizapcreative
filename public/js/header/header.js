@@ -230,7 +230,8 @@
                 });
             })
             .catch(function (err) {
-                console.error('[ajax-nav]', err);
+                console.warn('[ajax-nav]', err);
+                // fallback to full navigation when AJAX navigation fails
                 window.location.href = url;
             });
     }

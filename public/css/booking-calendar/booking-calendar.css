@@ -18,6 +18,7 @@
 html {
     background: var(--bg);
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 body {
@@ -25,6 +26,7 @@ body {
     background: var(--bg);
     color: var(--text);
     font-family: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
 }
 
 .booking-page {
@@ -52,7 +54,7 @@ body {
     border: 1px solid var(--border);
     background: var(--panel);
     box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
-    overflow: hidden;
+    overflow: visible;
 }
 
 .booking-widget__sidebar {
@@ -61,6 +63,7 @@ body {
     background: var(--panel-soft);
     display: flex;
     flex-direction: column;
+    border-radius: 20px 0 0 20px;
 }
 
 .booking-widget__brand {
@@ -144,6 +147,8 @@ body {
     display: grid;
     align-content: start;
     gap: 16px;
+    position: relative;
+    overflow: visible;
 }
 
 .calendar-toprow {
@@ -199,7 +204,7 @@ body {
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
-    z-index: 20;
+    z-index: 1300;
     min-width: 220px;
     max-height: 320px;
     overflow-y: auto;
@@ -384,6 +389,7 @@ body {
     align-content: start;
     gap: 14px;
     background: var(--bg);
+    border-radius: 0 20px 20px 0;
 }
 
 .times-date {
@@ -457,10 +463,6 @@ body {
     background: var(--gold-soft);
 }
 
-/* Disabled = either booked OR already-passed times.
-   By default this only greys the button out + strikes the label.
-   No badge here — the badge is opt-in via .time-slot--booked below,
-   so past (but not booked) times stay badge-less. */
 .time-slot--disabled {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.06);
@@ -483,9 +485,6 @@ body {
     color: rgba(255, 255, 255, 0.35);
 }
 
-/* Booked = genuinely taken slots only. Shows the "Booked" badge.
-   (JS only adds this class when the slot is actually in bookedSlots,
-   never for past-but-unbooked slots.) */
 .time-slot--booked .time-slot__badge {
     display: inline-flex;
     text-decoration: none;
@@ -517,7 +516,7 @@ body {
     top: calc(64px + 12px);
     left: 50%;
     transform: translateX(-50%);
-    z-index: 1200;
+    z-index: 1400;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -704,7 +703,8 @@ body {
     box-shadow: 0 32px 80px rgba(0, 0, 0, 0.7);
     width: 100%;
     max-width: 640px;
-    overflow: visible;
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
     transform: translateY(20px) scale(0.97);
     transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
     opacity: 0;
@@ -796,32 +796,117 @@ body {
 }
 
 @media (max-width: 980px) {
+    .booking-shell {
+        max-width: 640px;
+        margin: 28px auto 0;
+        padding: 0 24px 32px;
+    }
+
     .booking-widget__card {
         grid-template-columns: 1fr;
     }
 
-    .booking-widget__sidebar,
+    .booking-widget__sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+        border-radius: 20px 20px 0 0;
+    }
+
     .booking-widget__calendar {
         border-right: none;
         border-bottom: 1px solid var(--border);
     }
 
+    .booking-widget__times {
+        border-radius: 0 0 20px 20px;
+    }
+
     .times-list {
         max-height: none;
+    }
+
+    .calendar-day {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-shell {
+        margin-top: 20px;
+        padding: 0 18px 28px;
+    }
+
+    .booking-widget {
+        margin-bottom: 40px;
+    }
+
+    .booking-widget__title {
+        font-size: 16px;
+    }
+
+    .booking-toast {
+        top: calc(56px + 10px);
+        width: calc(100vw - 32px);
+        padding: 14px 16px;
+        gap: 12px;
+    }
+
+    .booking-modal__title {
+        font-size: 18px;
     }
 }
 
 @media (max-width: 640px) {
     .booking-shell {
-        padding: 40px 18px 52px;
+        padding: 0 16px 24px;
+    }
+
+    .booking-widget__sidebar,
+    .booking-widget__calendar,
+    .booking-widget__times {
+        padding: 16px;
     }
 
     .booking-form {
         grid-template-columns: 1fr;
     }
 
+    .booking-form-footer {
+        justify-content: center;
+    }
+
+    .booking-submit {
+        width: 100%;
+    }
+
+    .calendar-tz__list {
+        left: 0;
+        right: auto;
+        min-width: 200px;
+        max-width: calc(100vw - 32px);
+    }
+
+    .calendar-grid {
+        gap: 5px;
+    }
+
+    .calendar-day {
+        font-size: 11px;
+        border-radius: 7px;
+    }
+
+    .booking-modal-overlay {
+        padding: 16px;
+        align-items: center;
+    }
+
+    .booking-modal {
+        max-height: calc(100dvh - 32px);
+    }
+
     .booking-modal__header {
         padding: 22px 20px 0;
+        flex-wrap: wrap;
     }
 
     .booking-modal__body {
@@ -830,5 +915,29 @@ body {
 
     .booking-modal {
         border-radius: 16px;
+    }
+
+    .booking-modal__close {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+@media (max-width: 420px) {
+    .booking-widget__brand span {
+        font-size: 12px;
+    }
+
+    .calendar-days {
+        font-size: 9px;
+    }
+
+    .calendar-day {
+        font-size: 10px;
+    }
+
+    .time-slot {
+        font-size: 11px;
+        padding: 9px 6px;
     }
 }

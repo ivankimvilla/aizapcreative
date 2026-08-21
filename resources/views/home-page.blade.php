@@ -70,49 +70,38 @@
             <main class="process-shell">
                 <section class="process-hero">
                     <div class="process-hero__media-wrap">
-                        <div class="process-hero__media">
-                            <div class="process-hero__slide" style="animation-delay: 0s;">
-                                <div class="process-hero__slide-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
-                                </div>
-                                <div class="process-hero__slide-label">AI Commercial Ads</div>
+                        <div class="process-hero__media models-panel">
+                            <div style="display:flex;align-items:flex-start;gap:12px;">
+                                <h2 class="models-panel__title">HIGGSFIELD.AI</h2>
                             </div>
-                            <div class="process-hero__slide" style="animation-delay: -5s;">
-                                <div class="process-hero__slide-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".7" fill="currentColor" stroke="none"/></svg>
-                                </div>
-                                <div class="process-hero__slide-label">AI Product Ads</div>
-                            </div>
-                            <div class="process-hero__slide" style="animation-delay: -10s;">
-                                <div class="process-hero__slide-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
-                                </div>
-                                <div class="process-hero__slide-label">AI Storytelling / Drama</div>
-                            </div>
-                            <div class="process-hero__slide" style="animation-delay: -15s;">
-                                <div class="process-hero__slide-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 3.9"/><path d="m12.4 3.4 3.1 4"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
-                                </div>
-                                <div class="process-hero__slide-label">AI Movie Trailers</div>
-                            </div>
-                            <div class="process-hero__slide" style="animation-delay: -20s;">
-                                <div class="process-hero__slide-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
-                                </div>
-                                <div class="process-hero__slide-label">UGC-style AI Videos</div>
-                            </div>
-                            <div class="process-hero__slide" style="animation-delay: -25s;">
-                                <div class="process-hero__slide-icon">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
-                                </div>
-                                <div class="process-hero__slide-label">Explainer Videos</div>
+
+                            <div class="models-list">
+                                <div class="model-item"><span class="model-icon icon-s">S</span><span class="model-label">Seedance 2.5</span></div>
+                                <div class="model-item"><span class="model-icon icon-s">S</span><span class="model-label">Seedance 2.5 Edit</span></div>
+                                <div class="model-item"><span class="model-icon icon-s">S</span><span class="model-label">Seedance 2.0</span></div>
+                                <div class="model-item"><span class="model-icon icon-s">S</span><span class="model-label">Seedance 2.0 Fast</span></div>
+                                <div class="model-item"><span class="model-icon icon-s">S</span><span class="model-label">Seedance 2.0 Mini</span></div>
+                                <div class="model-item"><span class="model-icon icon-m">M</span><span class="model-label">MiniMax H3</span></div>
+                                <div class="model-item"><span class="model-icon icon-g">G</span><span class="model-label">Gemini Omni Flash</span></div>
+                                <div class="model-item"><span class="model-icon icon-k">K</span><span class="model-label">Kling 3.0</span></div>
+                                <div class="model-item"><span class="model-icon icon-f">F</span><span class="model-label">FLUX.3 Video</span></div>
+                                <div class="model-item"><span class="model-icon icon-x">X</span><span class="model-label">Grok Imagine 1.5</span></div>
+                                <div class="model-item"><span class="model-icon icon-m">M</span><span class="model-label">Minimax Hailuo</span></div>
+                                <div class="model-item"><span class="model-icon icon-k">K</span><span class="model-label">Kling</span></div>
+                                <div class="model-item"><span class="model-icon icon-o">O</span><span class="model-label">OpenAI Sora 2</span></div>
+                                <div class="model-item"><span class="model-icon icon-g">G</span><span class="model-label">Google Veo</span></div>
+                                <div class="model-item"><span class="model-icon icon-h">H</span><span class="model-label">Higgsfield</span></div>
+                                <div class="model-item"><span class="model-icon icon-w">W</span><span class="model-label">Wan</span></div>
+                                <div class="model-item"><span class="model-icon icon-s">S</span><span class="model-label">Seedance</span></div>
+                                <div class="model-item"><span class="model-icon icon-x">X</span><span class="model-label">Grok Imagine</span></div>
+                                <div class="model-item"><span class="model-icon icon-h">H</span><span class="model-label">HappyHorse</span></div>
                             </div>
                         </div>
                     </div>
                     <div class="process-hero__copy process-hero__copy--wide">
-                        <h1 class="process-hero__title">Our process.<br><span>Simple. clear.</span><br>Powerful.</h1>
+                        <h1 class="process-hero__title">Tools for <span>video creation.</span></h1>
                         <p class="process-hero__text">
-                            Our proven process ensures every project is strategic, creative, and delivered with precision from concept to final cut.
+                            AI video, voice, editing, motion, and production tools for polished content.
                         </p>
                     </div>
                 </section>

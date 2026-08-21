@@ -35,8 +35,6 @@ body {
     position: relative;
 }
 
-/* ---------- BRAND PANEL ---------- */
-
 .brand-panel {
     background: var(--ink);
     color: var(--white);
@@ -183,6 +181,8 @@ body {
     letter-spacing: 0.08em;
     color: var(--text-on-dark);
     text-transform: uppercase;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .brand-bottom .tag {
@@ -192,8 +192,6 @@ body {
     padding: 5px 10px;
     border-radius: 3px;
 }
-
-/* ---------- LIGHTNING SEAM (signature divider) ---------- */
 
 .seam {
     position: relative;
@@ -224,8 +222,6 @@ body {
         stroke-dashoffset: 0;
     }
 }
-
-/* ---------- FORM PANEL ---------- */
 
 .form-panel {
     display: flex;
@@ -308,7 +304,6 @@ body {
     border-color: #b91c1c;
 }
 
-/* Inline field error */
 .field-error {
     margin-top: 8px;
     color: #b91c1c;
@@ -374,6 +369,8 @@ body {
     justify-content: space-between;
     margin: -6px 0 26px;
     font-size: 13px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .remember {
@@ -446,9 +443,30 @@ body {
     transform: translateX(2px);
 }
 
+@media (max-width:1024px) and (min-width:861px) {
+    .brand-panel {
+        padding: 44px 40px;
+    }
+
+    .form-panel {
+        padding: 40px;
+    }
+
+    .headline {
+        font-size: clamp(32px, 5vw, 44px);
+    }
+
+    .form-wrap {
+        max-width: 420px;
+    }
+}
+
 @media (max-width:860px) {
     .screen {
         grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        min-height: auto;
+        align-content: start;
     }
 
     .seam {
@@ -456,20 +474,85 @@ body {
     }
 
     .brand-panel {
-        padding: 40px 28px;
-        min-height: 260px;
+        padding: 36px 28px 28px;
+        min-height: 0;
+        justify-content: flex-start;
+        gap: 24px;
     }
 
     .brand-mid {
-        margin: 22px 0;
+        margin: 0;
     }
 
     .headline {
         font-size: 34px;
     }
 
+    .spark-rule {
+        margin: 20px 0 16px;
+    }
+
+    .sub {
+        max-width: 46ch;
+    }
+
+    .brand-bottom {
+        margin-top: 4px;
+    }
+
     .form-panel {
-        padding: 36px 24px;
+        padding: 36px 24px 44px;
+    }
+}
+
+@media (max-width:480px) {
+    .brand-panel {
+        padding: 28px 20px 24px;
+        gap: 18px;
+    }
+
+    .wordmark span {
+        font-size: 17px;
+    }
+
+    .headline {
+        font-size: 27px;
+        max-width: 100%;
+    }
+
+    .spark-rule {
+        width: 160px;
+        margin: 4px 0 4px;
+    }
+
+    .sub {
+        font-size: 13.5px;
+        max-width: 100%;
+    }
+
+    .brand-bottom {
+        font-size: 10px;
+        margin-top: 2px;
+    }
+
+    .form-panel {
+        padding: 26px 18px 36px;
+    }
+
+    .form-wrap {
+        max-width: 100%;
+    }
+
+    .form-title {
+        font-size: 26px;
+    }
+
+    .form-desc {
+        margin-bottom: 28px;
+    }
+
+    .row-between {
+        margin: -4px 0 22px;
     }
 }
 
