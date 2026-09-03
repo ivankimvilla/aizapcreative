@@ -1,0 +1,146 @@
+:root {
+    --bg: #0a0c11;
+    --line: rgba(255, 255, 255, 0.09);
+    --ink: #f5f3ec;
+    --muted: #8a8f9e;
+    --accent: #f4761f;
+    /* swap for your existing gold/orange accent var */
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    color: var(--ink);
+}
+
+.tools-section {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 64px 60px 0;
+    /* top space so the title isn't flush against the divider above */
+}
+
+.tools-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 40px;
+    padding-bottom: 44px;
+}
+
+.tools-title {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    /* swap for your site's display serif */
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1.05;
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.tools-desc {
+    max-width: 320px;
+    text-align: left;
+    color: var(--muted);
+    font-size: 17px;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.tools-ticker {
+    position: relative;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    padding: 36px 0;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 80px, #000 calc(100% - 80px), transparent 100%);
+}
+
+.tools-track {
+    display: flex;
+    align-items: baseline;
+    width: max-content;
+    animation: tools-scroll 70s linear infinite;
+}
+
+.tools-track:hover {
+    animation-play-state: paused;
+}
+
+@keyframes tools-scroll {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.tools-item {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    white-space: nowrap;
+    padding: 0 32px;
+}
+
+.tools-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: inline-block;
+    align-self: center;
+    flex-shrink: 0;
+}
+
+.tools-name {
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-size: 26px;
+    color: var(--ink);
+}
+
+.tools-label {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .tools-track {
+        animation: none;
+    }
+}
+
+@media (max-width:720px) {
+    .tools-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tools-desc {
+        text-align: left;
+    }
+
+    .tools-title {
+        font-size: 36px;
+    }
+
+    .tools-name {
+        font-size: 20px;
+    }
+}

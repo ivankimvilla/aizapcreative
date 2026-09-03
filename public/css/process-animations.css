@@ -1,0 +1,153 @@
+/* ============================================================
+   Process section — scroll-reveal + hover interactions
+   Scoped entirely to .process-section / .process-icons-row.
+
+   IMPORTANT: elements are visible by default. The ".reveal-init"
+   class (added only by process-animations.js, right before it
+   observes the element) is what hides them ahead of the reveal.
+   If the JS ever fails to load, nothing disappears — it just
+   won't animate in.
+   ============================================================ */
+
+.process-section .section-heading {
+    transition: opacity .8s cubic-bezier(.16, .84, .44, 1), transform .8s cubic-bezier(.16, .84, .44, 1);
+}
+
+.process-section .section-heading.reveal-init {
+    opacity: 0;
+    transform: translateY(24px);
+}
+
+.process-section .section-heading.reveal-init.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Icon row: line draws in, then icons pop in one by one */
+.process-icons-row {
+    position: relative;
+}
+
+.process-icons-line {
+    transition: transform 1.1s cubic-bezier(.16, .84, .44, 1);
+}
+
+.process-icons-row.reveal-init .process-icons-line {
+    transform-origin: left center;
+    transform: scaleX(0);
+}
+
+.process-icons-row.reveal-init.is-visible .process-icons-line {
+    transform: scaleX(1);
+}
+
+.process-icon-node {
+    transition: opacity .6s ease, transform .6s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+.process-icons-row.reveal-init .process-icon-node {
+    opacity: 0;
+    transform: translateY(14px) scale(.9);
+}
+
+.process-icons-row.reveal-init.is-visible .process-icon-node {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(2) {
+    transition-delay: .08s;
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(3) {
+    transition-delay: .16s;
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(4) {
+    transition-delay: .24s;
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(5) {
+    transition-delay: .32s;
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(6) {
+    transition-delay: .40s;
+}
+
+.process-circle {
+    transition: transform .4s cubic-bezier(.34, 1.56, .64, 1), box-shadow .4s ease, border-color .4s ease;
+}
+
+.process-icon-node:hover .process-circle {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 12px 30px -8px rgba(244, 118, 31, .45);
+    border-color: #f4761f;
+}
+
+/* Step cards: cascading entrance + premium hover */
+.process-step-card {
+    transition: opacity .7s cubic-bezier(.16, .84, .44, 1),
+        transform .7s cubic-bezier(.16, .84, .44, 1),
+        box-shadow .4s ease,
+        border-color .4s ease;
+}
+
+.process-step-card.reveal-init {
+    opacity: 0;
+    transform: translateY(32px);
+}
+
+.process-step-card.reveal-init.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.process-step-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px -16px rgba(0, 0, 0, .55);
+    border-color: rgba(244, 118, 31, .4);
+}
+
+.process-step-image {
+    overflow: hidden;
+    position: relative;
+}
+
+.process-step-image img {
+    transition: transform .6s cubic-bezier(.16, .84, .44, 1), filter .6s ease;
+    will-change: transform;
+}
+
+.process-step-card:hover .process-step-image img {
+    transform: scale(1.08);
+    filter: brightness(1.05);
+}
+
+.process-number {
+    display: inline-block;
+    transition: color .4s ease, transform .4s ease;
+}
+
+.process-step-card:hover .process-number {
+    color: #f4761f;
+    transform: translateX(2px);
+}
+
+/* Respect users who've asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .process-section .section-heading,
+    .process-icons-line,
+    .process-icon-node,
+    .process-step-card,
+    .process-step-image img,
+    .process-number {
+        transition: none !important;
+    }
+
+    .reveal-init {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}

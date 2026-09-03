@@ -1,0 +1,95 @@
+.preloader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0c11;
+    transition: opacity .5s ease, visibility .5s ease;
+}
+
+.preloader.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.preloader__content {
+    text-align: center;
+}
+
+.preloader__brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.preloader__logo {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+
+.preloader__name {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.12em;
+    color: #f5f3ec;
+}
+
+.preloader__status {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: #8a8f9e;
+    margin: 0 0 18px;
+}
+
+.preloader__percent {
+    color: #f5f3ec;
+    font-weight: 700;
+}
+
+.preloader__bar {
+    width: 320px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
+.preloader__bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #f4761f, #8b5cf6);
+    transition: width .15s linear;
+}
+
+.preloader__frame {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: #5c6274;
+    margin: 18px 0 0;
+}
+
+@media (max-width:480px) {
+    .preloader__bar {
+        width: 240px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .preloader {
+        transition: none;
+    }
+
+    .preloader__bar-fill {
+        transition: none;
+    }
+}

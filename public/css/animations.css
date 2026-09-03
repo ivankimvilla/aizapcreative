@@ -1,0 +1,913 @@
+/* ==========================================================================
+   Aizap Creatives — Cinematic Animation & Interaction Layer
+   Drop-in stylesheet. Load AFTER your existing CSS files so these rules win.
+   Pairs with js/scroll-animations.js
+   ========================================================================== */
+
+:root {
+    --az-ease: cubic-bezier(.16, 1, .3, 1);
+    --az-ease-soft: cubic-bezier(.22, .61, .36, 1);
+    --az-gold: #d4af6a;
+    --az-gold-soft: rgba(212, 175, 106, .35);
+    --az-reveal-duration: .9s;
+    --az-reveal-distance: 46px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* --------------------------------------------------------------------
+   Page load veil — a soft cinematic curtain-lift once preloader ends
+   -------------------------------------------------------------------- */
+#app-content {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 1s var(--az-ease), transform 1s var(--az-ease);
+}
+
+#app-content.az-app-ready {
+    opacity: 1;
+    transform: none;
+}
+
+/* --------------------------------------------------------------------
+   Generic scroll-reveal primitives
+   Controlled by scroll-animations.js toggling .is-visible via
+   IntersectionObserver. Stagger delay is set inline as --az-delay.
+   -------------------------------------------------------------------- */
+[data-reveal] {
+    opacity: 0;
+    transition:
+        opacity var(--az-reveal-duration) var(--az-ease),
+        transform var(--az-reveal-duration) var(--az-ease),
+        filter var(--az-reveal-duration) var(--az-ease);
+    transition-delay: var(--az-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+[data-reveal="up"] {
+    transform: translateY(var(--az-reveal-distance));
+}
+
+[data-reveal="down"] {
+    transform: translateY(calc(var(--az-reveal-distance) * -1));
+}
+
+[data-reveal="left"] {
+    transform: translateX(calc(var(--az-reveal-distance) * -1));
+}
+
+[data-reveal="right"] {
+    transform: translateX(var(--az-reveal-distance));
+}
+
+[data-reveal="zoom"] {
+    transform: scale(.92);
+}
+
+[data-reveal="fade"] {
+    transform: none;
+}
+
+[data-reveal="blur"] {
+    filter: blur(10px);
+    transform: translateY(18px);
+}
+
+[data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+}
+
+/* --------------------------------------------------------------------
+   Hero
+   -------------------------------------------------------------------- */
+.hero-title .gold {
+    position: relative;
+}
+
+.hero-panel-media {
+    will-change: transform;
+    transition: transform .6s var(--az-ease-soft);
+}
+
+/* --------------------------------------------------------------------
+   Formats ticker — subtle hover pause + glow sweep
+   -------------------------------------------------------------------- */
+.formats-ticker__band {
+    overflow: hidden;
+    position: relative;
+}
+
+.formats-ticker__band::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(0, 0, 0, .9), transparent 12%, transparent 88%, rgba(0, 0, 0, .9));
+}
+
+.formats-ticker__track:hover {
+    animation-play-state: paused;
+}
+
+.formats-ticker__item {
+    transition: color .3s ease, transform .3s ease;
+}
+
+.formats-ticker__item:hover {
+    color: var(--az-gold);
+    transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------
+   Project / video cards — cinematic hover reveal
+   -------------------------------------------------------------------- */
+.project-card {
+    border-radius: 14px;
+    overflow: hidden;
+    transform: translateZ(0);
+    transition: transform .5s var(--az-ease), box-shadow .5s var(--az-ease);
+}
+
+.project-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 48px -18px rgba(0, 0, 0, .55);
+}
+
+.project-thumb {
+    position: relative;
+    overflow: hidden;
+}
+
+.project-thumb video,
+.project-thumb {
+    transition: transform .8s var(--az-ease-soft);
+}
+
+.project-card:hover .project-thumb video {
+    transform: scale(1.06);
+}
+
+.project-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, .65) 100%);
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
+}
+
+.project-card:hover .project-thumb::after {
+    opacity: 1;
+}
+
+.project-play-icon {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .14);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(255, 255, 255, .35);
+    transition: transform .4s var(--az-ease), background .4s ease;
+}
+
+.project-play-icon::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 54%;
+    transform: translate(-50%, -50%);
+    border-style: solid;
+    border-width: 9px 0 9px 15px;
+    border-color: transparent transparent transparent #fff;
+}
+
+.project-card:hover .project-play-icon {
+    transform: scale(1.12);
+    background: var(--az-gold);
+}
+
+.project-card__content {
+    transform: translateY(6px);
+    opacity: .9;
+    transition: transform .45s var(--az-ease), opacity .45s var(--az-ease);
+}
+
+.project-card:hover .project-card__content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* --------------------------------------------------------------------
+   Tools ticker — pause + item pop
+   -------------------------------------------------------------------- */
+.tools-track:hover {
+    animation-play-state: paused;
+}
+
+.tools-item {
+    transition: transform .3s var(--az-ease), border-color .3s ease, box-shadow .3s ease;
+}
+
+.tools-item:hover {
+    transform: translateY(-4px);
+    border-color: var(--az-gold-soft);
+    box-shadow: 0 10px 30px -14px rgba(212, 175, 106, .45);
+}
+
+.tools-dot {
+    transition: background .3s ease, box-shadow .3s ease;
+}
+
+.tools-item:hover .tools-dot {
+    box-shadow: 0 0 0 4px var(--az-gold-soft);
+}
+
+/* --------------------------------------------------------------------
+   Process icons row — draw-in line + node pop
+   -------------------------------------------------------------------- */
+.process-icons-line {
+    transform-origin: left center;
+    transform: scaleX(0);
+    transition: transform 1.1s var(--az-ease);
+}
+
+.process-icons-row.is-visible .process-icons-line {
+    transform: scaleX(1);
+}
+
+.process-icon-node {
+    opacity: 0;
+    transform: scale(.4);
+    transition: opacity .5s var(--az-ease), transform .5s var(--az-ease);
+}
+
+.process-icons-row.is-visible .process-icon-node {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(2) {
+    transition-delay: .08s;
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(3) {
+    transition-delay: .16s;
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(4) {
+    transition-delay: .24s;
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(5) {
+    transition-delay: .32s;
+}
+
+.process-icons-row.is-visible .process-icon-node:nth-child(6) {
+    transition-delay: .40s;
+}
+
+.process-circle {
+    transition: transform .4s var(--az-ease), box-shadow .4s ease, color .4s ease;
+}
+
+.process-icon-node:hover .process-circle {
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 12px 26px -10px var(--az-gold-soft);
+    color: var(--az-gold);
+}
+
+.process-step-card {
+    transition: transform .5s var(--az-ease), box-shadow .5s var(--az-ease), border-color .5s ease;
+}
+
+.process-step-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 26px 44px -20px rgba(0, 0, 0, .5);
+}
+
+.process-step-image img {
+    transition: transform .7s var(--az-ease-soft);
+}
+
+.process-step-card:hover .process-step-image img {
+    transform: scale(1.05);
+}
+
+.process-number {
+    transition: color .4s ease, transform .4s ease;
+}
+
+.process-step-card:hover .process-number {
+    color: var(--az-gold);
+    transform: translateY(-2px);
+}
+
+.process-cta {
+    transition: transform .4s var(--az-ease), box-shadow .4s ease;
+}
+
+.process-cta__button {
+    position: relative;
+    overflow: hidden;
+    transition: transform .35s var(--az-ease), box-shadow .35s ease;
+}
+
+.process-cta__button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px -14px var(--az-gold-soft);
+}
+
+/* --------------------------------------------------------------------
+   FEEDBACK SECTION — the main ask
+   -------------------------------------------------------------------- */
+.rating-summary--panel {
+    position: relative;
+    transition: transform .5s var(--az-ease), box-shadow .5s var(--az-ease);
+}
+
+.rating-summary--panel:hover {
+    transform: translateY(-4px);
+}
+
+.rating-summary--panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--az-gold-soft), transparent 40%, transparent 70%, var(--az-gold-soft));
+    --webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity .5s ease;
+    pointer-events: none;
+}
+
+.rating-summary--panel:hover::before {
+    opacity: 1;
+}
+
+/* Circular progress ring around the average-rating number. The ring
+   sweep is driven by --az-ring-deg (set inline from the server-side
+   rating value: rating/5 * 360deg). */
+.rating-ring {
+    position: relative;
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    background: conic-gradient(var(--az-gold) 0deg, var(--az-gold) var(--az-ring-progress, 0deg), rgba(255, 255, 255, .08) var(--az-ring-progress, 0deg));
+    transition: background 1.1s var(--az-ease);
+}
+
+.rating-summary.is-visible .rating-ring,
+.rating-summary--panel.is-visible .rating-ring {
+    --az-ring-progress: var(--az-ring-deg, 0deg);
+}
+
+.rating-ring::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    /* Set --az-panel-bg to match the rating card's real background color
+     (e.g. in a page-level override: .rating-summary--panel { --az-panel-bg: #111; }) */
+    background: var(--az-panel-bg, #0b0b0f);
+}
+
+.rating-summary__number {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    background: linear-gradient(135deg, #fff, var(--az-gold));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: transform .3s ease;
+}
+
+.rating-summary__stars svg {
+    transition: transform .4s var(--az-ease), opacity .4s ease;
+}
+
+.rating-summary.is-visible .rating-summary__stars svg {
+    animation: azStarPop .5s var(--az-ease) both;
+}
+
+.rating-summary.is-visible .rating-summary__stars svg:nth-child(1) {
+    animation-delay: .05s;
+}
+
+.rating-summary.is-visible .rating-summary__stars svg:nth-child(2) {
+    animation-delay: .15s;
+}
+
+.rating-summary.is-visible .rating-summary__stars svg:nth-child(3) {
+    animation-delay: .25s;
+}
+
+.rating-summary.is-visible .rating-summary__stars svg:nth-child(4) {
+    animation-delay: .35s;
+}
+
+.rating-summary.is-visible .rating-summary__stars svg:nth-child(5) {
+    animation-delay: .45s;
+}
+
+@keyframes azStarPop {
+    0% {
+        transform: scale(0) rotate(-30deg);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.25) rotate(6deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+.rating-bar-row__fill {
+    width: 0 !important;
+    transition: width 1.1s var(--az-ease);
+}
+
+.rating-summary.is-visible .rating-bar-row__fill {
+    width: var(--az-target-width, 0%) !important;
+}
+
+.rating-summary__cta {
+    position: relative;
+    overflow: hidden;
+    transition: transform .3s var(--az-ease), box-shadow .3s ease;
+}
+
+.rating-summary__cta:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 14px 30px -12px var(--az-gold-soft);
+}
+
+.feedback-table__body {
+    position: relative;
+}
+
+.review-card {
+    position: relative;
+    overflow: hidden;
+    transition:
+        transform .5s var(--az-ease),
+        box-shadow .5s var(--az-ease),
+        border-color .5s ease,
+        opacity .4s ease;
+    transform-origin: top center;
+}
+
+.review-card::before {
+    /* thin gold sweep across the top edge, revealed on hover */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--az-gold), transparent);
+    transform: scaleX(0);
+    transition: transform .5s var(--az-ease);
+}
+
+.review-card:hover::before {
+    transform: scaleX(1);
+}
+
+.review-card::after {
+    /* decorative quotation mark */
+    content: "\201C";
+    position: absolute;
+    top: -6px;
+    right: 16px;
+    font-size: 64px;
+    line-height: 1;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--az-gold);
+    opacity: .12;
+    pointer-events: none;
+    transition: opacity .4s ease, transform .4s ease;
+}
+
+.review-card:hover::after {
+    opacity: .22;
+    transform: translateY(3px);
+}
+
+.review-card:hover {
+    box-shadow: 0 22px 40px -20px rgba(0, 0, 0, .5);
+    border-color: var(--az-gold-soft);
+}
+
+/* Fallback lift for touch/coarse-pointer devices where JS tilt is skipped */
+@media (pointer: coarse) {
+
+    .review-card:hover,
+    .review-card:active {
+        transform: translateY(-4px);
+    }
+}
+
+.review-card__avatar {
+    transition: transform .4s var(--az-ease), box-shadow .4s ease;
+}
+
+.review-card:hover .review-card__avatar {
+    transform: scale(1.08) rotate(-3deg);
+    box-shadow: 0 0 0 3px var(--az-gold-soft);
+}
+
+.review-card__stars svg {
+    transition: transform .3s var(--az-ease);
+}
+
+.review-card:hover .review-card__stars svg {
+    transform: translateY(-2px);
+}
+
+.review-card__message {
+    transition: color .3s ease;
+}
+
+/* Filtering / re-sort fade, used by scroll-animations.js when new
+   feedback is appended without a full reload */
+.review-card.az-enter {
+    animation: azCardIn .6s var(--az-ease) both;
+}
+
+@keyframes azCardIn {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* --------------------------------------------------------------------
+   Review modal — scale + fade, not just visibility toggle
+   -------------------------------------------------------------------- */
+.review-modal__backdrop {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .35s var(--az-ease), visibility 0s linear .35s;
+}
+
+.review-modal__backdrop.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .35s var(--az-ease), visibility 0s linear 0s;
+}
+
+.review-modal {
+    /* "Buskag" burst reveal: expands outward from --az-origin-x/y, which JS
+     sets to the exact spot the "Write a review" button was clicked.
+     Falls back to center (50% 50%) when no origin is available, e.g. when
+     the modal reopens automatically after a validation error. */
+    clip-path: circle(0% at var(--az-origin-x, 50%) var(--az-origin-y, 50%));
+    opacity: 0;
+    transition:
+        clip-path 1.6s var(--az-ease),
+        opacity .6s ease;
+}
+
+.review-modal__backdrop.is-open .review-modal {
+    clip-path: circle(140% at var(--az-origin-x, 50%) var(--az-origin-y, 50%));
+    opacity: 1;
+}
+
+.review-modal__close {
+    transition: transform .3s var(--az-ease), color .3s ease;
+}
+
+.review-modal__close:hover {
+    transform: rotate(90deg);
+    color: var(--az-gold);
+}
+
+/* Content inside the modal fades/slides in slightly after the burst
+   starts, so it doesn't feel like it's being stretched. */
+.review-modal>* {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity .7s var(--az-ease) .45s, transform .7s var(--az-ease) .45s;
+}
+
+.review-modal__backdrop.is-open .review-modal>* {
+    opacity: 1;
+    transform: none;
+}
+
+/* --------------------------------------------------------------------
+   Contact section — slideshow crossfade + form focus glow
+   -------------------------------------------------------------------- */
+.aizap-contact__slideshow {
+    position: relative;
+}
+
+.aizap-contact__slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: scale(1.04);
+    transition: opacity 1.1s var(--az-ease), transform 1.6s var(--az-ease);
+}
+
+.aizap-contact__slide.is-active {
+    position: relative;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.aizap-contact__card {
+    transition: transform .5s var(--az-ease), box-shadow .5s var(--az-ease);
+}
+
+.aizap-form__input,
+.aizap-form__textarea,
+#fb-message,
+#fb-first-name,
+#fb-last-name,
+#fb-rating {
+    transition: border-color .3s ease, box-shadow .3s ease, transform .2s ease;
+}
+
+.aizap-form__input:focus,
+.aizap-form__textarea:focus,
+#fb-message:focus,
+#fb-first-name:focus,
+#fb-last-name:focus,
+#fb-rating:focus {
+    border-color: var(--az-gold);
+    box-shadow: 0 0 0 4px var(--az-gold-soft);
+    outline: none;
+}
+
+.aizap-form__submit,
+.feedback-submit {
+    position: relative;
+    overflow: hidden;
+    transition: transform .35s var(--az-ease), box-shadow .35s ease;
+}
+
+.aizap-form__submit:hover,
+.feedback-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px -14px var(--az-gold-soft);
+}
+
+.aizap-form__submit svg {
+    transition: transform .35s var(--az-ease), opacity .25s ease;
+}
+
+.aizap-form__submit:hover svg {
+    transform: translateX(5px);
+}
+
+/* "Sending" state — added by JS the instant the form is submitted, so the
+   button gives immediate feedback while the page navigates/reloads. */
+.aizap-form__submit.is-sending,
+.feedback-submit.is-sending {
+    pointer-events: none;
+    color: transparent !important;
+    transform: none !important;
+}
+
+.aizap-form__submit.is-sending svg {
+    opacity: 0;
+}
+
+.aizap-form__submit.is-sending::after,
+.feedback-submit.is-sending::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(255, 255, 255, .35);
+    border-top-color: #fff;
+    animation: azSpin .7s linear infinite;
+}
+
+@keyframes azSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* --------------------------------------------------------------------
+   Success celebration toast — shown after a successful submission.
+   Toggle it on by adding class "is-active" (see scroll-animations.js /
+   the blade snippet that checks your controller's success flash).
+   -------------------------------------------------------------------- */
+.review-success {
+    position: fixed;
+    z-index: 200;
+    top: 24px;
+    left: 50%;
+    transform: translate(-50%, -30px);
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 22px;
+    border-radius: 14px;
+    background: #12121a;
+    border: 1px solid var(--az-gold-soft);
+    box-shadow: 0 24px 48px -18px rgba(0, 0, 0, .6);
+    transition: opacity .5s var(--az-ease), transform .5s var(--az-ease), visibility 0s linear .5s;
+    max-width: min(92vw, 420px);
+}
+
+.review-success.is-active {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition: opacity .5s var(--az-ease), transform .5s var(--az-ease), visibility 0s linear 0s;
+}
+
+.review-success__check {
+    position: relative;
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--az-gold-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.review-success__check svg {
+    width: 20px;
+    height: 20px;
+    color: var(--az-gold);
+}
+
+.review-success__check svg path {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    transition: stroke-dashoffset .5s var(--az-ease) .35s;
+}
+
+.review-success.is-active .review-success__check svg path {
+    stroke-dashoffset: 0;
+}
+
+.review-success p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Small confetti burst behind the check — a handful of dots flung
+   outward once, driven purely by CSS via nth-child angles/delays. */
+.review-success__burst {
+    position: absolute;
+    inset: -20px;
+    pointer-events: none;
+}
+
+.review-success__burst span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--az-gold);
+    opacity: 0;
+}
+
+.review-success.is-active .review-success__burst span {
+    animation: azConfetti .8s var(--az-ease-soft) forwards;
+}
+
+.review-success__burst span:nth-child(1) {
+    --az-angle: 0deg;
+    animation-delay: .05s;
+}
+
+.review-success__burst span:nth-child(2) {
+    --az-angle: 45deg;
+    animation-delay: .08s;
+}
+
+.review-success__burst span:nth-child(3) {
+    --az-angle: 90deg;
+    animation-delay: .04s;
+}
+
+.review-success__burst span:nth-child(4) {
+    --az-angle: 135deg;
+    animation-delay: .1s;
+}
+
+.review-success__burst span:nth-child(5) {
+    --az-angle: 180deg;
+    animation-delay: .06s;
+}
+
+.review-success__burst span:nth-child(6) {
+    --az-angle: 225deg;
+    animation-delay: .09s;
+}
+
+.review-success__burst span:nth-child(7) {
+    --az-angle: 270deg;
+    animation-delay: .03s;
+}
+
+.review-success__burst span:nth-child(8) {
+    --az-angle: 315deg;
+    animation-delay: .07s;
+}
+
+@keyframes azConfetti {
+    0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--az-angle)) translateX(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) rotate(var(--az-angle)) translateX(46px) scale(.4);
+    }
+}
+
+/* --------------------------------------------------------------------
+   Ripple effect — added to buttons via JS on click
+   -------------------------------------------------------------------- */
+.az-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .5);
+    transform: scale(0);
+    animation: azRipple .6s var(--az-ease-soft);
+    pointer-events: none;
+}
+
+@keyframes azRipple {
+    to {
+        transform: scale(2.6);
+        opacity: 0;
+    }
+}
+
+.btn,
+.process-cta__button,
+.aizap-form__submit,
+.feedback-submit,
+.rating-summary__cta {
+    position: relative;
+    overflow: hidden;
+}
+
+/* --------------------------------------------------------------------
+   General section fade-in for headings/eyebrows used across the page
+   -------------------------------------------------------------------- */
+.section-heading,
+.feedback-header,
+.projects-header,
+.tools-header {
+    transition: opacity .8s var(--az-ease), transform .8s var(--az-ease);
+}
