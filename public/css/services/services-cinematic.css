@@ -1051,6 +1051,54 @@ body {
     border-top: 1px solid var(--border-soft);
 }
 
+.sample-reel-section .video-grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 360px;
+    grid-template-columns: none;
+    gap: 26px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 4px 0 18px;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: inline proximity;
+    scrollbar-color: rgba(255, 255, 255, 0.28) transparent;
+    scrollbar-width: thin;
+}
+
+.sample-reel-section .video-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.sample-reel-section .video-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 999px;
+}
+
+.sample-reel-section .video-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.28);
+    border-radius: 999px;
+}
+
+.sample-reel-section .video-grid>.project-card {
+    max-width: none;
+    min-width: 0;
+    scroll-snap-align: start;
+}
+
+.sample-reel-section .video-grid .project-thumb {
+    aspect-ratio: 4 / 3;
+    min-height: 260px;
+    max-height: 270px;
+}
+
+.sample-reel-section .video-grid .project-card--overlay .project-card__content {
+    top: 18px;
+    right: auto;
+    bottom: auto;
+    left: 18px;
+}
+
 .sample-reel-header {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1157,5 +1205,16 @@ body {
     .sample-reel-filter {
         padding: 7px 14px;
         font-size: 12px;
+    }
+
+    .sample-reel-section .video-grid {
+        grid-auto-columns: minmax(280px, 82vw);
+        gap: 16px;
+        padding-bottom: 14px;
+    }
+
+    .sample-reel-section .video-grid .project-card--overlay .project-card__content {
+        top: 14px;
+        left: 14px;
     }
 }

@@ -750,7 +750,7 @@
     }
 
     function setupLoadMore(grid) {
-        if (!grid || grid.dataset.loadMoreBound === '1') return;
+        if (!grid || grid.dataset.loadMoreBound === '1' || grid.dataset.loadMoreDisabled === '1') return;
 
         var cards = Array.prototype.slice.call(grid.querySelectorAll('.project-card'));
         if (cards.length === 0) return;

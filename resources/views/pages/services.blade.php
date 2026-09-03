@@ -166,9 +166,14 @@
                     <button class="sample-reel-filter" data-filter="explainer-videos" role="tab" aria-selected="false">Explainers</button>
                 </div>
 
-                <div class="projects-grid video-grid" id="sampleReelGrid">
+                <div class="projects-grid video-grid" id="sampleReelGrid" data-load-more-disabled="1">
                     @php
-                        $allVideos = \App\Models\ProjectVideo::where('is_featured', true)->latest()->get();
+                        $allVideos = \App\Models\ProjectVideo::where('is_featured', true)
+                            ->latest()
+                            ->get()
+                            ->groupBy(fn ($video) => $video->feature_category ?: $video->category)
+                            ->flatMap(fn ($videos) => $videos->take(2))
+                            ->values();
                     @endphp
                     @forelse ($allVideos as $video)
                         <x-frontend.video-card
@@ -176,7 +181,7 @@
                             :subtitle="$video->getCategoryLabelAttribute()"
                             :image-url="$video->cover_url"
                             :video-url="$video->video_url"
-                            :data-category="$video->category"
+                            :data-category="$video->feature_category ?: $video->category"
                         />
                     @empty
                         <x-frontend.video-card />

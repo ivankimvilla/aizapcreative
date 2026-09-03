@@ -3,6 +3,7 @@ var checkboxes = document.querySelectorAll('.video-checkbox');
 var selectAll = document.getElementById('selectAll');
 var selectedCount = document.getElementById('selectedCount');
 var deleteBtn = document.getElementById('deleteSelected');
+var projectsPage = document.querySelector('.projects-page');
 var newVideoBtn = document.getElementById('newVideoBtn');
 var overlay = document.getElementById('newVideoOverlay');
 var closeBtn = document.getElementById('newVideoClose');
@@ -166,6 +167,9 @@ checkboxes.forEach(function (box) {
 
 if (selectAll) {
     selectAll.addEventListener('change', function () {
+        if (projectsPage) {
+            projectsPage.classList.toggle('is-selecting-all', selectAll.checked);
+        }
         checkboxes.forEach(function (box) {
             box.checked = selectAll.checked;
             var card = box.closest('.video-card');
@@ -190,6 +194,28 @@ if (deleteBtn) {
         }
     });
 }
+
+document.addEventListener('click', function (event) {
+    var deleteCardButton = event.target.closest('.video-delete-btn');
+    if (!deleteCardButton || !deleteSelectedForm) return;
+
+    var videoId = deleteCardButton.dataset.id;
+    if (!videoId) return;
+
+    var confirmed = confirm('Delete this video? This cannot be undone.');
+    if (!confirmed) return;
+
+    var container = document.getElementById('deleteInputs');
+    if (!container) return;
+    container.innerHTML = '';
+
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'ids[]';
+    input.value = videoId;
+    container.appendChild(input);
+    deleteSelectedForm.submit();
+});
 
 if (newVideoBtn) {
     newVideoBtn.addEventListener('click', openModal);
@@ -398,6 +424,7 @@ function buildVideoCard(video) {
 
     article.innerHTML = '<div class="project-thumb video-thumb hue-' + (((video.id || 1) % 4) + 1) + ' ' + (video.video_url ? 'has-video' : '') + '">' +
         '<label class="video-select"><input type="checkbox" class="video-checkbox"><span></span></label>' +
+        '<button type="button" class="video-delete-btn" data-id="' + video.id + '" aria-label="Delete video"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v5M14 11v5"/></svg></button>' +
         videoMarkup +
         (video.is_featured ? '<span class="featured-star" title="Featured" aria-label="Featured"></span>' : '') +
         '<span class="duration"></span>' +

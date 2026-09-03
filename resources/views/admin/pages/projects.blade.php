@@ -67,6 +67,9 @@
             <input type="checkbox" class="video-checkbox">
             <span></span>
           </label>
+          <button type="button" class="video-delete-btn" data-id="{{ $video->id }}" aria-label="Delete video">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v5M14 11v5"/></svg>
+          </button>
           @if ($video->video_url)
             <video
               playsinline
@@ -125,10 +128,10 @@
             <select id="categorySelect" name="category">
               <option value="" disabled selected>Select category</option>
               <option value="ai-commercial-ads">AI Commercial Ads</option>
-              <option value="ai-product-ads">AI Product Ads</option>
-              <option value="ai-storytelling-drama">AI Storytelling / Drama</option>
-              <option value="ai-movie-trailers">AI Movie Trailers</option>
-              <option value="ugc-style-ai-videos">UGC-style AI Videos</option>
+          <!--    <option value="ai-product-ads">AI Product Ads</option> -->
+              <option value="ai-storytelling-drama">AI Drama</option>
+          <!--    <option value="ai-movie-trailers">AI Movie Trailers</option>  
+              <option value="ugc-style-ai-videos">UGC-style AI Videos</option> -->
               <option value="explainer-videos">Explainer Videos</option>
             </select>
           </div>

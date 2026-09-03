@@ -5,7 +5,7 @@
 @endonce
 
 @if (!empty($title) || !empty($subtitle))
-    <article class="project-card video-card project-card--overlay {{ $extraClass }}">
+    <article {{ $attributes }} class="project-card video-card project-card--overlay {{ $extraClass }}">
         @if (!empty($videoUrl))
             <div class="project-thumb video-card__thumb has-video">
                 <video

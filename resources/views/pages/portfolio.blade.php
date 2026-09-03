@@ -91,7 +91,7 @@
                 @endif
             </div>
 
-            <div class="video-grid projects-grid">
+            <div class="video-grid projects-grid" data-load-more-disabled="1">
                 @forelse ($videos ?? [] as $video)
                     <div class="project-tile is-loading" data-reveal style="--i:{{ $loop->index % 8 }}">
                         <span class="project-tile__index">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>

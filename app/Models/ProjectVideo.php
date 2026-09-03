@@ -26,7 +26,7 @@ class ProjectVideo extends Model
         return match ($this->feature_category ?? $this->category) {
             'ai-commercial-ads' => 'AI Commercial Ads',
             'ai-product-ads' => 'AI Product Ads',
-            'ai-storytelling-drama' => 'AI Storytelling / Drama',
+            'ai-storytelling-drama' => 'AI Drama',
             'ai-movie-trailers' => 'AI Movie Trailers',
             'ugc-style-ai-videos' => 'UGC-style AI Videos',
             'explainer-videos' => 'Explainer Videos',
