@@ -15,6 +15,50 @@ class ProjectVideoController extends Controller
         return view('admin.pages.projects', compact('videos'));
     }
 
+    public function generateUploadUrl(Request $request)
+    {
+        $data = $request->validate([
+            'file_name' => ['required', 'string', 'max:255'],
+            'folder' => ['nullable', 'string', 'max:255'],
+            'content_type' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $disk = ProjectVideo::storageDiskName();
+        $driver = config('filesystems.disks.' . $disk . '.driver');
+
+        if ($driver !== 's3') {
+            return response()->json([
+                'message' => 'Direct uploads are only enabled for S3-compatible storage disks.',
+            ], 400);
+        }
+
+        $bucket = config('filesystems.disks.' . $disk . '.bucket');
+        if (empty($bucket)) {
+            return response()->json([
+                'message' => 'S3 storage is not configured for this project.',
+            ], 400);
+        }
+
+        $folder = trim((string) ($data['folder'] ?? ''));
+        $fileName = trim((string) $data['file_name']);
+        $key = $folder !== '' ? rtrim($folder, '/') . '/' . $fileName : $fileName;
+
+        $client = Storage::disk($disk)->getClient();
+        $command = $client->getCommand('PutObject', [
+            'Bucket' => $bucket,
+            'Key' => $key,
+            'ContentType' => $data['content_type'] ?? 'application/octet-stream',
+        ]);
+        $signedRequest = $client->createPresignedRequest($command, '+15 minutes');
+
+        return response()->json([
+            'method' => 'PUT',
+            'url' => (string) $signedRequest->getUri(),
+            'key' => $key,
+            'final_url' => Storage::disk($disk)->url($key),
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -25,12 +69,18 @@ class ProjectVideoController extends Controller
             'is_featured' => ['nullable', 'boolean'],
             'video_file' => ['nullable', 'file', 'mimes:mp4,mov,webm'],
             'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png'],
+            'video_path' => ['nullable', 'string', 'max:2048'],
+            'cover_path' => ['nullable', 'string', 'max:2048'],
+            'video_url' => ['nullable', 'url', 'max:2048'],
+            'cover_url' => ['nullable', 'url', 'max:2048'],
         ]);
 
         $title = trim((string) ($data['title'] ?? ''));
         if ($title === '') {
             if ($request->hasFile('video_file')) {
                 $title = pathinfo($request->file('video_file')->getClientOriginalName(), PATHINFO_FILENAME);
+            } elseif (! empty($data['video_url'])) {
+                $title = pathinfo(parse_url($data['video_url'], PHP_URL_PATH) ?: 'video', PATHINFO_FILENAME);
             } else {
                 $title = 'Untitled video';
             }
@@ -38,14 +88,18 @@ class ProjectVideoController extends Controller
 
         $disk = ProjectVideo::storageDiskName();
 
-        $videoPath = null;
+        $videoPath = $data['video_path'] ?? null;
         if ($request->hasFile('video_file')) {
             $videoPath = $request->file('video_file')->store('project-videos', $disk);
+        } elseif (empty($videoPath) && ! empty($data['video_url'])) {
+            $videoPath = ltrim((string) parse_url($data['video_url'], PHP_URL_PATH), '/');
         }
 
-        $coverPath = null;
+        $coverPath = $data['cover_path'] ?? null;
         if ($request->hasFile('cover_image')) {
             $coverPath = $request->file('cover_image')->store('project-covers', $disk);
+        } elseif (empty($coverPath) && ! empty($data['cover_url'])) {
+            $coverPath = ltrim((string) parse_url($data['cover_url'], PHP_URL_PATH), '/');
         }
 
         $featureCategory = $data['feature_category'] ?? null;

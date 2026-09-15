@@ -1,0 +1,1403 @@
+PHPUnit Started (PHPUnit 11.5.56 using PHP 8.2.12 (cli) on WINNT)
+Test Runner Configured
+Bootstrap Finished (C:\xampp\htdocs\aizapcreative-main\vendor/autoload.php)
+Event Facade Sealed
+Test Suite Loaded (9 tests)
+Test Runner Started
+Test Suite Sorted
+Test Suite Filtered (1 test)
+Test Runner Execution Started (1 test)
+Test Suite Started (P\Tests\Feature\ProjectsFeatureTest, 1 test)
+Before First Test Method Called (P\Tests\Feature\ProjectsFeatureTest::setUpBeforeClass)
+Before First Test Method Finished:
+- P\Tests\Feature\ProjectsFeatureTest::setUpBeforeClass
+Test Preparation Started (P\Tests\Feature\ProjectsFeatureTest::__pest_evaluable_it_stores_featured_projects_and_shows_them_on_the_homepage)
+Before Test Method Called (P\Tests\Feature\ProjectsFeatureTest::setUp)
+Before Test Method Finished:
+- P\Tests\Feature\ProjectsFeatureTest::setUp
+Test Prepared (P\Tests\Feature\ProjectsFeatureTest::__pest_evaluable_it_stores_featured_projects_and_shows_them_on_the_homepage)
+Test Failed (P\Tests\Feature\ProjectsFeatureTest::__pest_evaluable_it_stores_featured_projects_and_shows_them_on_the_homepage)
+Failed asserting that '<!DOCTYPE html>\r\n
+<html lang="en">\r\n
+<head>\r\n
+    <meta charset="UTF-8">\r\n
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\r\n
+    <title>Aizap Creatives - Home</title>\r\n
+    <link rel="preconnect" href="https://fonts.bunny.net">\r\n
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800" rel="stylesheet" />\r\n
+    <link href="https://fonts.bunny.net/css?family=instrument-serif:400,400i" rel="stylesheet" />\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/home-page/home-page.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/format-ticker.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/pages/process.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/video-cards.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/tools-section.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/process-animations.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/home-page/contact-cta.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/animations.css">\r\n
+</head>\r\n
+<body class="home-page-page">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/header/header.css">\n
+    <script src="https://www.google.com/recaptcha/api.js?render=6LehmXstAAAAACiwAtFShS_-fmwWUpbavMPzixUA" async defer></script>\n
+\n
+<header class="site-header">\n
+    <div class="site-header__scroll-progress" aria-hidden="true">\n
+        <span id="siteHeaderScrollProgress"></span>\n
+    </div>\n
+\n
+    <div class="site-header__brand">\n
+        <img\n
+            src="http://localhost:8000/logo.png"\n
+            alt="AI Creatives Logo"\n
+            width="168"\n
+            height="168"\n
+            loading="eager"\n
+            fetchpriority="high"\n
+        >\n
+    </div>\n
+\n
+    <nav class="site-header__nav" id="siteNav">\n
+        <a href="http://localhost:8000" class="site-header__nav-link site-header__nav-link--active" data-no-ajax>Home</a>\n
+        <a href="http://localhost:8000/about-us" class="site-header__nav-link " data-no-ajax>About Us</a>\n
+\n
+                <div class="site-header__nav-item site-header__nav-item--services">\n
+            <a href="http://localhost:8000/what-we-do/services"\n
+               class="site-header__nav-link "\n
+               data-no-ajax>\n
+                <span>Services</span>\n
+            </a>\n
+        </div>\n
+\n
+        <a href="http://localhost:8000/portfolio" class="site-header__nav-link " data-no-ajax>Portfolio</a>\n
+        <a href="http://localhost:8000/contact" class="site-header__nav-link " data-no-ajax>Contact</a>\n
+\n
+    </nav>\n
+\n
+    <button type="button" class="site-header__toggle" id="siteNavToggle" aria-label="Toggle navigation" aria-expanded="false">\n
+        <span></span>\n
+        <span></span>\n
+        <span></span>\n
+    </button>\n
+\n
+    </header>\n
+\n
+<script src="http://localhost:8000/js/header/header.js"></script>\r\n
+    <main id="app-content">\r\n
+        <div class="background-glow">\r\n
+            <div class="container">\r\n
+                <section class="hero-section" id="services" style="background-image: url('http://localhost:8000/home-bg.png');">\r\n
+    <div class="hero-overlay"></div>\r\n
+    <div class="hero-copy" data-reveal="up" data-reveal-repeat>\r\n
+        <h1 class="hero-title">\r\n
+            <span class="gold">AIZAP</span> CREATIVES<br>\r\n
+            That <span class="gold">Builds Brands.</span>\r\n
+        </h1>\r\n
+        <p class="hero-sub">\r\n
+            We create high-quality AI-generated videos, ads, and creative content that helps brands stand out, connect, and grow in the digital world.\r\n
+        </p>\r\n
+        <div class="hero-cta-group">\r\n
+            <a href="http://localhost:8000/portfolio" class="btn btn-primary">View Our Work</a>\r\n
+            <a href="http://localhost:8000/contact" class="btn btn-secondary">Book a Call</a>\r\n
+        </div>\r\n
+    </div>\r\n
+</section>                <section class="formats-ticker" aria-label="Content formats we produce" data-reveal="fade">\r\n
+                <p class="formats-ticker__eyebrow">Three formats. One AI pipeline.</p>\r\n
+                <div class="formats-ticker__band">\r\n
+                    <div class="formats-ticker__track">\r\n
+                                                \r\n
+                                                                                    <span class="formats-ticker__item">Explainer Videos</span>\r\n
+                                                            <span class="formats-ticker__item">AI Commercial Ads</span>\r\n
+                                                            <span class="formats-ticker__item">AI Drama</span>\r\n
+                                                                                                                <span class="formats-ticker__item">Explainer Videos</span>\r\n
+                                                            <span class="formats-ticker__item">AI Commercial Ads</span>\r\n
+                                                            <span class="formats-ticker__item">AI Drama</span>\r\n
+                                                                                                                <span class="formats-ticker__item">Explainer Videos</span>\r\n
+                                                            <span class="formats-ticker__item">AI Commercial Ads</span>\r\n
+                                                            <span class="formats-ticker__item">AI Drama</span>\r\n
+                                                                                                                <span class="formats-ticker__item">Explainer Videos</span>\r\n
+                                                            <span class="formats-ticker__item">AI Commercial Ads</span>\r\n
+                                                            <span class="formats-ticker__item">AI Drama</span>\r\n
+                                                                        </div>\r\n
+                </div>\r\n
+            </section>\r\n
+                <section class="projects-section" id="projects">\r\n
+                <div class="projects-header" data-reveal="up">\r\n
+                    <div>\r\n
+                        <div class="eyebrow">Our Work</div>\r\n
+                        <h2>Sample Videos</h2>\r\n
+                    </div>\r\n
+                    <a href="/portfolio" class="btn btn-secondary">View All Videos</a>\r\n
+                </div>\r\n
+                <div class="projects-grid video-grid">\r\n
+                                            <article class="project-card project-card--overlay" data-reveal="up" style="--az-delay: 0ms;">\r\n
+                                                            <div class="project-thumb" style="background-image: url('http://localhost:8000/home-bg.png');">\r\n
+                                    <span class="project-play-icon" aria-hidden="true"></span>\r\n
+                                    <div class="project-card__content">\r\n
+                                        <span class="project-category">\r\n
+                                            Nova Retail • AI Commercial Ads\r\n
+                                        </span>\r\n
+                                    </div>\r\n
+                                </div>\r\n
+                                                    </article>\r\n
+                                    </div>\r\n
+            </section>\r\n
+\r\n
+                <main class="process-shell">\r\n
+                    <section class="tools-section" id="tools">\r\n
+                    <div class="tools-header" data-reveal="up">\r\n
+                        <h2 class="tools-title">Our tools</h2>\r\n
+                        <p class="tools-desc">The generation and post-production tools behind every deliverable.</p>\r\n
+                    </div>\r\n
+                    <div class="tools-ticker">\r\n
+                        <div class="tools-track">\r\n
+                            \r\n
+                                                                                                <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.5</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.5 Edit</span>\r\n
+                                        <span class="tools-label">Video Editing</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0 Fast</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0 Mini</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">MiniMax H3</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Gemini Omni Flash</span>\r\n
+                                        <span class="tools-label">Multimodal AI</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Kling 3.0</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">FLUX.3 Video</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Grok Imagine 1.5</span>\r\n
+                                        <span class="tools-label">Image &amp; Video</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Minimax Hailuo</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Kling</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">OpenAI Sora 2</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Google Veo</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Higgsfield</span>\r\n
+                                        <span class="tools-label">Scene &amp; Motion</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Wan</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Grok Imagine</span>\r\n
+                                        <span class="tools-label">Image Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">HappyHorse</span>\r\n
+                                        <span class="tools-label">Voice &amp; Audio</span>\r\n
+                                    </div>\r\n
+                                                                                                                                <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.5</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.5 Edit</span>\r\n
+                                        <span class="tools-label">Video Editing</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0 Fast</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0 Mini</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">MiniMax H3</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Gemini Omni Flash</span>\r\n
+                                        <span class="tools-label">Multimodal AI</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Kling 3.0</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">FLUX.3 Video</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Grok Imagine 1.5</span>\r\n
+                                        <span class="tools-label">Image &amp; Video</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Minimax Hailuo</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Kling</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">OpenAI Sora 2</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Google Veo</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Higgsfield</span>\r\n
+                                        <span class="tools-label">Scene &amp; Motion</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Wan</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Grok Imagine</span>\r\n
+                                        <span class="tools-label">Image Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">HappyHorse</span>\r\n
+                                        <span class="tools-label">Voice &amp; Audio</span>\r\n
+                                    </div>\r\n
+                                                                                    </div>\r\n
+                    </div>\r\n
+                </section>\r\n
+                    <section class="process-section">\r\n
+                    <div class="section-heading" data-reveal="up">\r\n
+                        <div class="eyebrow">How We Work</div>\r\n
+                        <h2>A clear process. Exceptional results.</h2>\r\n
+                        <p>From your idea to a powerful final video - we handle everything.</p>\r\n
+                    </div>\r\n
+\r\n
+                    <div class="process-icons-row">\r\n
+                        <div class="process-icons-line"></div>\r\n
+\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.44 1 1.15 1 1.9V17a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-.4c0-.75.4-1.46 1-1.9A7 7 0 0 0 12 2z"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 2.5 2.5 0 0 0 1.32 4.26 2.5 2.5 0 0 0 1.98 3 2.5 2.5 0 0 0 4.96-.44"/><path d="M12 4.5a2.5 2.5 0 0 1 4.96-.46 2.5 2.5 0 0 1 1.98 3 2.5 2.5 0 0 1 1.32 4.24 2.5 2.5 0 0 1-1.32 4.26 2.5 2.5 0 0 1-1.98 3 2.5 2.5 0 0 1-4.96-.44"/><path d="M12 4.5v15"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></div></div>\r\n
+                    </div>\r\n
+\r\n
+                    <div class="process-steps">\r\n
+                                                                            <article class="process-step-card" data-reveal="up" style="--az-delay: 0ms;">\r\n
+                                <span class="process-number">01</span>\r\n
+                                <h3>Discovery Call</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/discovery-call.png" alt="Discovery Call" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We get to know your goals, audience, and vision.</p>\r\n
+                                <ul><li>Project brief</li><li>Goal alignment</li><li>Scope &amp; timeline</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 90ms;">\r\n
+                                <span class="process-number">02</span>\r\n
+                                <h3>Strategy &amp; Concept</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/strategy-concept.png" alt="Strategy &amp; Concept" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We craft the right strategy and creative concept.</p>\r\n
+                                <ul><li>Market &amp; audience insight</li><li>Creative direction</li><li>Concept approval</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 180ms;">\r\n
+                                <span class="process-number">03</span>\r\n
+                                <h3>Script &amp; Storyboard</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/script.png" alt="Script &amp; Storyboard" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We write the script and visualize the entire story.</p>\r\n
+                                <ul><li>Scriptwriting</li><li>Storyboard &amp; shot list</li><li>Client approval</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 270ms;">\r\n
+                                <span class="process-number">04</span>\r\n
+                                <h3>AI Production</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/production.png" alt="AI Production" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">Our AI tools bring your story to life.</p>\r\n
+                                <ul><li>AI image &amp; video generation</li><li>Voiceover &amp; SFX</li><li>Scene composition</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 360ms;">\r\n
+                                <span class="process-number">05</span>\r\n
+                                <h3>Editing &amp; Revisions</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/editing-revisions.png" alt="Editing &amp; Revisions" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We polish every frame until it&#039;s perfect.</p>\r\n
+                                <ul><li>Editing &amp; color grading</li><li>Sound design &amp; music</li><li>Revisions included</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 450ms;">\r\n
+                                <span class="process-number">06</span>\r\n
+                                <h3>Final Delivery</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/final-delivery.png" alt="Final Delivery" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We deliver a high-impact final video, ready to perform.</p>\r\n
+                                <ul><li>Final quality check</li><li>Formats for all platforms</li><li>On-time delivery</li></ul>\r\n
+                            </article>\r\n
+                                            </div>\r\n
+                </section>\r\n
+                    <section class="process-cta" data-reveal="zoom">\r\n
+                    <div class="process-cta__left">\r\n
+                        <div class="process-cta__icon">\r\n
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l2 2 4-4"/></svg>\r\n
+                        </div>\r\n
+                        <div>\r\n
+                            <h3>Ready to bring your story to life?</h3>\r\n
+                            <p>Let's create something extraordinary together.</p>\r\n
+                        </div>\r\n
+                    </div>\r\n
+                    <a href="/contact" class="process-cta__button">Let's Work Together</a>\r\n
+                </section>\r\n
+                </main>\r\n
+\r\n
+                <section class="feedback-section" id="feedback">\r\n
+                <div class="feedback-layout">\r\n
+                    <aside class="feedback-summary">\r\n
+                        <div class="feedback-header" data-reveal="left">\r\n
+                            <div class="eyebrow">Client Feedback</div>\r\n
+                            <h2>What Our Clients Say</h2>\r\n
+                            <p class="feedback-header__sub">Real feedback from the brands and creators we've worked with — see what it's like to bring your project to Aizap Creatives.</p>\r\n
+                        </div>\r\n
+\r\n
+                        \r\n
+                        <div class="rating-summary rating-summary--panel" data-reveal="up">\r\n
+                            <div class="rating-summary__score">\r\n
+                                <div class="rating-summary__number">0.0</div>\r\n
+                                <div class="rating-summary__stars" aria-hidden="true">\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                    </div>\r\n
+                                <div class="rating-summary__count" id="feedbackSummaryCount">0 reviews</div>\r\n
+                            </div>\r\n
+                            <div class="rating-summary__bars">\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">5</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 100%;"></span></span></div>\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">4</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 60%;"></span></span></div>\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">3</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 35%;"></span></span></div>\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">2</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 15%;"></span></span></div>\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">1</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 8%;"></span></span></div>\r\n
+                                                            </div>\r\n
+                            <button type="button" class="btn btn-primary rating-summary__cta" id="openReviewModalBtn">Write a review</button>\r\n
+                        </div>\r\n
+                        <div class="feedback-summary__note"><strong>New reviews appear instantly</strong> once submitted, and each entry includes the post date so visitors can see recent praise.</div>\r\n
+                    </aside>\r\n
+\r\n
+                    <div class="feedback-panel" data-reveal="right">\r\n
+                        <div class="feedback-panel__top"><div class="feedback-panel__title">\r\n
+                            <span class="feedback-panel__icon" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h16v11H8l-4 4V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>\r\n
+                            Feedback List <span class="feedback-panel__count" id="feedbackCount">0</span>\r\n
+                        </div></div>\r\n
+                        <div class="feedback-table__wrap"><div class="feedback-table__body" id="feedbackBody">\r\n
+                                                            <div class="review-card review-card--empty"><p class="review-card__message">No client feedback is available yet.</p></div>\r\n
+                                                    </div></div>\r\n
+                    </div>\r\n
+                </div>\r\n
+\r\n
+                                <div class="review-modal__backdrop" id="reviewModalBackdrop">\r\n
+                    <div class="review-modal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">\r\n
+                        <button type="button" class="review-modal__close" id="closeReviewModalBtn" aria-label="Close">&times;</button>\r\n
+                        <div class="feedback-form-header"><div class="eyebrow">Share Your Experience</div><h3 id="reviewModalTitle">Write a Feedback</h3><p class="feedback-form-sub">Tell us what you think about working with Aizap Creatives.</p></div>\r\n
+                        <form id="feedbackForm" class="feedback-form" action="http://localhost:8000/feedback" method="POST">\r\n
+                            <input type="hidden" name="_token" value="r073lJPMfgJ3CKE7vaNlt3kg7jfQCuet1Bwo8Qmx" autocomplete="off">                                                        <div class="form-row"><div class="form-group"><label for="fb-first-name">First name<span class="required-asterisk">*</span></label><input type="text" id="fb-first-name" name="first_name" autocomplete="given-name" value="" required></div><div class="form-group"><label for="fb-last-name">Last name<span class="required-asterisk">*</span></label><input type="text" id="fb-last-name" name="last_name" autocomplete="family-name" value="" required></div></div>\r\n
+                            <div class="form-group"><label for="fb-rating">Your Rating<span class="required-asterisk">*</span></label><select id="fb-rating" name="rating" required><option value="5" selected>⭐⭐⭐⭐⭐ — 5 (Excellent)</option><option value="4" >⭐⭐⭐⭐☆ — 4 (Good)</option><option value="3" >⭐⭐⭐☆☆ — 3 (Average)</option><option value="2" >⭐⭐☆☆☆ — 2 (Poor)</option><option value="1" >⭐☆☆☆☆ — 1 (Terrible)</option></select></div>\r\n
+                            <div class="form-group form-group--grow"><label for="fb-message">Your Feedback<span class="required-asterisk">*</span></label><textarea id="fb-message" name="message" rows="4" autocomplete="off" required></textarea></div>\r\n
+                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-feedback-response" data-sitekey="6LehmXstAAAAACiwAtFShS_-fmwWUpbavMPzixUA" value="">\r\n
+                            <button type="submit" class="btn btn-primary feedback-submit">Submit Feedback</button>\r\n
+                        </form>\r\n
+                    </div>\r\n
+                </div>\r\n
+            </section>\r\n
+                <section class="brief-cta" id="contact" data-brief-reveal="fade">\r\n
+                <span class="brief-cta__dot" aria-hidden="true"></span>\r\n
+                <div class="brief-cta__glow" aria-hidden="true"></div>\r\n
+\r\n
+                <div class="brief-cta__inner">\r\n
+                    <p class="brief-cta__eyebrow" data-brief-reveal="up">\r\n
+                        <span class="brief-cta__eyebrow-dot" aria-hidden="true"></span>\r\n
+                        Start a Project\r\n
+                    </p>\r\n
+\r\n
+                    <h2 class="brief-cta__title" data-brief-reveal="up" style="--az-delay: 70ms;">\r\n
+                        Got a brief? <em>Let&rsquo;s zap</em> it into motion.\r\n
+                    </h2>\r\n
+\r\n
+                    <p class="brief-cta__sub" data-brief-reveal="up" style="--az-delay: 140ms;">\r\n
+                        Tell us the format, the deadline, and the platform - we&rsquo;ll come back with a script and a look before you commit.\r\n
+                    </p>\r\n
+\r\n
+                    <div class="brief-cta__actions" data-brief-reveal="up" style="--az-delay: 210ms;">\r\n
+                        <a href="mailto:hello@aizapcreatives.com" class="brief-cta__email">\r\n
+                            <svg class="brief-cta__email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">\r\n
+                                <rect x="3" y="5" width="18" height="14" rx="2"/>\r\n
+                                <path d="M3 7l9 6 9-6"/>\r\n
+                            </svg>\r\n
+                            <span>aizapcreatives@gmail.com</span>\r\n
+                        </a>\r\n
+\r\n
+                        <button type="button" class="brief-cta__button" id="openContactModalBtn">\r\n
+                            <span>Start a project</span>\r\n
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>\r\n
+                        </button>\r\n
+                    </div>\r\n
+                </div>\r\n
+            </section>\r\n
+            </div>\r\n
+        </div>\r\n
+    </main>\r\n
+\r\n
+    <div class="contact-modal__backdrop" id="contactModalBackdrop">\r\n
+        <div class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" id="contactModal">\r\n
+            <button type="button" class="contact-modal__close" id="closeContactModalBtn" aria-label="Close">&times;</button>\r\n
+            <div class="contact-modal__header">\r\n
+                <div class="eyebrow">Let&rsquo;s Work Together</div>\r\n
+                <h3 id="contactModalTitle">Tell us about your project</h3>\r\n
+                <p class="contact-modal__sub">Share a few details and one of our creative leads will get back to you shortly.</p>\r\n
+            </div>\r\n
+                        <form id="contactForm" class="contact-modal-form" action="http://localhost:8000/contact" method="POST">\r\n
+                <input type="hidden" name="_token" value="r073lJPMfgJ3CKE7vaNlt3kg7jfQCuet1Bwo8Qmx" autocomplete="off">                <input type="hidden" name="subject" id="contactSubject" value="Home page inquiry">\r\n
+                <div class="contact-modal-form__row"><div class="contact-modal-form__group"><label class="contact-modal-form__label" for="cf-first-name">First name<span class="required-asterisk">*</span></label><input class="contact-modal-form__input" id="cf-first-name" type="text" name="first_name" value="" required autocomplete="given-name"></div><div class="contact-modal-form__group"><label class="contact-modal-form__label" for="cf-last-name">Last name<span class="required-asterisk">*</span></label><input class="contact-modal-form__input" id="cf-last-name" type="text" name="last_name" value="" required autocomplete="family-name"></div></div>\r\n
+                <div class="contact-modal-form__group"><label class="contact-modal-form__label" for="cf-email">Email<span class="required-asterisk">*</span></label><input class="contact-modal-form__input" id="cf-email" type="email" name="email" value="" required autocomplete="email"></div>\r\n
+                <div class="contact-modal-form__group contact-modal-form__group--grow"><label class="contact-modal-form__label" for="cf-message">Message<span class="required-asterisk">*</span></label><textarea class="contact-modal-form__textarea" id="cf-message" name="message" rows="4" required></textarea></div>\r\n
+                <div class="contact-modal-form__recaptcha"><input type="hidden" name="g-recaptcha-response" id="g-recaptcha-contact-response" data-sitekey="6LehmXstAAAAACiwAtFShS_-fmwWUpbavMPzixUA" value=""></div>\r\n
+                <button class="contact-modal-form__submit" type="submit"><span>Send Message</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>\r\n
+            </form>\r\n
+        </div>\r\n
+    </div>\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/footer/footer.css">\n
+\n
+<footer class="site-footer">\n
+    <div class="site-footer__top">\n
+        <div class="site-footer__row">\n
+\n
+        <div class="site-footer__brand">\n
+            <div class="site-footer__brand-title">\n
+                <span class="site-footer__brand-mark">ai</span><span class="site-footer__brand-text">ZAP CREATIVES</span>\n
+            </div>\n
+            <p>\n
+                We are an AI-powered creative studio that helps brands and creators tell their stories through next-generation content.\n
+            </p>\n
+        </div>\n
+\n
+        <div class="site-footer__column site-footer__column--links">\n
+            <h3>Quick Links</h3>\n
+            <div class="site-footer__cols">\n
+                <div class="site-footer__col">\n
+                    <a href="http://localhost:8000">Home</a>\n
+                    <a href="http://localhost:8000/about-us">About Us</a>\n
+                    <div class="site-footer__services-menu">\n
+                        <button type="button"\n
+                            id="footerServicesToggle"\n
+                            class="site-footer__services-trigger"\n
+                            aria-haspopup="true"\n
+                            aria-expanded="false">\n
+                            <span>Services</span>\n
+                            <svg class="site-footer__services-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">\n
+                                <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n
+                            </svg>\n
+                        </button>\n
+                        <div id="footerServicesDropdown" class="site-footer__services-dropdown" hidden>\n
+                            <a href="http://localhost:8000/what-we-do/ai-commercial-ads">AI Commercial Ads</a>\n
+                         <!--   <a href="http://localhost:8000/what-we-do/ai-product-ads">AI Product Ads</a> -->\n
+                            <a href="http://localhost:8000/what-we-do/ai-storytelling-drama">AI Drama</a>\n
+                         <!--  <a href="http://localhost:8000/what-we-do/ai-movie-trailers">AI Movie Trailers</a> -->\n
+                         <!--  <a href="http://localhost:8000/what-we-do/ugc-style-ai-videos">UGC-style AI Videos</a> -->\n
+                            <a href="http://localhost:8000/what-we-do/explainer-videos">Explainer Videos</a>\n
+                        </div>\n
+                    </div>\n
+                </div>\n
+                <div class="site-footer__col">\n
+                    <a href="http://localhost:8000/portfolio">Portfolio</a>\n
+                    <a href="http://localhost:8000/contact">Contact</a>\n
+                </div>\n
+            </div>\n
+        </div>\n
+\n
+        <div class="site-footer__column site-footer__column--services">\n
+            <h3>Services</h3>\n
+            <div class="site-footer__cols">\n
+                <div class="site-footer__col">\n
+                    <a href="http://localhost:8000/what-we-do/ai-commercial-ads">AI Commercial Ads</a>\n
+                    <a href="http://localhost:8000/what-we-do/ai-storytelling-drama">AI Drama</a>\n
+                    <a href="http://localhost:8000/what-we-do/explainer-videos">Explainer Videos</a>\n
+                </div>\n
+                <div class="site-footer__col">\n
+                 <!--   <a href="http://localhost:8000/what-we-do/ai-product-ads">AI Product Ads</a> -->\n
+                 <!--   <a href="http://localhost:8000/what-we-do/ai-movie-trailers">AI Movie Trailers</a> -->\n
+                 <!--  <a href="http://localhost:8000/what-we-do/ugc-style-ai-videos">UGC-style AI Videos</a> -->\n
+                </div>\n
+            </div>\n
+        </div>\n
+\n
+        <div class="site-footer__column site-footer__column--contact">\n
+            <h3>Get In Touch</h3>\n
+            <p>Davao City, Philippines</p>\n
+            <p><a href="mailto:aizapcreatives@gmail.com">aizapcreatives@gmail.com</a></p>\n
+            <p><a href="tel:+639535786765">+63 (953) 578-6765</a></p>\n
+        </div>\n
+\n
+        </div>\n
+\n
+        <div class="site-footer__socials">\n
+            <a href="https://www.facebook.com/profile.php?id=61555466491031&mibextid=wwXIfr&rdid=d4amKcQ6qw8cRg7x&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1D3GqsevBs%2F%3Fmibextid%3DwwXIfr#" class="site-footer__social site-footer__social--facebook" aria-label="Facebook" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.23 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22C18.34 21.23 22 17.08 22 12.06z"/></svg>\n
+            </a>\n
+            <a href="https://www.instagram.com/@aizap_creatives?fbclid=IwY2xjawTkFYpwZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAUQDvDUxFShoWWbHougyHjr0tFz3E38fX8e0bnTUpya-P0mXW-SGhI9q0gFS8E_aem_xbYaUp-p45jZ67aagl8wvg" class="site-footer__social site-footer__social--instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg>\n
+            </a>\n
+            <a href="https://www.youtube.com/@aizap_creatives?fbclid=IwY2xjawTkFcVwZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEevPjgYuqkCcObexL0RcVwouMlqHPpTwVnAYk3JsO9snXfQgy_UJ2REgsM7to_aem_plCGj1IPh5AHCzQH_BA0zg" class="site-footer__social site-footer__social--youtube" aria-label="YouTube" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 15.5v-7l6 3.5-6 3.5z"/></svg>\n
+            </a>\n
+            <a href="https://www.tiktok.com/@aizap_creatives?fbclid=IwY2xjawTkFU9wZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeyUJ-bbTz8OfVqveHDob6DW1lmmaJkP1z_oOEffUQDvDUxFShoWWbHougyHjr0tFz3E38fX8e0bnTUpya-P0mXW" class="site-footer__social site-footer__social--tiktok" aria-label="TikTok" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.4 2.1 1.8 3.6 4 3.9v2.6c-1.4 0-2.7-.4-4-1.2v6.1c0 3.1-2.5 5.6-5.6 5.6S5.3 17.5 5.3 14.4c0-3 2.3-5.4 5.3-5.6v2.7c-1.4.2-2.5 1.4-2.5 2.9 0 1.6 1.3 2.9 2.9 2.9s2.9-1.3 2.9-2.9V3h2.6z"/></svg>\n
+            </a>\n
+            <a href="https://www.linkedin.com/@aizap_creatives?_l=en_US" class="site-footer__social site-footer__social--linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3.5a1.96 1.96 0 100 3.92 1.96 1.96 0 000-3.92zM20.44 20h-3.37v-6.06c0-1.45-.03-3.31-2.02-3.31-2.03 0-2.34 1.58-2.34 3.2V20H9.34V8.5h3.24v1.57h.05c.45-.86 1.56-1.77 3.21-1.77 3.43 0 4.6 2.26 4.6 5.2V20z"/></svg>\n
+            </a>\n
+        </div>\n
+    </div>\n
+\n
+    <div class="site-footer__bottom">\n
+        <span class="site-footer__bottom-left">&copy; 2026 aiZAP CREATIVES.</span>\n
+        <span class="site-footer__bottom-sep">&bull;</span>\n
+        <span class="site-footer__bottom-right">All Rights Reserved.</span>\n
+    </div>\n
+</footer>\n
+\n
+<script>\n
+(function () {\n
+    var trigger = document.getElementById('footerServicesToggle');\n
+    var dropdown = document.getElementById('footerServicesDropdown');\n
+\n
+    if (!trigger || !dropdown) {\n
+        return;\n
+    }\n
+\n
+    function closeDropdown() {\n
+        dropdown.hidden = true;\n
+        trigger.setAttribute('aria-expanded', 'false');\n
+        trigger.classList.remove('site-footer__services-trigger--open');\n
+    }\n
+\n
+    function openDropdown() {\n
+        dropdown.hidden = false;\n
+        trigger.setAttribute('aria-expanded', 'true');\n
+        trigger.classList.add('site-footer__services-trigger--open');\n
+    }\n
+\n
+    trigger.addEventListener('click', function (event) {\n
+        var isOpen = !dropdown.hidden;\n
+        if (isOpen) {\n
+            closeDropdown();\n
+        } else {\n
+            openDropdown();\n
+        }\n
+        event.stopPropagation();\n
+    });\n
+\n
+    document.addEventListener('click', function (event) {\n
+        var target = event.target;\n
+        if (!dropdown.contains(target) && target !== trigger) {\n
+            closeDropdown();\n
+        }\n
+    });\n
+})();\n
+</script>\r\n
+    <script src="http://localhost:8000/js/video-player.js"></script>\r\n
+    <script src="http://localhost:8000/js/home-page.js"></script>\r\n
+    <script src="http://localhost:8000/js/tools-section.js"></script>\r\n
+    <script src="http://localhost:8000/js/process-animations.js"></script>\r\n
+    <script src="http://localhost:8000/js/contact-cta.js"></script>\r\n
+    <script src="http://localhost:8000/js/scroll-animations.js"></script>\r\n
+    <script>\r\n
+        (function () {\r\n
+            var svc = document.getElementById('cf-service');\r\n
+            if (!svc) return;\r\n
+            svc.addEventListener('change', function () {\r\n
+                this.classList.toggle('has-value', this.value !== '');\r\n
+            });\r\n
+        })();\r\n
+    </script>\r\n
+</body>\r\n
+</html>\r\n
+' [UTF-8](length: 53369) contains "Summer Campaign Teaser" [ASCII](length: 22).
+After Test Method Called (P\Tests\Feature\ProjectsFeatureTest::tearDown)
+After Test Method Finished:
+- P\Tests\Feature\ProjectsFeatureTest::tearDown
+Test Finished (P\Tests\Feature\ProjectsFeatureTest::__pest_evaluable_it_stores_featured_projects_and_shows_them_on_the_homepage)
+After Last Test Method Called (P\Tests\Feature\ProjectsFeatureTest::tearDownAfterClass)
+After Last Test Method Finished:
+- P\Tests\Feature\ProjectsFeatureTest::tearDownAfterClass
+Test Suite Finished (P\Tests\Feature\ProjectsFeatureTest, 1 test)
+Test Runner Execution Finished
+
+   FAIL  Tests\Feature\ProjectsFeatureTest
+  ⨯ it stores featured projects and shows them on the homepage           0.69s  
+  ────────────────────────────────────────────────────────────────────────────  
+   FAILED  Tests\Feature\ProjectsFeatureTest > it stores featured projects a…   
+  Expected: <!DOCTYPE html>\r\n
+<html lang="en">\r\n
+<head>\r\n
+    <meta charset="UTF-8">\r\n
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\r\n
+    <title>Aizap Creatives - Home</title>\r\n
+    <link rel="preconnect" href="https://fonts.bunny.net">\r\n
+    <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600,700,800" rel="stylesheet" />\r\n
+    <link href="https://fonts.bunny.net/css?family=instrument-serif:400,400i" rel="stylesheet" />\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/home-page/home-page.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/format-ticker.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/pages/process.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/video-cards.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/tools-section.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/process-animations.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/home-page/contact-cta.css">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/animations.css">\r\n
+</head>\r\n
+<body class="home-page-page">\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/header/header.css">\n
+    <script src="https://www.google.com/recaptcha/api.js?render=6LehmXstAAAAACiwAtFShS_-fmwWUpbavMPzixUA" async defer></script>\n
+\n
+<header class="site-header">\n
+    <div class="site-header__scroll-progress" aria-hidden="true">\n
+        <span id="siteHeaderScrollProgress"></span>\n
+    </div>\n
+\n
+    <div class="site-header__brand">\n
+        <img\n
+            src="http://localhost:8000/logo.png"\n
+            alt="AI Creatives Logo"\n
+            width="168"\n
+            height="168"\n
+            loading="eager"\n
+            fetchpriority="high"\n
+        >\n
+    </div>\n
+\n
+    <nav class="site-header__nav" id="siteNav">\n
+        <a href="http://localhost:8000" class="site-header__nav-link site-header__nav-link--active" data-no-ajax>Home</a>\n
+        <a href="http://localhost:8000/about-us" class="site-header__nav-link " data-no-ajax>About Us</a>\n
+\n
+                <div class="site-header__nav-item site-header__nav-item--services">\n
+            <a href="http://localhost:8000/what-we-do/services"\n
+               class="site-header__nav-link "\n
+               data-no-ajax>\n
+                <span>Services</span>\n
+            </a>\n
+        </div>\n
+\n
+        <a href="http://localhost:8000/portfolio" class="site-header__nav-link " data-no-ajax>Portfolio</a>\n
+        <a href="http://localhost:8000/contact" class="site-header__nav-link " data-no-ajax>Contact</a>\n
+\n
+    </nav>\n
+\n
+    <button type="button" class="site-header__toggle" id="siteNavToggle" aria-label="Toggle navigation" aria-expanded="false">\n
+        <span></span>\n
+        <span></span>\n
+        <span></span>\n
+    </button>\n
+\n
+    </header>\n
+\n
+<script src="http://localhost:8000/js/header/header.js"></script>\r\n
+    <main id="app-content">\r\n
+        <div class="background-glow">\r\n
+            <div class="container">\r\n
+                <section class="hero-section" id="services" style="background-image: url('http://localhost:8000/home-bg.png');">\r\n
+    <div class="hero-overlay"></div>\r\n
+    <div class="hero-copy" data-reveal="up" data-reveal-repeat>\r\n
+        <h1 class="hero-title">\r\n
+            <span class="gold">AIZAP</span> CREATIVES<br>\r\n
+            That <span class="gold">Builds Brands.</span>\r\n
+        </h1>\r\n
+        <p class="hero-sub">\r\n
+            We create high-quality AI-generated videos, ads, and creative content that helps brands stand out, connect, and grow in the digital world.\r\n
+        </p>\r\n
+        <div class="hero-cta-group">\r\n
+            <a href="http://localhost:8000/portfolio" class="btn btn-primary">View Our Work</a>\r\n
+            <a href="http://localhost:8000/contact" class="btn btn-secondary">Book a Call</a>\r\n
+        </div>\r\n
+    </div>\r\n
+</section>                <section class="formats-ticker" aria-label="Content formats we produce" data-reveal="fade">\r\n
+                <p class="formats-ticker__eyebrow">Three formats. One AI pipeline.</p>\r\n
+                <div class="formats-ticker__band">\r\n
+                    <div class="formats-ticker__track">\r\n
+                                                \r\n
+                                                                                    <span class="formats-ticker__item">Explainer Videos</span>\r\n
+                                                            <span class="formats-ticker__item">AI Commercial Ads</span>\r\n
+                                                            <span class="formats-ticker__item">AI Drama</span>\r\n
+                                                                                                                <span class="formats-ticker__item">Explainer Videos</span>\r\n
+                                                            <span class="formats-ticker__item">AI Commercial Ads</span>\r\n
+                                                            <span class="formats-ticker__item">AI Drama</span>\r\n
+                                                                                                                <span class="formats-ticker__item">Explainer Videos</span>\r\n
+                                                            <span class="formats-ticker__item">AI Commercial Ads</span>\r\n
+                                                            <span class="formats-ticker__item">AI Drama</span>\r\n
+                                                                                                                <span class="formats-ticker__item">Explainer Videos</span>\r\n
+                                                            <span class="formats-ticker__item">AI Commercial Ads</span>\r\n
+                                                            <span class="formats-ticker__item">AI Drama</span>\r\n
+                                                                        </div>\r\n
+                </div>\r\n
+            </section>\r\n
+                <section class="projects-section" id="projects">\r\n
+                <div class="projects-header" data-reveal="up">\r\n
+                    <div>\r\n
+                        <div class="eyebrow">Our Work</div>\r\n
+                        <h2>Sample Videos</h2>\r\n
+                    </div>\r\n
+                    <a href="/portfolio" class="btn btn-secondary">View All Videos</a>\r\n
+                </div>\r\n
+                <div class="projects-grid video-grid">\r\n
+                                            <article class="project-card project-card--overlay" data-reveal="up" style="--az-delay: 0ms;">\r\n
+                                                            <div class="project-thumb" style="background-image: url('http://localhost:8000/home-bg.png');">\r\n
+                                    <span class="project-play-icon" aria-hidden="true"></span>\r\n
+                                    <div class="project-card__content">\r\n
+                                        <span class="project-category">\r\n
+                                            Nova Retail • AI Commercial Ads\r\n
+                                        </span>\r\n
+                                    </div>\r\n
+                                </div>\r\n
+                                                    </article>\r\n
+                                    </div>\r\n
+            </section>\r\n
+\r\n
+                <main class="process-shell">\r\n
+                    <section class="tools-section" id="tools">\r\n
+                    <div class="tools-header" data-reveal="up">\r\n
+                        <h2 class="tools-title">Our tools</h2>\r\n
+                        <p class="tools-desc">The generation and post-production tools behind every deliverable.</p>\r\n
+                    </div>\r\n
+                    <div class="tools-ticker">\r\n
+                        <div class="tools-track">\r\n
+                            \r\n
+                                                                                                <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.5</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.5 Edit</span>\r\n
+                                        <span class="tools-label">Video Editing</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0 Fast</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0 Mini</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">MiniMax H3</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Gemini Omni Flash</span>\r\n
+                                        <span class="tools-label">Multimodal AI</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Kling 3.0</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">FLUX.3 Video</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Grok Imagine 1.5</span>\r\n
+                                        <span class="tools-label">Image &amp; Video</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Minimax Hailuo</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Kling</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">OpenAI Sora 2</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Google Veo</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Higgsfield</span>\r\n
+                                        <span class="tools-label">Scene &amp; Motion</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Wan</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Grok Imagine</span>\r\n
+                                        <span class="tools-label">Image Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">HappyHorse</span>\r\n
+                                        <span class="tools-label">Voice &amp; Audio</span>\r\n
+                                    </div>\r\n
+                                                                                                                                <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.5</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.5 Edit</span>\r\n
+                                        <span class="tools-label">Video Editing</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0 Fast</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance 2.0 Mini</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">MiniMax H3</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Gemini Omni Flash</span>\r\n
+                                        <span class="tools-label">Multimodal AI</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Kling 3.0</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">FLUX.3 Video</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Grok Imagine 1.5</span>\r\n
+                                        <span class="tools-label">Image &amp; Video</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Minimax Hailuo</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Kling</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">OpenAI Sora 2</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Google Veo</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Higgsfield</span>\r\n
+                                        <span class="tools-label">Scene &amp; Motion</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Wan</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Seedance</span>\r\n
+                                        <span class="tools-label">Video Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">Grok Imagine</span>\r\n
+                                        <span class="tools-label">Image Generation</span>\r\n
+                                    </div>\r\n
+                                                                    <div class="tools-item">\r\n
+                                        <span class="tools-dot"></span>\r\n
+                                        <span class="tools-name">HappyHorse</span>\r\n
+                                        <span class="tools-label">Voice &amp; Audio</span>\r\n
+                                    </div>\r\n
+                                                                                    </div>\r\n
+                    </div>\r\n
+                </section>\r\n
+                    <section class="process-section">\r\n
+                    <div class="section-heading" data-reveal="up">\r\n
+                        <div class="eyebrow">How We Work</div>\r\n
+                        <h2>A clear process. Exceptional results.</h2>\r\n
+                        <p>From your idea to a powerful final video - we handle everything.</p>\r\n
+                    </div>\r\n
+\r\n
+                    <div class="process-icons-row">\r\n
+                        <div class="process-icons-line"></div>\r\n
+\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.44 1 1.15 1 1.9V17a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-.4c0-.75.4-1.46 1-1.9A7 7 0 0 0 12 2z"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/><path d="M9 9h1"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4.5a2.5 2.5 0 0 0-4.96-.46 2.5 2.5 0 0 0-1.98 3 2.5 2.5 0 0 0-1.32 4.24 2.5 2.5 0 0 0 1.32 4.26 2.5 2.5 0 0 0 1.98 3 2.5 2.5 0 0 0 4.96-.44"/><path d="M12 4.5a2.5 2.5 0 0 1 4.96-.46 2.5 2.5 0 0 1 1.98 3 2.5 2.5 0 0 1 1.32 4.24 2.5 2.5 0 0 1-1.32 4.26 2.5 2.5 0 0 1-1.98 3 2.5 2.5 0 0 1-4.96-.44"/><path d="M12 4.5v15"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.12 15.88"/><path d="M14.47 14.48 20 20"/><path d="M8.12 8.12 12 12"/></svg></div></div>\r\n
+                        <div class="process-icon-node"><div class="process-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></div></div>\r\n
+                    </div>\r\n
+\r\n
+                    <div class="process-steps">\r\n
+                                                                            <article class="process-step-card" data-reveal="up" style="--az-delay: 0ms;">\r\n
+                                <span class="process-number">01</span>\r\n
+                                <h3>Discovery Call</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/discovery-call.png" alt="Discovery Call" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We get to know your goals, audience, and vision.</p>\r\n
+                                <ul><li>Project brief</li><li>Goal alignment</li><li>Scope &amp; timeline</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 90ms;">\r\n
+                                <span class="process-number">02</span>\r\n
+                                <h3>Strategy &amp; Concept</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/strategy-concept.png" alt="Strategy &amp; Concept" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We craft the right strategy and creative concept.</p>\r\n
+                                <ul><li>Market &amp; audience insight</li><li>Creative direction</li><li>Concept approval</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 180ms;">\r\n
+                                <span class="process-number">03</span>\r\n
+                                <h3>Script &amp; Storyboard</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/script.png" alt="Script &amp; Storyboard" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We write the script and visualize the entire story.</p>\r\n
+                                <ul><li>Scriptwriting</li><li>Storyboard &amp; shot list</li><li>Client approval</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 270ms;">\r\n
+                                <span class="process-number">04</span>\r\n
+                                <h3>AI Production</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/production.png" alt="AI Production" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">Our AI tools bring your story to life.</p>\r\n
+                                <ul><li>AI image &amp; video generation</li><li>Voiceover &amp; SFX</li><li>Scene composition</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 360ms;">\r\n
+                                <span class="process-number">05</span>\r\n
+                                <h3>Editing &amp; Revisions</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/editing-revisions.png" alt="Editing &amp; Revisions" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We polish every frame until it&#039;s perfect.</p>\r\n
+                                <ul><li>Editing &amp; color grading</li><li>Sound design &amp; music</li><li>Revisions included</li></ul>\r\n
+                            </article>\r\n
+                                                    <article class="process-step-card" data-reveal="up" style="--az-delay: 450ms;">\r\n
+                                <span class="process-number">06</span>\r\n
+                                <h3>Final Delivery</h3>\r\n
+                                <div class="process-step-image"><img src="http://localhost:8000/images/process/final-delivery.png" alt="Final Delivery" loading="lazy"></div>\r\n
+                                <p class="process-step-desc">We deliver a high-impact final video, ready to perform.</p>\r\n
+                                <ul><li>Final quality check</li><li>Formats for all platforms</li><li>On-time delivery</li></ul>\r\n
+                            </article>\r\n
+                                            </div>\r\n
+                </section>\r\n
+                    <section class="process-cta" data-reveal="zoom">\r\n
+                    <div class="process-cta__left">\r\n
+                        <div class="process-cta__icon">\r\n
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 12l2 2 4-4"/></svg>\r\n
+                        </div>\r\n
+                        <div>\r\n
+                            <h3>Ready to bring your story to life?</h3>\r\n
+                            <p>Let's create something extraordinary together.</p>\r\n
+                        </div>\r\n
+                    </div>\r\n
+                    <a href="/contact" class="process-cta__button">Let's Work Together</a>\r\n
+                </section>\r\n
+                </main>\r\n
+\r\n
+                <section class="feedback-section" id="feedback">\r\n
+                <div class="feedback-layout">\r\n
+                    <aside class="feedback-summary">\r\n
+                        <div class="feedback-header" data-reveal="left">\r\n
+                            <div class="eyebrow">Client Feedback</div>\r\n
+                            <h2>What Our Clients Say</h2>\r\n
+                            <p class="feedback-header__sub">Real feedback from the brands and creators we've worked with — see what it's like to bring your project to Aizap Creatives.</p>\r\n
+                        </div>\r\n
+\r\n
+                        \r\n
+                        <div class="rating-summary rating-summary--panel" data-reveal="up">\r\n
+                            <div class="rating-summary__score">\r\n
+                                <div class="rating-summary__number">0.0</div>\r\n
+                                <div class="rating-summary__stars" aria-hidden="true">\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="opacity: 0.2;"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1L12 2Z"/></svg>\r\n
+                                                                    </div>\r\n
+                                <div class="rating-summary__count" id="feedbackSummaryCount">0 reviews</div>\r\n
+                            </div>\r\n
+                            <div class="rating-summary__bars">\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">5</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 100%;"></span></span></div>\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">4</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 60%;"></span></span></div>\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">3</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 35%;"></span></span></div>\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">2</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 15%;"></span></span></div>\r\n
+                                                                    <div class="rating-bar-row"><span class="rating-bar-row__label">1</span><span class="rating-bar-row__track"><span class="rating-bar-row__fill" style="width: 8%;"></span></span></div>\r\n
+                                                            </div>\r\n
+                            <button type="button" class="btn btn-primary rating-summary__cta" id="openReviewModalBtn">Write a review</button>\r\n
+                        </div>\r\n
+                        <div class="feedback-summary__note"><strong>New reviews appear instantly</strong> once submitted, and each entry includes the post date so visitors can see recent praise.</div>\r\n
+                    </aside>\r\n
+\r\n
+                    <div class="feedback-panel" data-reveal="right">\r\n
+                        <div class="feedback-panel__top"><div class="feedback-panel__title">\r\n
+                            <span class="feedback-panel__icon" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 4h16v11H8l-4 4V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>\r\n
+                            Feedback List <span class="feedback-panel__count" id="feedbackCount">0</span>\r\n
+                        </div></div>\r\n
+                        <div class="feedback-table__wrap"><div class="feedback-table__body" id="feedbackBody">\r\n
+                                                            <div class="review-card review-card--empty"><p class="review-card__message">No client feedback is available yet.</p></div>\r\n
+                                                    </div></div>\r\n
+                    </div>\r\n
+                </div>\r\n
+\r\n
+                                <div class="review-modal__backdrop" id="reviewModalBackdrop">\r\n
+                    <div class="review-modal" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">\r\n
+                        <button type="button" class="review-modal__close" id="closeReviewModalBtn" aria-label="Close">&times;</button>\r\n
+                        <div class="feedback-form-header"><div class="eyebrow">Share Your Experience</div><h3 id="reviewModalTitle">Write a Feedback</h3><p class="feedback-form-sub">Tell us what you think about working with Aizap Creatives.</p></div>\r\n
+                        <form id="feedbackForm" class="feedback-form" action="http://localhost:8000/feedback" method="POST">\r\n
+                            <input type="hidden" name="_token" value="r073lJPMfgJ3CKE7vaNlt3kg7jfQCuet1Bwo8Qmx" autocomplete="off">                                                        <div class="form-row"><div class="form-group"><label for="fb-first-name">First name<span class="required-asterisk">*</span></label><input type="text" id="fb-first-name" name="first_name" autocomplete="given-name" value="" required></div><div class="form-group"><label for="fb-last-name">Last name<span class="required-asterisk">*</span></label><input type="text" id="fb-last-name" name="last_name" autocomplete="family-name" value="" required></div></div>\r\n
+                            <div class="form-group"><label for="fb-rating">Your Rating<span class="required-asterisk">*</span></label><select id="fb-rating" name="rating" required><option value="5" selected>⭐⭐⭐⭐⭐ — 5 (Excellent)</option><option value="4" >⭐⭐⭐⭐☆ — 4 (Good)</option><option value="3" >⭐⭐⭐☆☆ — 3 (Average)</option><option value="2" >⭐⭐☆☆☆ — 2 (Poor)</option><option value="1" >⭐☆☆☆☆ — 1 (Terrible)</option></select></div>\r\n
+                            <div class="form-group form-group--grow"><label for="fb-message">Your Feedback<span class="required-asterisk">*</span></label><textarea id="fb-message" name="message" rows="4" autocomplete="off" required></textarea></div>\r\n
+                            <input type="hidden" name="g-recaptcha-response" id="g-recaptcha-feedback-response" data-sitekey="6LehmXstAAAAACiwAtFShS_-fmwWUpbavMPzixUA" value="">\r\n
+                            <button type="submit" class="btn btn-primary feedback-submit">Submit Feedback</button>\r\n
+                        </form>\r\n
+                    </div>\r\n
+                </div>\r\n
+            </section>\r\n
+                <section class="brief-cta" id="contact" data-brief-reveal="fade">\r\n
+                <span class="brief-cta__dot" aria-hidden="true"></span>\r\n
+                <div class="brief-cta__glow" aria-hidden="true"></div>\r\n
+\r\n
+                <div class="brief-cta__inner">\r\n
+                    <p class="brief-cta__eyebrow" data-brief-reveal="up">\r\n
+                        <span class="brief-cta__eyebrow-dot" aria-hidden="true"></span>\r\n
+                        Start a Project\r\n
+                    </p>\r\n
+\r\n
+                    <h2 class="brief-cta__title" data-brief-reveal="up" style="--az-delay: 70ms;">\r\n
+                        Got a brief? <em>Let&rsquo;s zap</em> it into motion.\r\n
+                    </h2>\r\n
+\r\n
+                    <p class="brief-cta__sub" data-brief-reveal="up" style="--az-delay: 140ms;">\r\n
+                        Tell us the format, the deadline, and the platform - we&rsquo;ll come back with a script and a look before you commit.\r\n
+                    </p>\r\n
+\r\n
+                    <div class="brief-cta__actions" data-brief-reveal="up" style="--az-delay: 210ms;">\r\n
+                        <a href="mailto:hello@aizapcreatives.com" class="brief-cta__email">\r\n
+                            <svg class="brief-cta__email-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">\r\n
+                                <rect x="3" y="5" width="18" height="14" rx="2"/>\r\n
+                                <path d="M3 7l9 6 9-6"/>\r\n
+                            </svg>\r\n
+                            <span>aizapcreatives@gmail.com</span>\r\n
+                        </a>\r\n
+\r\n
+                        <button type="button" class="brief-cta__button" id="openContactModalBtn">\r\n
+                            <span>Start a project</span>\r\n
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>\r\n
+                        </button>\r\n
+                    </div>\r\n
+                </div>\r\n
+            </section>\r\n
+            </div>\r\n
+        </div>\r\n
+    </main>\r\n
+\r\n
+    <div class="contact-modal__backdrop" id="contactModalBackdrop">\r\n
+        <div class="contact-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" id="contactModal">\r\n
+            <button type="button" class="contact-modal__close" id="closeContactModalBtn" aria-label="Close">&times;</button>\r\n
+            <div class="contact-modal__header">\r\n
+                <div class="eyebrow">Let&rsquo;s Work Together</div>\r\n
+                <h3 id="contactModalTitle">Tell us about your project</h3>\r\n
+                <p class="contact-modal__sub">Share a few details and one of our creative leads will get back to you shortly.</p>\r\n
+            </div>\r\n
+                        <form id="contactForm" class="contact-modal-form" action="http://localhost:8000/contact" method="POST">\r\n
+                <input type="hidden" name="_token" value="r073lJPMfgJ3CKE7vaNlt3kg7jfQCuet1Bwo8Qmx" autocomplete="off">                <input type="hidden" name="subject" id="contactSubject" value="Home page inquiry">\r\n
+                <div class="contact-modal-form__row"><div class="contact-modal-form__group"><label class="contact-modal-form__label" for="cf-first-name">First name<span class="required-asterisk">*</span></label><input class="contact-modal-form__input" id="cf-first-name" type="text" name="first_name" value="" required autocomplete="given-name"></div><div class="contact-modal-form__group"><label class="contact-modal-form__label" for="cf-last-name">Last name<span class="required-asterisk">*</span></label><input class="contact-modal-form__input" id="cf-last-name" type="text" name="last_name" value="" required autocomplete="family-name"></div></div>\r\n
+                <div class="contact-modal-form__group"><label class="contact-modal-form__label" for="cf-email">Email<span class="required-asterisk">*</span></label><input class="contact-modal-form__input" id="cf-email" type="email" name="email" value="" required autocomplete="email"></div>\r\n
+                <div class="contact-modal-form__group contact-modal-form__group--grow"><label class="contact-modal-form__label" for="cf-message">Message<span class="required-asterisk">*</span></label><textarea class="contact-modal-form__textarea" id="cf-message" name="message" rows="4" required></textarea></div>\r\n
+                <div class="contact-modal-form__recaptcha"><input type="hidden" name="g-recaptcha-response" id="g-recaptcha-contact-response" data-sitekey="6LehmXstAAAAACiwAtFShS_-fmwWUpbavMPzixUA" value=""></div>\r\n
+                <button class="contact-modal-form__submit" type="submit"><span>Send Message</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>\r\n
+            </form>\r\n
+        </div>\r\n
+    </div>\r\n
+    <link rel="stylesheet" href="http://localhost:8000/css/footer/footer.css">\n
+\n
+<footer class="site-footer">\n
+    <div class="site-footer__top">\n
+        <div class="site-footer__row">\n
+\n
+        <div class="site-footer__brand">\n
+            <div class="site-footer__brand-title">\n
+                <span class="site-footer__brand-mark">ai</span><span class="site-footer__brand-text">ZAP CREATIVES</span>\n
+            </div>\n
+            <p>\n
+                We are an AI-powered creative studio that helps brands and creators tell their stories through next-generation content.\n
+            </p>\n
+        </div>\n
+\n
+        <div class="site-footer__column site-footer__column--links">\n
+            <h3>Quick Links</h3>\n
+            <div class="site-footer__cols">\n
+                <div class="site-footer__col">\n
+                    <a href="http://localhost:8000">Home</a>\n
+                    <a href="http://localhost:8000/about-us">About Us</a>\n
+                    <div class="site-footer__services-menu">\n
+                        <button type="button"\n
+                            id="footerServicesToggle"\n
+                            class="site-footer__services-trigger"\n
+                            aria-haspopup="true"\n
+                            aria-expanded="false">\n
+                            <span>Services</span>\n
+                            <svg class="site-footer__services-caret" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">\n
+                                <path d="M9 6L15 12L9 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>\n
+                            </svg>\n
+                        </button>\n
+                        <div id="footerServicesDropdown" class="site-footer__services-dropdown" hidden>\n
+                            <a href="http://localhost:8000/what-we-do/ai-commercial-ads">AI Commercial Ads</a>\n
+                         <!--   <a href="http://localhost:8000/what-we-do/ai-product-ads">AI Product Ads</a> -->\n
+                            <a href="http://localhost:8000/what-we-do/ai-storytelling-drama">AI Drama</a>\n
+                         <!--  <a href="http://localhost:8000/what-we-do/ai-movie-trailers">AI Movie Trailers</a> -->\n
+                         <!--  <a href="http://localhost:8000/what-we-do/ugc-style-ai-videos">UGC-style AI Videos</a> -->\n
+                            <a href="http://localhost:8000/what-we-do/explainer-videos">Explainer Videos</a>\n
+                        </div>\n
+                    </div>\n
+                </div>\n
+                <div class="site-footer__col">\n
+                    <a href="http://localhost:8000/portfolio">Portfolio</a>\n
+                    <a href="http://localhost:8000/contact">Contact</a>\n
+                </div>\n
+            </div>\n
+        </div>\n
+\n
+        <div class="site-footer__column site-footer__column--services">\n
+            <h3>Services</h3>\n
+            <div class="site-footer__cols">\n
+                <div class="site-footer__col">\n
+                    <a href="http://localhost:8000/what-we-do/ai-commercial-ads">AI Commercial Ads</a>\n
+                    <a href="http://localhost:8000/what-we-do/ai-storytelling-drama">AI Drama</a>\n
+                    <a href="http://localhost:8000/what-we-do/explainer-videos">Explainer Videos</a>\n
+                </div>\n
+                <div class="site-footer__col">\n
+                 <!--   <a href="http://localhost:8000/what-we-do/ai-product-ads">AI Product Ads</a> -->\n
+                 <!--   <a href="http://localhost:8000/what-we-do/ai-movie-trailers">AI Movie Trailers</a> -->\n
+                 <!--  <a href="http://localhost:8000/what-we-do/ugc-style-ai-videos">UGC-style AI Videos</a> -->\n
+                </div>\n
+            </div>\n
+        </div>\n
+\n
+        <div class="site-footer__column site-footer__column--contact">\n
+            <h3>Get In Touch</h3>\n
+            <p>Davao City, Philippines</p>\n
+            <p><a href="mailto:aizapcreatives@gmail.com">aizapcreatives@gmail.com</a></p>\n
+            <p><a href="tel:+639535786765">+63 (953) 578-6765</a></p>\n
+        </div>\n
+\n
+        </div>\n
+\n
+        <div class="site-footer__socials">\n
+            <a href="https://www.facebook.com/profile.php?id=61555466491031&mibextid=wwXIfr&rdid=d4amKcQ6qw8cRg7x&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1D3GqsevBs%2F%3Fmibextid%3DwwXIfr#" class="site-footer__social site-footer__social--facebook" aria-label="Facebook" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06C2 17.08 5.66 21.23 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22C18.34 21.23 22 17.08 22 12.06z"/></svg>\n
+            </a>\n
+            <a href="https://www.instagram.com/@aizap_creatives?fbclid=IwY2xjawTkFYpwZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAUQDvDUxFShoWWbHougyHjr0tFz3E38fX8e0bnTUpya-P0mXW-SGhI9q0gFS8E_aem_xbYaUp-p45jZ67aagl8wvg" class="site-footer__social site-footer__social--instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.2" fill="currentColor" stroke="none"/></svg>\n
+            </a>\n
+            <a href="https://www.youtube.com/@aizap_creatives?fbclid=IwY2xjawTkFcVwZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEevPjgYuqkCcObexL0RcVwouMlqHPpTwVnAYk3JsO9snXfQgy_UJ2REgsM7to_aem_plCGj1IPh5AHCzQH_BA0zg" class="site-footer__social site-footer__social--youtube" aria-label="YouTube" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 15.5v-7l6 3.5-6 3.5z"/></svg>\n
+            </a>\n
+            <a href="https://www.tiktok.com/@aizap_creatives?fbclid=IwY2xjawTkFU9wZG9mBWV4dG4DYWVtAjEwAGJyaWQRMThCQ3lFMkltbENDUXBweGNzcnRjBmFwcF9pZBAyMjIwMzkxNzg4MjAwODkyAAEeyUJ-bbTz8OfVqveHDob6DW1lmmaJkP1z_oOEffUQDvDUxFShoWWbHougyHjr0tFz3E38fX8e0bnTUpya-P0mXW" class="site-footer__social site-footer__social--tiktok" aria-label="TikTok" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.5 3c.4 2.1 1.8 3.6 4 3.9v2.6c-1.4 0-2.7-.4-4-1.2v6.1c0 3.1-2.5 5.6-5.6 5.6S5.3 17.5 5.3 14.4c0-3 2.3-5.4 5.3-5.6v2.7c-1.4.2-2.5 1.4-2.5 2.9 0 1.6 1.3 2.9 2.9 2.9s2.9-1.3 2.9-2.9V3h2.6z"/></svg>\n
+            </a>\n
+            <a href="https://www.linkedin.com/@aizap_creatives?_l=en_US" class="site-footer__social site-footer__social--linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">\n
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3.5a1.96 1.96 0 100 3.92 1.96 1.96 0 000-3.92zM20.44 20h-3.37v-6.06c0-1.45-.03-3.31-2.02-3.31-2.03 0-2.34 1.58-2.34 3.2V20H9.34V8.5h3.24v1.57h.05c.45-.86 1.56-1.77 3.21-1.77 3.43 0 4.6 2.26 4.6 5.2V20z"/></svg>\n
+            </a>\n
+        </div>\n
+    </div>\n
+\n
+    <div class="site-footer__bottom">\n
+        <span class="site-footer__bottom-left">&copy; 2026 aiZAP CREATIVES.</span>\n
+        <span class="site-footer__bottom-sep">&bull;</span>\n
+        <span class="site-footer__bottom-right">All Rights Reserved.</span>\n
+    </div>\n
+</footer>\n
+\n
+<script>\n
+(function () {\n
+    var trigger = document.getElementById('footerServicesToggle');\n
+    var dropdown = document.getElementById('footerServicesDropdown');\n
+\n
+    if (!trigger || !dropdown) {\n
+        return;\n
+    }\n
+\n
+    function closeDropdown() {\n
+        dropdown.hidden = true;\n
+        trigger.setAttribute('aria-expanded', 'false');\n
+        trigger.classList.remove('site-footer__services-trigger--open');\n
+    }\n
+\n
+    function openDropdown() {\n
+        dropdown.hidden = false;\n
+        trigger.setAttribute('aria-expanded', 'true');\n
+        trigger.classList.add('site-footer__services-trigger--open');\n
+    }\n
+\n
+    trigger.addEventListener('click', function (event) {\n
+        var isOpen = !dropdown.hidden;\n
+        if (isOpen) {\n
+            closeDropdown();\n
+        } else {\n
+            openDropdown();\n
+        }\n
+        event.stopPropagation();\n
+    });\n
+\n
+    document.addEventListener('click', function (event) {\n
+        var target = event.target;\n
+        if (!dropdown.contains(target) && target !== trigger) {\n
+            closeDropdown();\n
+        }\n
+    });\n
+})();\n
+</script>\r\n
+    <script src="http://localhost:8000/js/video-player.js"></script>\r\n
+    <script src="http://localhost:8000/js/home-page.js"></script>\r\n
+    <script src="http://localhost:8000/js/tools-section.js"></script>\r\n
+    <script src="http://localhost:8000/js/process-animations.js"></script>\r\n
+    <script src="http://localhost:8000/js/contact-cta.js"></script>\r\n
+    <script src="http://localhost:8000/js/scroll-animations.js"></script>\r\n
+    <script>\r\n
+        (function () {\r\n
+            var svc = document.getElementById('cf-service');\r\n
+            if (!svc) return;\r\n
+            svc.addEventListener('change', function () {\r\n
+                this.classList.toggle('has-value', this.value !== '');\r\n
+            });\r\n
+        })();\r\n
+    </script>\r\n
+</body>\r\n
+</html>\r\n
+
+
+  To contain: Summer Campaign Teaser
+
+  at tests\Feature\ProjectsFeatureTest.php:39
+     35▕ 
+     36▕     $homepage = $this->get('/');
+     37▕ 
+     38▕     $homepage->assertStatus(200);
+  ➜  39▕     $homepage->assertSee('Summer Campaign Teaser');
+     40▕     $homepage->assertSee('Nova Retail');
+     41▕ });
+     42▕ 
+     43▕ it('allows uploading a project video without a cover image', function () {
+
+
+  Tests:    1 failed (5 assertions)
+  Duration: 1.05s
+
+Test Runner Finished
+PHPUnit Finished (Shell Exit Code: 1)

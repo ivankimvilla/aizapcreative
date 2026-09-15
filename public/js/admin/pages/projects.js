@@ -24,6 +24,50 @@ var UPLOAD_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes, generous for large videos
 var currentXhr = null;
 var isUploading = false;
 
+async function uploadToSignedStorage(file, folder) {
+    if (!file || !form) return null;
+
+    var tokenInput = form.querySelector('input[name="_token"]');
+    if (!tokenInput) return null;
+
+    var directUploadUrl = form.action ? form.action.replace(/\/$/, '') + '/upload-url' : '/admin/projects/upload-url';
+    var payload = new FormData();
+    payload.append('file_name', file.name);
+    payload.append('folder', folder || '');
+    payload.append('content_type', file.type || 'application/octet-stream');
+
+    try {
+        var response = await fetch(directUploadUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': tokenInput.value,
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: payload
+        });
+
+        if (!response.ok) return null;
+
+        var result = await response.json();
+        if (!result || !result.url || !result.key) return null;
+
+        var putResponse = await fetch(result.url, {
+            method: 'PUT',
+            body: file,
+            headers: {
+                'Content-Type': file.type || 'application/octet-stream'
+            }
+        });
+
+        if (!putResponse.ok) return null;
+
+        return result;
+    } catch (e) {
+        return null;
+    }
+}
+
 function showFloatingToast(message, duration) {
     duration = duration || 4000;
     var container = document.getElementById('globalToasts');
@@ -533,7 +577,7 @@ function updateUploadProgress(loaded, total) {
 }
 
 if (form && categorySelect) {
-    form.addEventListener('submit', function (e) {
+    form.addEventListener('submit', async function (e) {
         e.preventDefault();
 
         if (isUploading) return; // guard against double-submit
@@ -559,6 +603,40 @@ if (form && categorySelect) {
 
         setUploadingUi(true);
 
+        var formData = new FormData(form);
+        var directVideoUpload = null;
+        var directCoverUpload = null;
+
+        try {
+            directVideoUpload = await uploadToSignedStorage(videoFile.files[0], 'project-videos');
+        } catch (error) {
+            directVideoUpload = null;
+        }
+
+        if (directVideoUpload) {
+            formData.delete('video_file');
+            formData.set('video_path', directVideoUpload.key);
+            if (directVideoUpload.final_url) {
+                formData.set('video_url', directVideoUpload.final_url);
+            }
+        }
+
+        if (coverImage && coverImage.files && coverImage.files.length) {
+            try {
+                directCoverUpload = await uploadToSignedStorage(coverImage.files[0], 'project-covers');
+            } catch (error) {
+                directCoverUpload = null;
+            }
+
+            if (directCoverUpload) {
+                formData.delete('cover_image');
+                formData.set('cover_path', directCoverUpload.key);
+                if (directCoverUpload.final_url) {
+                    formData.set('cover_url', directCoverUpload.final_url);
+                }
+            }
+        }
+
         var xhr = new XMLHttpRequest();
         currentXhr = xhr;
 
@@ -568,11 +646,13 @@ if (form && categorySelect) {
         xhr.setRequestHeader('Accept', 'application/json');
         xhr.setRequestHeader('X-CSRF-TOKEN', tokenInput.value);
 
-        xhr.upload.addEventListener('progress', function (evt) {
-            if (evt.lengthComputable) {
-                updateUploadProgress(evt.loaded, evt.total);
-            }
-        });
+        if (!directVideoUpload) {
+            xhr.upload.addEventListener('progress', function (evt) {
+                if (evt.lengthComputable) {
+                    updateUploadProgress(evt.loaded, evt.total);
+                }
+            });
+        }
 
         xhr.addEventListener('load', function () {
             currentXhr = null;
@@ -663,6 +743,6 @@ if (form && categorySelect) {
             // No alert needed: abort only happens on deliberate user cancel/close.
         });
 
-        xhr.send(new FormData(form));
+        xhr.send(formData);
     });
 }

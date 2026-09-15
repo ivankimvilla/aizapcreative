@@ -131,6 +131,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/admin/notifications/{type}/{id}/read', [AdminNotificationController::class, 'markRead'])->name('admin.notifications.markRead');
     Route::post('/admin/notifications/mark-all-read', [AdminNotificationController::class, 'markAllRead'])->name('admin.notifications.markAllRead');
     Route::get('/admin/projects', [ProjectVideoController::class, 'index'])->name('admin.projects');
+    Route::post('/admin/projects/upload-url', [ProjectVideoController::class, 'generateUploadUrl'])->name('admin.projects.upload-url');
     Route::post('/admin/projects', [ProjectVideoController::class, 'store'])->name('admin.projects.store');
     Route::delete('/admin/projects', [ProjectVideoController::class, 'destroy'])->name('admin.projects.destroy');
     Route::get('/admin/messages', [ContactMessageController::class, 'index'])->name('admin.messages');
