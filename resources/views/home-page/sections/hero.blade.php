@@ -1,5 +1,5 @@
 <section class="hero-section" id="services">
-    <video class="hero-video" autoplay muted loop playsinline poster="{{ asset('home-bg.mp4') }}">
+    <video class="hero-video" autoplay muted loop playsinline poster="{{ asset('home-bg.png') }}">
         <source src="{{ asset('home-bg.mp4') }}" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
