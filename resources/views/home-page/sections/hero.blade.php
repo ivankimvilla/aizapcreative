@@ -1,4 +1,7 @@
-<section class="hero-section" id="services" style="background-image: url('{{ asset('home-bg.png') }}');">
+<section class="hero-section" id="services">
+    <video class="hero-video" autoplay muted loop playsinline poster="{{ asset('home-bg.png') }}">
+        <source src="{{ asset('home-bg.mp4') }}" type="video/mp4">
+    </video>
     <div class="hero-overlay"></div>
     <div class="hero-copy" data-reveal="up" data-reveal-repeat>
         <h1 class="hero-title">

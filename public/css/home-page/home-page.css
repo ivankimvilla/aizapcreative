@@ -105,16 +105,23 @@ body {
     padding: 80px 40px;
     border-radius: 24px;
     overflow: hidden;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
+    background: #000;
     isolation: isolate;
+}
+
+.hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
 }
 
 .hero-overlay {
     position: absolute;
     inset: 0;
-    z-index: 0;
+    z-index: 1;
     background:
         radial-gradient(circle at 50% 38%, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.55) 55%, rgba(0, 0, 0, 0.92) 100%),
         linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 30%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.95) 100%),
@@ -152,7 +159,7 @@ body {
 
 .hero-copy {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     max-width: 980px;
     display: flex;
     flex-direction: column;
